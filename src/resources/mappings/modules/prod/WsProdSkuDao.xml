@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.prod.dao.WsProdSkuDao">
+    
+	<sql id="wsProdSkuColumns">
+		a.id AS "id",
+		a.product_id AS "wsProduct.id",
+		a.sku_name AS "skuName",
+		a.attribute_values AS "attributeValues",
+		a.attrivalue_values AS "attrivalueValues",
+		a.surplus_quantity AS "surplusQuantity",
+		a.price AS "price",
+		a.really_price AS "reallyPrice",
+		a.reward_money AS "rewardMoney",
+		a.state AS "state",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsProdSkuJoins">
+		LEFT JOIN ws_product b ON b.id = a.product_id
+	</sql>
+    
+	<select id="get" resultType="WsProdSku">
+		SELECT 
+			<include refid="wsProdSkuColumns"/>
+		FROM ws_prod_sku a
+		<include refid="wsProdSkuJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsProdSku">
+		SELECT 
+			<include refid="wsProdSkuColumns"/>
+		FROM ws_prod_sku a
+		<include refid="wsProdSkuJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsProduct!=null and wsProduct.id != null and wsProduct.id != ''">
+				AND a.product_id = #{wsProduct.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsProdSku">
+		SELECT 
+			<include refid="wsProdSkuColumns"/>
+		FROM ws_prod_sku a
+		<include refid="wsProdSkuJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_prod_sku(
+			id,
+			product_id,
+			sku_name,
+			attribute_values,
+			attrivalue_values,
+			surplus_quantity,
+			price,
+			really_price,
+			reward_money,
+			state,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{wsProduct.id},
+			#{skuName},
+			#{attributeValues},
+			#{attrivalueValues},
+			#{surplusQuantity},
+			#{price},
+			#{reallyPrice},
+			#{rewardMoney},
+			#{state},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_prod_sku SET 	
+			product_id = #{wsProduct.id},
+			sku_name = #{skuName},
+			attribute_values = #{attributeValues},
+			attrivalue_values = #{attrivalueValues},
+			surplus_quantity = #{surplusQuantity},
+			price = #{price},
+			really_price = #{reallyPrice},
+			reward_money = #{rewardMoney},
+			state = #{state},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_prod_sku SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE product_id = #{wsProduct.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<update id="deleteByProId">
+		delete from ws_prod_sku WHERE product_id = #{wsProduct.id}
+	</update>
+	
+</mapper>

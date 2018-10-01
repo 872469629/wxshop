@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.member.dao.WsAddressDao">
+    
+	<sql id="wsAddressColumns">
+		a.id AS "id",
+		a.member_id AS "wsMember.id",
+		a.consignee AS "consignee",
+		a.tel AS "tel",
+		a.zip_code AS "zipCode",
+		a.city AS "city",
+		a.address AS "address",
+		a.is_default AS "isDefault",
+		a.province_id AS "area.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsAddressJoins">
+		LEFT JOIN ws_member b ON b.id = a.member_id
+	</sql>
+    
+	<select id="get" resultType="WsAddress">
+		SELECT 
+			<include refid="wsAddressColumns"/>
+		FROM ws_address a
+		<include refid="wsAddressJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsAddress">
+		SELECT 
+			<include refid="wsAddressColumns"/>
+		FROM ws_address a
+		<include refid="wsAddressJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsMember != null and wsMember.id != null and wsMember.id != ''">
+				AND a.member_id = #{wsMember.id}
+			</if>
+			<if test="isDefault != null  and isDefault != ''">
+				AND a.is_default = #{isDefault}
+			</if>
+			<if test="consignee != null and consignee != ''">
+				AND a.consignee LIKE 
+					<if test="dbName == 'oracle'">'%'||#{consignee}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{consignee}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{consignee},'%')</if>
+			</if>
+			<if test="tel != null and tel != ''">
+				AND a.tel LIKE 
+					<if test="dbName == 'oracle'">'%'||#{tel}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{tel}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{tel},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsAddress">
+		SELECT 
+			<include refid="wsAddressColumns"/>
+		FROM ws_address a
+		<include refid="wsAddressJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_address(
+			id,
+			member_id,
+			consignee,
+			tel,
+			zip_code,
+			city,
+			address,
+			is_default,
+			province_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{wsMember.id},
+			#{consignee},
+			#{tel},
+			#{zipCode},
+			#{city},
+			#{address},
+			#{isDefault},
+			#{area.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_address SET 	
+			member_id = #{wsMember.id},
+			consignee = #{consignee},
+			tel = #{tel},
+			zip_code = #{zipCode},
+			city = #{city},
+			address = #{address},
+			is_default = #{isDefault},
+			province_id = #{area.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<update id="updateDefault">
+		UPDATE ws_address a SET 	
+			is_default = #{isDefault}
+		WHERE 1=1
+		<if test="wsMember != null and wsMember.id != null and wsMember.id != ''">
+			AND a.member_id = #{wsMember.id}
+		</if>
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_address SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE member_id = #{wsMember.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

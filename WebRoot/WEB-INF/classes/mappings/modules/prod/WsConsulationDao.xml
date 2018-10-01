@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.prod.dao.WsConsulationDao">
+    
+	<sql id="wsConsulationColumns">
+		a.id AS "id",
+		a.product_id AS "productId",
+		b.product_title AS "productTitle",
+		b.thumb AS "thumb",
+		b.really_unit_price AS "reallyUnitPrice",
+		a.order_id AS "orderId",
+		a.member_id AS "memberId",
+		c.nickname AS "nickname",
+		c.headimgurl AS "headimgurl",
+		a.consulation_content AS "consulationContent",
+		a.prod_consulation_level AS "prodConsulationLevel",
+		a.logistics_consulation_level AS "logisticsConsulationLevel",
+		a.forconsulation AS "forconsulation",
+		a.consulation_images AS "consulationImages",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsConsulationJoins">
+		left join ws_order_item b on b.order_id=a.order_id and b.product_id=a.product_id
+		left join ws_member c on c.id=a.member_id
+	</sql>
+    
+	<select id="get" resultType="WsConsulation">
+		SELECT 
+			<include refid="wsConsulationColumns"/>
+		FROM ws_consulation a
+		<include refid="wsConsulationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsConsulation">
+		SELECT 
+			<include refid="wsConsulationColumns"/>
+		FROM ws_consulation a
+		<include refid="wsConsulationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="productId != null and productId != ''">
+				AND a.product_id = #{productId}
+			</if>
+			<if test="orderId != null and orderId != ''">
+				AND a.order_id = #{orderId}
+			</if>
+			<if test="memberId != null and memberId != ''">
+				AND a.member_id = #{memberId}
+			</if>
+			<if test="productTitle != null and productTitle != ''">
+				AND b.product_title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{productTitle}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{productTitle}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{productTitle},'%')</if>
+			</if>
+			<if test="nickname != null and nickname != ''">
+				AND c.nickname LIKE 
+					<if test="dbName == 'oracle'">'%'||#{nickname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{nickname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{nickname},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsConsulation">
+		SELECT 
+			<include refid="wsConsulationColumns"/>
+		FROM ws_consulation a
+		<include refid="wsConsulationJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_consulation(
+			id,
+			product_id,
+			order_id,
+			member_id,
+			consulation_content,
+			prod_consulation_level,
+			logistics_consulation_level,
+			forconsulation,
+			consulation_images,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{productId},
+			#{orderId},
+			#{memberId},
+			#{consulationContent},
+			#{prodConsulationLevel},
+			#{logisticsConsulationLevel},
+			#{forconsulation},
+			#{consulationImages},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_consulation SET 	
+			product_id = #{productId},
+			order_id = #{orderId},
+			member_id = #{memberId},
+			content = #{content},
+			prod_consulation_level = #{prodConsulationLevel},
+			logistics_consulation_level = #{logisticsConsulationLevel},
+			forconsulation = #{forconsulation},
+			consulation_images = #{consulationImages},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_consulation SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

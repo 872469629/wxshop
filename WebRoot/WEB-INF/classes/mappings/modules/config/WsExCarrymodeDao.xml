@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.config.dao.WsExCarrymodeDao">
+    
+	<sql id="wsExCarrymodeColumns">
+		a.id AS "id",
+		a.fare_id AS "wsExFaretemplate.id",
+		a.region AS "region",
+		a.region_name AS "regionName",
+		a.first_piece AS "firstPiece",
+		a.first_weight AS "firstWeight",
+		a.first_bulk AS "firstBulk",
+		a.first_amount AS "firstAmount",
+		a.second_piece AS "secondPiece",
+		a.second_weight AS "secondWeight",
+		a.second_bulk AS "secondBulk",
+		a.second_amount AS "secondAmount",
+		a.is_default AS "isDefault",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsExCarrymodeJoins">
+		LEFT JOIN ws_ex_faretemplate b ON b.id = a.fare_id
+		LEFT JOIN sys_area a3 ON a3.id = a.region
+	</sql>
+    
+	<select id="get" resultType="WsExCarrymode">
+		SELECT 
+			<include refid="wsExCarrymodeColumns"/>
+		FROM ws_ex_carrymode a
+		<include refid="wsExCarrymodeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsExCarrymode">
+		SELECT 
+			<include refid="wsExCarrymodeColumns"/>
+		FROM ws_ex_carrymode a
+		<include refid="wsExCarrymodeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsExFaretemplate != null and wsExFaretemplate.id != ''">
+				AND a.fare_id = #{wsExFaretemplate.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsExCarrymode">
+		SELECT 
+			<include refid="wsExCarrymodeColumns"/>
+		FROM ws_ex_carrymode a
+		<include refid="wsExCarrymodeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_ex_carrymode(
+			id,
+			fare_id,
+			region,
+			region_name,
+			first_piece,
+			first_weight,
+			first_bulk,
+			first_amount,
+			second_piece,
+			second_weight,
+			second_bulk,
+			second_amount,
+			is_default,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{wsExFaretemplate.id},
+			#{region},
+			#{regionName},
+			#{firstPiece},
+			#{firstWeight},
+			#{firstBulk},
+			#{firstAmount},
+			#{secondPiece},
+			#{secondWeight},
+			#{secondBulk},
+			#{secondAmount},
+			#{isDefault},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_ex_carrymode SET 	
+			fare_id = #{wsExFaretemplate.id},
+			region = #{region},
+			region_name= #{regionName},
+			first_piece = #{firstPiece},
+			first_weight = #{firstWeight},
+			first_bulk = #{firstBulk},
+			first_amount = #{firstAmount},
+			second_piece = #{secondPiece},
+			second_weight = #{secondWeight},
+			second_bulk = #{secondBulk},
+			second_amount = #{secondAmount},
+			is_default = #{isDefault},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_ex_carrymode SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE fare_id = #{wsExFaretemplate.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

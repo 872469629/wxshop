@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<meta name="format-detection" content="telephone=no, email=no"/>
+	<meta charset="UTF-8">
+	<title>收货地址</title>
+	<link rel="stylesheet" href="css/themes/css/core.css">
+	<link rel="stylesheet" href="css/themes/css/icon.css">
+	<link rel="stylesheet" href="css/themes/css/home.css">
+</head>
+<body style="background:#eee">
+<div id="indexVm" v-cloak>
+	<header class="aui-header-default aui-header-fixed aui-header-bg">
+		<a href="javascript:history.back(-1)" class="aui-header-item">
+			<i class="aui-icon aui-icon-back-white"></i>
+		</a>
+		<div class="aui-header-center aui-header-center-clear">
+			<div class="aui-header-center-logo">
+				<div class="aui-car-white-Typeface">收货地址</div>
+			</div>
+		</div>
+		<a href="#" class="aui-header-item-icon"   style="min-width:0">
+			<!--<i class="aui-icon aui-icon-search"></i>-->
+		</a>
+	</header>
+
+	<section class="aui-myOrder-content" >
+		<div class="aui-Address-box" v-for="wsAddress in wsAddressList">
+			<div class="aui-Address-box-item">
+				<div class="aui-Address-box-item-bd">
+					<p>{{wsAddress.consignee}}</p>
+				</div>
+				<div class="aui-Address-box-item-ft">
+					<p>{{wsAddress.tel}}</p>
+				</div>
+			</div>
+			<div class="aui-Address-box-item">
+				<div class="aui-Address-box-item-bd">
+					<p>{{wsAddress.city}}&nbsp;{{wsAddress.address}}</p>
+				</div>
+			</div>
+			<div class="aui-Address-box-item">
+				<div class="aui-Address-box-item-bd">
+					<p><input type="radio" name="isDefault" v-bind:value="wsAddress.id"  class="check goods-check goodsCheck" v-bind:checked="wsAddress.isDefault=='1'? 'checked':''" style="background-size: 17px 17px;"> 
+						<em style="padding-left:24px;">默认地址</em>
+					</p>
+				</div>
+				<a class="aui-Address-box-item-ft" v-bind:href="'userEditAddress.html?id='+wsAddress.id">
+					<p>编辑</p>
+				</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a class="aui-Address-box-item-ft" v-bind:onclick="'deleteAddress(\''+wsAddress.id+'\')'" >
+					<p>删除</p>
+				</a>
+			</div>
+		</div>
+		<div class="aui-out">
+			<a href="userEditAddress.html">新建收货地址</a>
+		</div>
+		<div class="aui-out" >
+			<a onclick="saveAddr()">保存默认地址并返回</a>
+		</div>
+	</section>
+</div>
+
+<script src="js/jquery.min.js" ></script>
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#indexVm',
+		data: {
+			wsAddressList:[],
+		},
+		created: function () {
+			mui.ajax(wxshop.serverUrl+"/address/list", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code")
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+					}	
+					vm.wsAddressList=data.wsAddressList;
+				},
+				error: function(xhr,type,errorThrown) {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+		},
+	});
+	function saveAddr(){
+		var addressId="";
+		$("input[name='isDefault']:checked").each(function(){
+			addressId=$(this).val();
+		});
+		mui.ajax(wxshop.serverUrl+"/address/saveDefaultAddr", {
+			type: "post",
+			data:{
+				id:addressId,
+			},
+			dataType: "json",
+			success: function(data) {
+				if(data.ret==0){
+					mui.alert(data.msg);
+					return;
+				}
+				mui.back();
+			},
+			error: function(xhr,type,errorThrown) {
+				mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+			}
+		});
+	}
+	function deleteAddress(addressId){
+		mui.ajax(wxshop.serverUrl+"/address/delete", {
+			type: "post",
+			data:{
+				id:addressId,
+			},
+			dataType: "json",
+			success: function(data) {
+				if(data.ret==0){
+					mui.alert(data.msg);
+					return;
+				}
+				vm.wsAddressList=data.wsAddressList;
+			},
+			error: function(xhr,type,errorThrown) {
+				mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+			}
+		});
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>首购</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<script src="js/TouchSlide.1.1.js"></script>
+<style>
+html,body,.mui-content{ max-width:100%; }
+.mui-scroll-wrapper{  height:40px; width:auto; right:10px;}
+.hot-pro-bot-box{ margin-top:40px;}
+.mui-icon-back:before, .mui-icon-left-nav:before{ background-image:url(images/h-back-white.png);}
+.mui-bar{ background-color:#dd2727;border-bottom:none;}
+.mui-title{ height:50px; line-height:50px; }
+.header h1{ color:#fff;}
+.banner{ margin-top:40px;}
+.nav-out{ position:fixed; top:50px;}
+.nav-con{ top:90px; bottom:53px;}
+</style>
+</head>
+
+<body>
+  <div id="header" class="search-head header mui-bar mui-bar-nav">
+    <h1 class="mui-title">超级返</h1>
+    <div class="notice-box">
+      <span class="notice-icon"><img src="images/notice-icon.png"><em>2</em></span>
+      <span>消息</span>
+    </div>
+  </div>
+  <!--header-end-->
+
+<footer class="footer ind-footer mui-bar-tab" id="footer">
+    <ul class="display-box-middle">
+      <li>
+        <a href="Index.html">
+        <span class="footer-icon footer-index"></span><span>首页</span>
+        </a>
+      </li>
+      <li>
+        <a href="Classification.html">
+        <span class="footer-icon footer-classification"></span><span>分类</span>
+        </a>
+      </li>
+      <li>
+        <a class="on" href="Cash-back.html">
+        <span class="footer-icon footer-cash-back"></span><span>超级返</span>
+        </a>
+      </li>
+      <li>
+        <a href="Shopping-Cart.html">
+        <span class="footer-icon footer-cart"></span><span>购物车</span>
+        </a>
+      </li>
+      <li>
+        <a href="My.html">
+        <span class="footer-icon footer-my"></span><span>我的首购</span>
+        </a>
+      </li>
+    </ul>
+  </footer>
+  <!--footer-end-->
+<div class="mui-content">
+  
+  <!--导航-->
+  <div class="nav-out">
+    <div class="hot-pro-nav">
+      <div class="mui-scroll-wrapper">
+          <ul class="mui-scroll clearfix">
+            <li><a class="active" href="javascript:void(0)">全部</a></li>
+            <li><a href="javascript:void(0)">服饰</a></li>
+            <li><a href="javascript:void(0)">美妆</a></li>
+            <li><a href="javascript:void(0)">居家</a></li>
+            <li><a href="javascript:void(0)">食品</a></li>
+            <li><a href="javascript:void(0)">全部</a></li>
+            <li><a href="javascript:void(0)">服饰</a></li>
+            <li><a href="javascript:void(0)">居家</a></li>
+            <li><a href="javascript:void(0)">食品</a></li>
+            <li><a href="javascript:void(0)">全部</a></li>
+            <li><a href="javascript:void(0)">服饰</a></li>
+          </ul>
+      </div>
+    </div>
+  </div>  
+  <!--导航-->
+
+  <!--折叠展开列表内容-->
+  <div class="nav-con">
+    <ul class="clearfix">
+      <li><a href="javascript:void(0)">全部</a></li>
+      <li><a href="javascript:void(0)">全部</a></li>
+      <li><a href="javascript:void(0)">全部</a></li>
+      <li><a href="javascript:void(0)">全部</a></li>            
+      <li><a href="javascript:void(0)">全部</a></li>
+      <li><a href="javascript:void(0)">全部</a></li>
+      <li><a href="javascript:void(0)">全部</a></li>
+      <li><a href="javascript:void(0)">全部</a></li>
+    </ul>
+  </div>
+  <!--折叠展开列表内容-->
+   <!--Banner-->
+  <div class="banner" id="index-banner">
+    <div class="banner-pics">
+      <ul class="banner-pics-list OnSale-banner">
+        <li><a href="javascript:void(0)"><img src="images/banner750x360.jpg" alt=""/></a></li>
+        <li><a href="javascript:void(0)"><img src="images/banner750x360.jpg" alt=""/></a></li>
+        <li><a href="javascript:void(0)"><img src="images/banner750x360.jpg" alt=""/></a></li>
+      </ul>
+    </div>
+    <ul class="banner-tit">
+      <li class="on"></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+  <script type="text/javascript">
+          TouchSlide({
+              slideCell:"#index-banner",
+              titCell:".banner-tit li",//开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+              mainCell:".banner-pics-list",
+              effect:"left",
+              autoPlay:true,//自动播放
+              //autoPage:true, //自动分页
+              })
+  </script> 
+  <!--banner-end--> 
+  <!--排序-->
+  <div class="sort-list">
+    <ul class="goods-all-tit-list clearfix">
+        <li><a class="on" href="javascript:void(0)">最新上线</a></li>
+        <li><a href="javascript:void(0)">销量优先</a></li>
+        <li><a href="javascript:void(0)">价格排序</a><div class="up-down-icon"><span class="sort-up active"></span><span class="sort-down"></span></div></li>
+    </ul>
+  </div>
+  <!--排序-->
+  <!--活动列表-->
+  <div class="cash-back-group">
+   <div class="cash-back-item">
+     <div class="cash-back-img"><a href="Cash-back-details.html"><img src="images/cash-back-img.jpg"></a></div>
+     <div class="cash-back-tit">
+       <a href="Cash-back-details.html">
+         <h2>古尔莎（Gulsha）晨露玫瑰滋养套装</h2>
+         <span>让肌肤沐浴在玫瑰花丛中，肌肤享受恋爱与呵护</span>
+       </a>  
+     </div>
+     <div class="cash-back-bot clearfix">
+       <div class="comments-list-bot-price fl">            
+          <em>￥<b>198</b></em>  
+          <span>返</span>      
+          <strong>11.84</strong>
+       </div>
+       <div class="fr clearfix">
+         <div class="percentage-out"><div class="percentage-in" style="width:30%"></div><em>24%</em></div>
+         <div class="cash-back-robbed">已抢<em>2371</em>件</div>
+       </div>
+     </div>
+   </div>
+   <div class="cash-back-item">
+     <div class="cash-back-img"><a href="Cash-back-details.html"><img src="images/cash-back-img.jpg"></a></div>
+     <div class="cash-back-tit">
+       <h2>古尔莎（Gulsha）晨露玫瑰滋养套装古尔莎（Gulsha）晨露玫瑰滋养套装</h2>
+       <span>让肌肤沐浴在玫瑰花丛中，肌肤享受恋爱与呵护让肌肤沐浴在玫瑰花丛中，肌肤享受恋爱与呵护</span>
+     </div>
+     <div class="cash-back-bot clearfix">
+       <div class="comments-list-bot-price fl">            
+          <em>￥<b>198</b></em>  
+          <span>返</span>      
+          <strong>11.84</strong>
+       </div>
+       <div class="fr clearfix">
+         <div class="percentage-out"><div class="percentage-in" style="width:30%"></div><em>24%</em></div>
+         <div class="cash-back-robbed">已抢<em>2371</em>件</div>
+       </div>
+     </div>
+   </div>
+   <div class="cash-back-item">
+     <div class="cash-back-img"><a href="Cash-back-details.html"><img src="images/cash-back-img.jpg"></a></div>
+     <div class="cash-back-tit">
+       <a href="Cash-back-details.html">
+         <h2>古尔莎（Gulsha）晨露玫瑰滋养套装</h2>
+         <span>让肌肤沐浴在玫瑰花丛中，肌肤享受恋爱与呵护</span>
+       </a>  
+     </div>
+     <div class="cash-back-bot clearfix">
+       <div class="comments-list-bot-price fl">            
+          <em>￥<b>198</b></em>  
+          <span>返</span>      
+          <strong>11.84</strong>
+       </div>
+       <div class="fr clearfix">
+         <div class="percentage-out"><div class="percentage-in" style="width:30%"></div><em>24%</em></div>
+         <div class="cash-back-robbed">已抢<em>2371</em>件</div>
+       </div>
+     </div>
+   </div>
+   <div class="cash-back-item">
+     <div class="cash-back-img"><a href="Cash-back-details.html"><img src="images/cash-back-img.jpg"></a></div>
+     <div class="cash-back-tit">
+       <a href="Cash-back-details.html">
+         <h2>古尔莎（Gulsha）晨露玫瑰滋养套装</h2>
+         <span>让肌肤沐浴在玫瑰花丛中，肌肤享受恋爱与呵护</span>
+       </a>  
+     </div>
+     <div class="cash-back-bot clearfix">
+       <div class="comments-list-bot-price fl">            
+          <em>￥<b>198</b></em>  
+          <span>返</span>      
+          <strong>11.84</strong>
+       </div>
+       <div class="fr clearfix">
+         <div class="percentage-out"><div class="percentage-in" style="width:30%"></div><em>24%</em></div>
+         <div class="cash-back-robbed">已抢<em>2371</em>件</div>
+       </div>
+     </div>
+   </div>
+   <div class="cash-back-item">
+     <div class="cash-back-img"><a href="Cash-back-details.html"><img src="images/cash-back-img.jpg"></a></div>
+     <div class="cash-back-tit">
+       <a href="Cash-back-details.html">
+         <h2>古尔莎（Gulsha）晨露玫瑰滋养套装</h2>
+         <span>让肌肤沐浴在玫瑰花丛中，肌肤享受恋爱与呵护</span>
+       </a>  
+     </div>
+     <div class="cash-back-bot clearfix">
+       <div class="comments-list-bot-price fl">            
+          <em>￥<b>198</b></em>  
+          <span>返</span>      
+          <strong>11.84</strong>
+       </div>
+       <div class="fr clearfix">
+         <div class="percentage-out"><div class="percentage-in" style="width:30%"></div><em>24%</em></div>
+         <div class="cash-back-robbed">已抢<em>2371</em>件</div>
+       </div>
+     </div>
+   </div>
+  </div>
+  <!--活动列表-->
+</div>
+<!--container-end-->
+<script src="js/mui.min.js"></script>
+<script>
+mui.init({
+  swipeBack: true, //启用右滑关闭功能
+});
+mui('.mui-scroll-wrapper').scroll({
+	deceleration: 0.0005, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+	scrollY: false, //是否竖向滚动
+	scrollX: true, //是否横向滚动
+	startX: 0, //初始化时滚动至x
+	startY: 0, //初始化时滚动至y
+	bounce: true, //是否启用回弹
+	bounceTime: 500, //回弹动画时间
+	scrollTime: 500,
+	directionLockThreshold: 5,
+	indicators:false
+});
+</script>
+</body>
+</html>

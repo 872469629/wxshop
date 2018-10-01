@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>邀请奖励</title>
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<!--消息 脚本-->
+<link rel="stylesheet" href="css/amazeui.min.css">
+<script src="js/amazeui.min.js"></script>
+<!--消息 脚本-->
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+</head>
+
+<body>
+<div id="indexVm" v-cloak>
+  <header class="header mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">邀请奖励</h1>
+    <div class="am-dropdown" data-am-dropdown>
+      <span class="am-btn am-dropdown-toggle" data-am-dropdown-toggle><em class="header-notice-tips"></em></span>
+      <ul class="am-dropdown-content">
+        <li class="clearfix"><a href="message.html"><i><img src="images/header-notice.png"></i>消息<em v-bind:class="messagenum>0?'header-notice-tips fr':''"></em></a></li>
+        <li><a href="index.html"><i><img src="images/header-home.png"></i>首页</a></li>
+      </ul>
+    </div>
+  </header>
+  <!--header-end-->
+<div class="mui-content">
+    <div class="account-balance">
+      <p>邀请奖励余额</p>
+      <p class="money"><em>{{member.balance}}</em>元</p>
+    </div>
+    <div class="exchange-group">
+      <div class="exchange-item">
+        <span class="exchange-item-top">推荐好友</span>
+        <em class="exchange-item-bot">{{member.awardFriend}}元</em>
+      </div>
+      <div class="exchange-item">
+        <span class="exchange-item-top">推荐商品</span>
+        <em class="exchange-item-bot">{{member.awardProd}}元</em>
+      </div>
+      <div class="exchange-item">
+        <a class="exchange-btn" href="#">提现</a>
+      </div>
+    </div>
+    <div class="rule-description right-arrow highlight">
+      <a href="awardRule.html">奖励规则说明</a>
+    </div>
+    <div class="settings-btn"><button class="btn" type="button" onclick="invitationPord()">立即推广商品</button></div>
+    <div class="rule-description right-arrow highlight">
+      <a >推广二维码<br/>长按下方二维码，发送朋友扫码关注我们，即可获取该用户的永久邀请奖励！</a>
+      <img v-bind:src="member.awardQrCode" />
+    </div>
+
+</div>
+</div>
+<!--container-end-->
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script type="text/javascript" charset="UTF-8" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+	var title,desc,link,imgUrl,type;
+	var vm = new Vue({
+		el: '#indexVm',
+		data: {
+			messagenum: "",
+			member: "",
+		},
+		created: function () {
+			mui.ajax(wxshop.serverUrl+"/reward", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code")
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+					}					
+					vm.messagenum=data.messagenum;
+					vm.member=data.member;
+					title=data.title;
+					desc=data.desc;
+					imgUrl=data.imgUrl;
+					link=data.link;
+					vm.$nextTick(function () {
+						wxshop.wx_config(function () {
+							wxshop.wxShareFriend(title,desc,link,imgUrl);
+						});
+					})
+				},
+				error: function(xhr,type,errorThrown) {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+		},
+	});
+	function invitationPord(){
+		mui.openWindow({url:"invitationCashBack.html?ruid="+vm.member.id});
+	}
+</script>
+</body>
+</html>

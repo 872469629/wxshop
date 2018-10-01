@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.activity.dao.WsActivityCouponProdDao">
+    
+	<sql id="wsActivityCouponProdColumns">
+		a.id AS "id",
+		a.prod_id AS "prodId",
+		a.coupon_id AS "wsActivityCoupon.id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsActivityCouponProdJoins">
+		LEFT JOIN ws_activity_coupon b ON b.id = a.coupon_id
+		LEFT JOIN ws_product c ON c.id = a.prod_id
+	</sql>
+    
+	<select id="get" resultType="WsActivityCouponProd">
+		SELECT 
+			<include refid="wsActivityCouponProdColumns"/>
+		FROM ws_activity_coupon_prod a
+		<include refid="wsActivityCouponProdJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsActivityCouponProd">
+		SELECT 
+			<include refid="wsActivityCouponProdColumns"/>
+		FROM ws_activity_coupon_prod a
+		<include refid="wsActivityCouponProdJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsActivityCoupon!=null and wsActivityCoupon.id != null and wsActivityCoupon.id != ''">
+				AND a.coupon_id = #{wsActivityCoupon.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsActivityCouponProd">
+		SELECT 
+			<include refid="wsActivityCouponProdColumns"/>
+		FROM ws_activity_coupon_prod a
+		<include refid="wsActivityCouponProdJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_activity_coupon_prod(
+			id,
+			prod_id,
+			coupon_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{prodId},
+			#{wsActivityCoupon.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_activity_coupon_prod SET 	
+			prod_id = #{prodId},
+			coupon_id = #{wsActivityCoupon.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		delete from ws_activity_coupon_prod
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE coupon_id = #{wsActivityCoupon.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<update id="deleteByCouponId">
+		delete from ws_activity_coupon_prod
+		WHERE coupon_id = #{wsActivityCoupon.id}
+	</update>
+	
+</mapper>

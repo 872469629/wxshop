@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>商城产品详情</title>
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<script src="js/TouchSlide.1.1.js"></script>
+<!--消息 脚本-->
+<link rel="stylesheet" href="css/amazeui.min.css">
+<script src="js/amazeui.min.js"></script>
+<!--消息 脚本-->
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" type="text/css" href="css/icons-extra.css" />
+<link rel="stylesheet" type="text/css" href="css/app.css"/>
+<link rel="stylesheet" type="text/css" href="css/home.css"/>
+<link rel="stylesheet" type="text/css" href="css/sc/style.css"/>
+<style>
+.header{ border-bottom:none; background-color:transparent; }
+.mui-bar-nav~.mui-content{ padding-top:0; }
+.mui-bar{ position:absolute; }
+.cash-back-details{ height:0; padding-bottom:100%; background-position:center center; background-repeat:no-repeat; background-size:cover; }
+</style>
+</head>
+<body >
+<div id="prodVm" v-cloak>
+		<header class="header mui-bar mui-bar-nav">
+			<a id="ceshi" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<div class="am-dropdown" data-am-dropdown>
+				<span class="am-btn am-dropdown-toggle" data-am-dropdown-toggle><em class="header-notice-tips"></em></span>
+			</div>
+		</header>
+<footer class="footer mui-bar-tab display-box-middle" id="footer">
+  <div class="Cash-back-details-l">
+    <span class="icon-guanzhu" onclick="collectEdit()">收藏&nbsp;{{wsMemberCollectLogNum}}</span>
+    <span class="icon-xinxi" onclick="consulation()">评论&nbsp;{{wsConsulationNum}}</span>
+    <!--
+    	<span class="icon-fenxiang">分享</span>
+    -->
+  </div>
+  <div class="Cash-back-details-r"><a onclick="addCart()">加入购物车</a></div>
+  <div class="Cash-back-details-r"><a onclick="buyProd()">立即购买</a></div>
+</footer>
+<!--footer-end-->
+<div class="mui-content">
+  <!--图文信息-->
+	<div class="banner" id="index-banner">
+		<div class="banner-pics">
+			<ul class="banner-pics-list OnSale-banner">
+				<li v-for="slide in imageList">
+					<img v-bind:src="slide"  style="width: 375px;height: 300px;"/>
+				</li>
+			</ul>
+		</div>
+		<ul class="banner-tit">
+			<li v-for="(slide,index) in imageList" class="on"></li>
+		</ul>
+	</div>
+	
+  	<div class="cash-back-tit-content">
+    	<div class="cash-back-tit">
+        	<h2>{{wsProduct.title}}</h2>
+	    </div>
+	    <div class="cash-back-bot clearfix">
+	        <div class="comments-list-bot-price fl">            
+	          <em>商城价格￥<b>{{wsProductPrice}}</b></em>
+	          <span>返</span>      
+          	  <strong>{{wsProductBackPrice}}</strong>
+	        </div>
+	        <div class="fr clearfix">
+	          <div class="cash-back-robbed">已抢<em>{{wsProduct.selNum}}</em>件</div>
+	        </div>
+	    </div>
+  	</div> 
+  
+  
+  
+  	<div style="padding:0 10px; margin-top:10px"class="">
+			<div id="segmentedControl" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
+				<a class="mui-control-item mui-active" href="#item1">商品详情</a>
+				<a class="mui-control-item" href="#item2">商品属性</a>
+				<a class="mui-control-item" href="#item3" id="consulation">商品评价</a>
+				<a class="mui-control-item" href="#guige" id="skuSpec">购买规格</a>
+			</div>
+	</div>
+  	<!--图文信息-->   
+  	<!--图文详情-->
+  	<div id="item1" class="mui-control-content mui-active">
+    	<div style="padding-top: 5px;" class="cash-back-details-box" v-html="wsProduct.prodContent"></div>
+  	</div>
+  	
+	<div id="item2" class="mui-control-content">
+			<ul class="mui-table-view ">
+				<li class="mui-table-view-cell b-line" v-for="WsProdSkuBaseAttr in WsProdSkuBaseAttrList" style="text-align: center;">
+					{{WsProdSkuBaseAttr.attrbuteName}}: {{WsProdSkuBaseAttr.attrbuteValueName}}
+				</li>
+			</ul>
+	</div>
+	<div id="guige" class="mui-control-content">		
+	<div class="chose">
+				<ul>
+					<h5>请选择产品规格:</h5>
+					<li v-for="wsProdSku in wsProdSkuList" v-bind:id="wsProdSku.id" v-bind:onclick="'selectSkuName('+wsProdSku.reallyPrice+','+wsProdSku.rewardMoney+')'">
+						{{wsProdSku.skuName}}
+					</li>
+				</ul>
+			</div>
+			<a href="#" class="seven">
+				<b>7</b>天无理由退换货
+				<span id="sss"></span>
+			</a>
+	</div>
+  	<!--评论-->
+  	<div id="item3" class="mui-control-content">
+    	<div class="all-comments-tit">全部评论({{wsConsulationNum}})</div>
+    	<div class="all-comments-list" v-for="wsConsulation in wsConsulationList">
+      		<div class="all-comments-list-img"><img v-bind:src="wsConsulation.headimgurl"></div>
+	      	<div class="all-comments-list-txt">
+	        	<div class="user-name"></div>
+	        	<div class="comments-bot clearfix">
+	          	<div class="comments-content fl">{{wsConsulation.consulationContent}}</div>
+	          	<div class="huifu fr"><span>{{wsConsulation.prodConsulationLevel}}星</span></div>
+	        	</div>
+	      	</div>
+    	</div>
+    	<div class="open-more"><span>展开全部</span></div>
+  	</div>
+  	<!--评论-->
+</div>
+</div>
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script type="text/javascript" charset="UTF-8" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript">
+		var title,desc,link,imgUrl,type;
+		var skuId;
+		var prodId;
+		var vm = new Vue({
+		el: '#prodVm',
+		data: {
+			messagenum: "0",
+			wsProduct: '',
+			imageList: [],
+			WsProdSkuBaseAttrList:[],
+			wsProdSkuList:[],
+			wsConsulationList:[],
+			wsConsulationNum:"0",
+			wsMemberCollectLogNum:"0",
+			wsProductPrice:"",
+			wsProductBackPrice:"",
+		},
+		created: function () {
+			localStorage.ruid=wxshop.getUrlParam("ruid");
+			prodId = wxshop.getUrlParam("id");
+			mui.ajax(wxshop.serverUrl+"/prod/getProdDetail", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+					id : prodId
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+					}	
+					localStorage.uid=data.member.id;
+					vm.messagenum=data.messagenum;
+					vm.wsProduct=data.wsProduct;
+					vm.imageList=data.wsProduct.prodImageList;
+					vm.WsProdSkuBaseAttrList=data.WsProdSkuBaseAttrList;
+					vm.wsProdSkuList=data.wsProduct.wsProdSkuList;
+					vm.wsConsulationList=data.wsConsulationList;
+					vm.wsConsulationNum=data.wsConsulationNum;
+					vm.wsMemberCollectLogNum=data.wsMemberCollectLogNum;
+					vm.wsProductPrice=data.wsProduct.rangePrice;
+					vm.wsProductBackPrice=data.wsProduct.defaultRewardMoney;
+					title=data.title;
+					desc=data.desc;
+					imgUrl=data.imgUrl;
+					link=data.link;
+					vm.$nextTick(function () {
+					  	wxshop.wx_config(function () {
+							wxshop.wxShareFriend(title,desc,link,imgUrl);
+						});
+					  	TouchSlide({
+							slideCell: "#index-banner",
+							mainCell: ".banner-pics-list",
+							effect: "left",
+							delayTime: 1000,
+							autoPlay: true, //自动播放
+						});
+						mui.init();
+						$('.chose li').click(function(){
+							$(this).addClass('chose-active').siblings().removeClass('chose-active');
+							skuId=$(this).attr("id");
+							var tags=document.getElementsByClassName('chose-active');//获取标签
+							var tagArr = "";
+					        for(var i=0;i < tags.length; i++){
+					            tagArr += tags[i].innerHTML;//保存满足条件的元素
+					        }
+					        $('#sss').html(tagArr);
+						});
+						$('.article li').click(function(){
+							$(this).addClass('article-active').siblings().removeClass('article-active');
+							if($(this).attr("id")=="talkbox1"){
+								$('.talkbox1').show();
+								$('.talkbox2').hide();
+							}else{
+								$('.talkbox2').show();
+								$('.talkbox1').hide();
+							}
+						});	
+					})
+				},
+				error: function() {
+					mui.alert("后台系统无法连接，请联系运营人员管理！");
+				}
+			});
+		},
+	});
+	<!--商品收藏 -->
+	function collectEdit(){
+		mui.ajax(wxshop.serverUrl+"/collect/addCollect", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+					prodId:wxshop.getUrlParam("id"),
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+						return;
+					}
+					vm.wsMemberCollectLogNum=data.wsMemberCollectLogNum;
+					mui.toast('收藏商品成功，可以在个人中心查看收藏商品!');
+				},
+				error: function(xhr,type,errorThrown) {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+		});
+	}
+	<!--查看评论 -->
+	function consulation(){
+			var consulationTab = document.getElementById("consulation");
+	    //模拟首页点击
+	    mui.trigger(consulationTab, 'tap');
+	    consulationTab.classList.add('mui-active');
+	    //切换选项卡高亮
+	    var current = document.querySelector(".mui-control-item.mui-active");
+	    if (consulationTab !== current) {
+	        current.classList.remove('mui-active');
+	        consulationTab.classList.add('mui-active');
+	        var currentItem = document.querySelector(".mui-control-content.mui-active");
+	        currentItem.classList.remove('mui-active');
+	        var skuSpecTabItem = document.getElementById("item3");
+	        skuSpecTabItem.classList.add('mui-active');
+	    }
+	}
+	<!--sku选择之后修改商品价格 -->
+	function selectSkuName(price,backPrice){
+		vm.wsProductPrice=price;
+		vm.wsProductBackPrice=backPrice;
+	}
+	<!--购买页面跳转 -->
+	function buyProd(){
+		if(skuId==null || skuId==""){
+		  var skuSpecTab = document.getElementById("skuSpec");
+	    //模拟首页点击
+	    mui.trigger(skuSpecTab, 'tap');
+	    skuSpecTab.classList.add('mui-active');	
+	    //切换选项卡高亮
+	    var current = document.querySelector(".mui-control-item.mui-active");
+	    if (skuSpecTab !== current) {
+	        current.classList.remove('mui-active');
+	        skuSpecTab.classList.add('mui-active');
+	        var currentItem = document.querySelector(".mui-control-content.mui-active");
+	        currentItem.classList.remove('mui-active');
+	        var skuSpecTabItem = document.getElementById("guige");
+	        skuSpecTabItem.classList.add('mui-active');
+	        mui.toast("请选择产品规格，再进行购买");
+	    }
+			return;	
+		}
+		var arrParam=[];
+		var item={};
+		item.skuId=skuId;
+		item.quantity=1;
+		arrParam.push(item);
+		localStorage.wsCartOrder = JSON.stringify(arrParam);
+		mui.openWindow({url:"prodOrderConfirm.html",});
+	}
+	//加入购物车
+	function addCart(){
+		//判断是否选择了产品规格
+		if(skuId==null || skuId==""){
+		  var skuSpecTab = document.getElementById("skuSpec");
+	    //模拟首页点击
+	    skuSpecTab.classList.add('mui-active');	
+	    //切换选项卡高亮
+	    var current = document.querySelector(".mui-control-item.mui-active");
+	    if (skuSpecTab !== current) {
+	        current.classList.remove('mui-active');
+	        skuSpecTab.classList.add('mui-active');
+	        var currentItem = document.querySelector(".mui-control-content.mui-active");
+	        currentItem.classList.remove('mui-active');
+	        var skuSpecTabItem = document.getElementById("guige");
+	        skuSpecTabItem.classList.add('mui-active');
+	        mui.toast("请选择产品规格，再添加购物车");
+	    }
+			return;	
+		}
+		//请求后台，添加购物车
+		mui.ajax(wxshop.serverUrl+"/cart/addCart", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+					skuId : skuId
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+						return;
+					}
+					mui.toast('添加购物车成功');
+				},
+				error: function(xhr,type,errorThrown) {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+	}
+</script>
+
+
+</body>
+</html>

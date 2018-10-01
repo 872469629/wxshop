@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ws.dao.WxMassMsgDao">
+    
+	<sql id="wxMassMsgColumns">
+		a.id AS "id",
+		a.is_to_all AS "isToAll",
+		a.user_group AS "userGroup",
+		a.media_id AS "mediaId",
+		a.media_date AS "mediaDate",
+		a.msg_type AS "msgType",
+		a.material_id AS "materialId",
+		a.material_title AS "materialTitle",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wxMassMsgJoins">
+	</sql>
+    
+	<select id="get" resultType="WxMassMsg">
+		SELECT 
+			<include refid="wxMassMsgColumns"/>
+		FROM wx_mass_msg a
+		<include refid="wxMassMsgJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WxMassMsg">
+		SELECT 
+			<include refid="wxMassMsgColumns"/>
+		FROM wx_mass_msg a
+		<include refid="wxMassMsgJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="msgType != null and msgType != ''">
+				AND a.msg_type = #{msgType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WxMassMsg">
+		SELECT 
+			<include refid="wxMassMsgColumns"/>
+		FROM wx_mass_msg a
+		<include refid="wxMassMsgJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO wx_mass_msg(
+			id,
+			is_to_all,
+			user_group,
+			media_id,
+			media_date,
+			msg_type,
+			material_id,
+			material_title,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{isToAll},
+			#{userGroup},
+			#{mediaId},
+			#{mediaDate},
+			#{msgType},
+			#{materialId},
+			#{materialTitle},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE wx_mass_msg SET 	
+			is_to_all = #{isToAll},
+			user_group = #{userGroup},
+			media_id = #{mediaId},
+			media_date = #{mediaDate},
+			msg_type = #{msgType},
+			material_id = #{materialId},
+			material_title = #{materialTitle},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE wx_mass_msg SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

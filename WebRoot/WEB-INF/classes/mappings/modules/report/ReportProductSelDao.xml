@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.report.dao.ReportProductSelDao">
+    
+	<sql id="reportProductSelColumns">
+		a.id AS "id",
+		a.count_date AS "countDate",
+		a.product_id AS "productId",
+		a.product_name AS "productName",
+		a.sel_num AS "selNum",
+		a.sel_money AS "selMoney",
+		a.percent AS "percent",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="reportProductSelJoins">
+	</sql>
+    
+	<select id="get" resultType="ReportProductSel">
+		SELECT 
+			<include refid="reportProductSelColumns"/>
+		FROM report_product_sel a
+		<include refid="reportProductSelJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ReportProductSel">
+		SELECT 
+			<include refid="reportProductSelColumns"/>
+		FROM report_product_sel a
+		<include refid="reportProductSelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="countDate != null and countDate != ''">
+				AND a.count_date = #{countDate}
+			</if>
+			<if test="productName != null and productName != ''">
+				AND a.product_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{productName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{productName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{productName},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ReportProductSel">
+		SELECT 
+			<include refid="reportProductSelColumns"/>
+		FROM report_product_sel a
+		<include refid="reportProductSelJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO report_product_sel(
+			id,
+			count_date,
+			product_id,
+			product_name,
+			sel_num,
+			sel_money,
+			percent,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{countDate},
+			#{productId},
+			#{productName},
+			#{selNum},
+			#{selMoney},
+			#{percent},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE report_product_sel SET 	
+			count_date = #{countDate},
+			product_id = #{productId},
+			product_name = #{productName},
+			sel_num = #{selNum},
+			sel_money = #{selMoney},
+			percent = #{percent},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE report_product_sel SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

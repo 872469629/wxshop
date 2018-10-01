@@ -1,0 +1,671 @@
+{
+  "paysuccess.html": {
+    "href": "paysuccess.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/mui.min.js",
+      "images/qq-icon.png",
+      "images/header-notice.png",
+      "images/header-home.png"
+    ],
+    "refer": [
+      "index.html"
+    ],
+    "priority": 0
+  },
+  "payOrder.html": {
+    "href": "payOrder.html",
+    "resources": [
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "css/haitao/home.css",
+      "css/haitao/icons-extra.css",
+      "css/haitao/app.css",
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js"
+    ],
+    "refer": [
+      "paysuccess.html"
+    ],
+    "priority": 0
+  },
+  "userEditAddress.html": {
+    "href": "userEditAddress.html",
+    "resources": [
+      "css/mui.min.css",
+      "css/themes/css/core.css",
+      "css/themes/css/icon.css",
+      "css/themes/css/home.css",
+      "css/themes/js/jquery.min.js",
+      "css/themes/js/aui.js",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js"
+    ],
+    "refer": [
+      "userAddres.html"
+    ],
+    "priority": 0
+  },
+  "userAddres.html": {
+    "href": "userAddres.html",
+    "resources": [
+      "css/themes/css/core.css",
+      "css/themes/css/icon.css",
+      "css/themes/css/home.css",
+      "js/jquery.min.js",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js"
+    ],
+    "refer": [
+      "userEditAddress.html"
+    ],
+    "priority": 0
+  },
+  "prodOrderConfirm.html": {
+    "href": "prodOrderConfirm.html",
+    "resources": [
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "css/haitao/home.css",
+      "css/haitao/icons-extra.css",
+      "css/haitao/app.css",
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js"
+    ],
+    "refer": [
+      "payOrder.html",
+      "userAddres.html"
+    ],
+    "priority": 0
+  },
+  "productDetails.html": {
+    "href": "productDetails.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/TouchSlide.1.1.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "css/home.css",
+      "css/icons-extra.css",
+      "css/app.css",
+      "css/sc/style.css",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js"
+    ],
+    "refer": [
+      "prodOrderConfirm.html"
+    ],
+    "priority": 0
+  },
+  "productSearchList.html": {
+    "href": "productSearchList.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "css/prodlist.css",
+      "js/vue.js",
+      "js/mui.min.js",
+      "js/mui.pullToRefresh.js",
+      "js/mui.pullToRefresh.material.js",
+      "js/wxshop.js",
+      "images/header-notice.png",
+      "images/header-home.png"
+    ],
+    "refer": [
+      "productSearchList.html",
+      "productDetails.html"
+    ],
+    "priority": 0
+  },
+  "searchPage.html": {
+    "href": "searchPage.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "images/h-back.png",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js"
+    ],
+    "refer": [
+      "productSearchList.html"
+    ],
+    "priority": 0
+  },
+  "messagedetail.html": {
+    "href": "messagedetail.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/header-notice.png",
+      "images/header-home.png"
+    ],
+    "refer": [],
+    "priority": 0
+  },
+  "messagelist.html": {
+    "href": "messagelist.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/header-notice.png",
+      "images/header-home.png"
+    ],
+    "refer": [
+      "messagedetail.html",
+      "message.html",
+      "index.html"
+    ],
+    "priority": 0
+  },
+  "message.html": {
+    "href": "message.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/icon/tz-1.png",
+      "images/icon/tz-2.png",
+      "images/icon/tz-3.png",
+      "images/header-notice.png",
+      "images/header-home.png"
+    ],
+    "refer": [
+      "messagelist.html",
+      "message.html",
+      "index.html"
+    ],
+    "priority": 0
+  },
+  "returnBack.html": {
+    "href": "returnBack.html",
+    "resources": [
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "css/haitao/home.css",
+      "css/haitao/icons-extra.css",
+      "css/haitao/app.css",
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js"
+    ],
+    "refer": [
+      "orderlist.html"
+    ],
+    "priority": 0
+  },
+  "userAddConsulation.html": {
+    "href": "userAddConsulation.html",
+    "resources": [
+      "css/haitao/js/mui.min.js",
+      "css/haitao/js/mui.view.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "css/mui.min.css",
+      "css/haitao/css/home.css",
+      "css/haitao/css/icons-extra.css",
+      "css/haitao/css/app.css",
+      "css/haitao/css/feedback.css",
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/base.css",
+      "css/common.css"
+    ],
+    "refer": [
+      "orderlist.html"
+    ],
+    "priority": 0
+  },
+  "orderlist.html": {
+    "href": "orderlist.html",
+    "resources": [
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "css/haitao/home.css",
+      "css/haitao/icons-extra.css",
+      "css/haitao/app.css",
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js"
+    ],
+    "refer": [
+      "returnBack.html",
+      "userAddConsulation.html",
+      "payOrder.html"
+    ],
+    "priority": 0
+  },
+  "productCouponList.html": {
+    "href": "productCouponList.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "css/prodlist.css",
+      "js/vue.js",
+      "js/mui.min.js",
+      "js/mui.pullToRefresh.js",
+      "js/mui.pullToRefresh.material.js",
+      "js/wxshop.js",
+      "images/header-notice.png",
+      "images/header-home.png"
+    ],
+    "refer": [
+      "productCouponList.html",
+      "productDetails.html"
+    ],
+    "priority": 0
+  },
+  "coupon.html": {
+    "href": "coupon.html",
+    "resources": [
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "css/haitao/home.css",
+      "css/haitao/icons-extra.css",
+      "css/haitao/app.css",
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/mui.min.js",
+      "js/mui.pullToRefresh.js",
+      "js/mui.pullToRefresh.material.js",
+      "js/wxshop.js",
+      "js/vue.js"
+    ],
+    "refer": [
+      "productCouponList.html"
+    ],
+    "priority": 0
+  },
+  "userFoot.html": {
+    "href": "userFoot.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/notice-icon.png"
+    ],
+    "refer": [
+      "message.html",
+      "productDetails.html"
+    ],
+    "priority": 0
+  },
+  "userCollect.html": {
+    "href": "userCollect.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/notice-icon.png"
+    ],
+    "refer": [
+      "productDetails.html",
+      "message.html"
+    ],
+    "priority": 0
+  },
+  "userConsulation.html": {
+    "href": "userConsulation.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/header-notice.png",
+      "images/header-home.png"
+    ],
+    "refer": [
+      "message.html",
+      "index.html"
+    ],
+    "priority": 0
+  },
+  "invitationProductDetails.html": {
+    "href": "invitationProductDetails.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/TouchSlide.1.1.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "css/home.css",
+      "css/icons-extra.css",
+      "css/app.css",
+      "css/sc/style.css",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js"
+    ],
+    "refer": [
+      "prodOrderConfirm.html"
+    ],
+    "priority": 0
+  },
+  "invitationCashBack.html": {
+    "href": "invitationCashBack.html",
+    "resources": [
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/TouchSlide.1.1.js",
+      "images/h-back-white.png",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/notice-icon.png"
+    ],
+    "refer": [
+      "invitationCashBack.html",
+      "index.html",
+      "prodCat.html",
+      "shoppingcart.html",
+      "userCenter.html",
+      "invitationProductDetails.html"
+    ],
+    "priority": 0
+  },
+  "awardRule.html": {
+    "href": "awardRule.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/header-notice.png",
+      "images/header-home.png"
+    ],
+    "refer": [
+      "message.html",
+      "index.html"
+    ],
+    "priority": 0
+  },
+  "invitationAward.html": {
+    "href": "invitationAward.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/header-notice.png",
+      "images/header-home.png"
+    ],
+    "refer": [
+      "invitationCashBack.html",
+      "awardRule.html",
+      "message.html",
+      "index.html"
+    ],
+    "priority": 0
+  },
+  "about.html": {
+    "href": "about.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/header-notice.png",
+      "images/header-home.png"
+    ],
+    "refer": [
+      "message.html",
+      "index.html"
+    ],
+    "priority": 0
+  },
+  "userCenter.html": {
+    "href": "userCenter.html",
+    "resources": [
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/notice-icon.png",
+      "images/my-order.png",
+      "images/my-footprints.png",
+      "images/my-collection.png",
+      "images/my-comment.png",
+      "images/my-reward.png",
+      "images/my-account-modification.png",
+      "images/my-feedback.png",
+      "images/my-set-up.png",
+      "images/group1.png",
+      "images/group2.png",
+      "images/group3.png",
+      "images/group4.png",
+      "images/group5.png"
+    ],
+    "refer": [
+      "message.html",
+      "index.html",
+      "prodCat.html",
+      "shoppingcart.html",
+      "userCenter.html",
+      "orderlist.html",
+      "coupon.html",
+      "userFoot.html",
+      "userCollect.html",
+      "userConsulation.html",
+      "invitationAward.html",
+      "userAddres.html",
+      "about.html"
+    ],
+    "priority": 0
+  },
+  "shoppingcart.html": {
+    "href": "shoppingcart.html",
+    "resources": [
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/notice-icon.png"
+    ],
+    "refer": [
+      "prodOrderConfirm.html",
+      "message.html",
+      "index.html",
+      "prodCat.html",
+      "shoppingcart.html",
+      "userCenter.html",
+      "coupon.html",
+      "productDetails.html"
+    ],
+    "priority": 0
+  },
+  "productList.html": {
+    "href": "productList.html",
+    "resources": [
+      "js/jquery.min.js",
+      "js/common.js",
+      "css/amazeui.min.css",
+      "js/amazeui.min.js",
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "css/prodlist.css",
+      "js/vue.js",
+      "js/mui.min.js",
+      "js/mui.pullToRefresh.js",
+      "js/mui.pullToRefresh.material.js",
+      "js/wxshop.js",
+      "images/header-notice.png",
+      "images/header-home.png"
+    ],
+    "refer": [
+      "productList.html",
+      "productDetails.html"
+    ],
+    "priority": 0
+  },
+  "prodCat.html": {
+    "href": "prodCat.html",
+    "resources": [
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/notice-icon.png"
+    ],
+    "refer": [
+      "searchPage.html",
+      "message.html",
+      "index.html",
+      "prodCat.html",
+      "shoppingcart.html",
+      "userCenter.html",
+      "productList.html"
+    ],
+    "priority": 0
+  },
+  "index.html": {
+    "href": "index.html",
+    "resources": [
+      "css/mui.min.css",
+      "css/base.css",
+      "css/common.css",
+      "css/index.css",
+      "js/jquery.min.js",
+      "js/common.js",
+      "js/TouchSlide.1.1.js",
+      "js/mui.min.js",
+      "js/wxshop.js",
+      "js/vue.js",
+      "images/notice-icon.png"
+    ],
+    "refer": [
+      "index.html",
+      "searchPage.html",
+      "message.html",
+      "prodCat.html",
+      "shoppingcart.html",
+      "userCenter.html",
+      "productDetails.html"
+    ],
+    "priority": 0
+  }
+}

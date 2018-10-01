@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.prod.dao.WsCartDao">
+    
+	<sql id="wsCartColumns">
+		a.id AS "id",
+		a.member_id AS "memberId",
+		a.product_id AS "productId",
+		a.sku_id AS "skuId",
+		a.sku_spec AS "skuSpec",
+		a.title AS "title",
+		a.thumb AS "thumb",
+		a.quantity AS "quantity",
+		a.activity_id AS "activityId",
+		a.discount_amount AS "discountAmount",
+		a.unit_default_price AS "unitDefaultPrice",
+		a.unit_price AS "unitPrice",
+		a.price AS "price",
+		a.state AS "state",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsCartJoins">
+	JOIN ws_prod_sku b ON b.id=a.sku_id and b.del_flag = #{DEL_FLAG_NORMAL}
+	</sql>
+    
+	<select id="get" resultType="WsCart">
+		SELECT 
+			<include refid="wsCartColumns"/>
+		FROM ws_cart a
+		<include refid="wsCartJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsCart">
+		SELECT 
+			<include refid="wsCartColumns"/>
+		FROM ws_cart a
+		<include refid="wsCartJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="memberId != null and memberId != ''">
+				AND a.member_id = #{memberId}
+			</if>
+			<if test="productId != null and productId != ''">
+				AND a.product_id = #{productId}
+			</if>
+			<if test="skuId != null and skuId != ''">
+				AND a.sku_id = #{skuId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsCart">
+		SELECT 
+			<include refid="wsCartColumns"/>
+		FROM ws_cart a
+		<include refid="wsCartJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_cart(
+			id,
+			member_id,
+			product_id,
+			sku_id,
+			sku_spec,
+			title,
+			thumb,
+			quantity,
+			activity_id,
+			discount_amount,
+			unit_default_price,
+			unit_price,
+			price,
+			state,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{memberId},
+			#{productId},
+			#{skuId},
+			#{skuSpec},
+			#{title},
+			#{thumb},
+			#{quantity},
+			#{activityId},
+			#{discountAmount},
+			#{unitDefaultPrice},
+			#{unitPrice},
+			#{price},
+			#{state},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_cart SET 	
+			member_id = #{memberId},
+			product_id = #{productId},
+			sku_id = #{skuId},
+			sku_spec = #{skuSpec},
+			title = #{title},
+			thumb = #{thumb},
+			quantity = #{quantity},
+			activity_id = #{activityId},
+			discount_amount = #{discountAmount},
+			unit_default_price = #{unitDefaultPrice},
+			unit_price = #{unitPrice},
+			price = #{price},
+			state = #{state},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_cart SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

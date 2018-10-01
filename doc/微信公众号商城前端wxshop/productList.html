@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable" />
+		<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+		<meta content="telephone=no" name="format-detection" />
+		<title>商城产品列表</title>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/common.js"></script>
+		<!--消息 脚本-->
+		<link rel="stylesheet" href="css/amazeui.min.css">
+		<script src="js/amazeui.min.js"></script>
+		<!--消息 脚本-->
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="css/base.css">
+		<link rel="stylesheet" type="text/css" href="css/common.css">
+		<link rel="stylesheet" type="text/css" href="css/prodlist.css">
+		<script src="js/vue.js"></script>
+	</head>
+
+	<body>
+	<div id="indexVm" v-cloak>
+		<header class="header mui-bar mui-bar-nav">
+			<a id="ceshi" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">列表明细</h1>
+			<div class="am-dropdown" data-am-dropdown>
+				<span class="am-btn am-dropdown-toggle" data-am-dropdown-toggle><em class="header-notice-tips"></em></span>
+				<ul class="am-dropdown-content">
+					<li class="clearfix">
+						<a href="#"><i><img
+							src="images/header-notice.png"></i>消息<em class="header-notice-tips fr">{{messagenum}}</em></a>
+					</li>
+					<li>
+						<a href="Index.html"><i><img
+							src="images/header-home.png"></i>首页</a>
+					</li>
+				</ul>
+			</div>
+		</header>
+		<!--header-end-->
+		<div class="mui-content">
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<!--排序-->
+				<div class="sort-list">
+					<ul class="goods-all-tit-list clearfix">
+						<li>
+							<a v-bind:class="prodOrderBy=='createDate' ? 'on':''" v-bind:href="'productList.html?prodCategoryId='+prodCategoryId+'&&prodOrderBy=createDate'">最新上线</a>
+						</li>
+						<li>
+							<a v-bind:class="prodOrderBy=='defaultReallyPrice' ? 'on':''" v-bind:href="'productList.html?prodCategoryId='+prodCategoryId+'&&prodOrderBy=defaultReallyPrice'">销量优先</a>
+						</li>
+						<li>
+							<a v-bind:class="prodOrderBy=='selNum' ? 'on':''" v-bind:href="'productList.html?prodCategoryId='+prodCategoryId+'&&prodOrderBy=selNum'">价格排序</a>
+							<div class="up-down-icon">
+								<span class="sort-up active"></span><span class="sort-down"></span>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<!--排序-->
+
+				<div class="mui-slider-group">
+					<div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+						<div id="scroll1" class="mui-scroll-wrapper">
+							<div class="mui-scroll nine-pieces-group">
+								<ul class="mui-table-view clearfix">
+									<!--产品列表-->
+									<li class="fl" v-for="(wsProduct,index) in wsProductList">
+										<a v-bind:href="'productDetails.html?id='+wsProduct.id">
+											<div class="nine-pieces-img" v-bind:style="'background-image: url('+wsProduct.prodImage+');'"></div>
+											<div class="nine-pieces-txt">
+												<div class="nine-pieces-txt-tit">{{wsProduct.title}}</div>
+												<div class="nine-pieces-price clearfix">
+													<span class="fl">￥<em>{{wsProduct.defaultReallyPrice}}</em></span> <span class="fr">市场价：{{wsProduct.defaultPrice}}元</span>
+												</div>
+												<div class="nine-pieces-tips clearfix">
+													<span class="fl">包邮</span> <span class="fr">已售<em>{{wsProduct.selNum}}</em>件
+												</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<!--产品列表-->
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		</div>
+		<!--container-end-->
+		<script src="js/mui.min.js"></script>
+		<script src="js/mui.pullToRefresh.js"></script>
+		<script src="js/mui.pullToRefresh.material.js"></script>
+		<script src="js/wxshop.js"></script>
+		<script src="js/vue.js"></script>
+		<script>
+			var createFragment = function(ul, index, count, reverse) {
+				var length = ul.querySelectorAll('li').length;
+				var fragment = document.createDocumentFragment();
+				var li;
+				for(var i = 0; i < count; i++) {
+					li = document.createElement('li');
+					li.className = 'mui-table-view-cell';
+					li.innerHTML = '第' +
+						(index + 1) +
+						'个选项卡子项-' +
+						(length + (reverse ? (count - i) :
+							(i + 1)));
+					fragment.appendChild(li);
+				}
+				return fragment;
+			};
+			var prodOrderBy,prodCategoryId;
+			var vm = new Vue({
+				el: '#indexVm',
+				data: {
+					messagenum: "0",
+					wsProductList: [],
+					prodOrderBy:"",
+					prodCategoryId:"",
+				},
+				created: function () {
+					prodOrderBy=wxshop.getUrlParam("prodOrderBy");
+					if(prodOrderBy==null || prodOrderBy == ""){
+						prodOrderBy="createDate";
+					}
+					prodCategoryId=wxshop.getUrlParam("prodCategoryId");
+					mui.ajax(wxshop.serverUrl+"/prod/getProdListByCat", {
+						type: "post",
+						data:{
+							code:wxshop.getUrlParam("code"),
+							prodCategoryId:prodCategoryId,
+							prodOrderBy:prodOrderBy,
+						},
+						dataType: "json",
+						success: function(data) {
+							if(data.ret==0){
+								mui.alert(data.msg);
+							}
+							if(data.ret==2){
+								wxshop.getOpenId(data.appid);
+							}	
+							vm.messagenum=data.messagenum;
+							vm.wsProductList=data.wsProductList;
+							vm.prodOrderBy=prodOrderBy;
+							vm.prodCategoryId=prodCategoryId;
+							vm.$nextTick(function () {
+								mui.init();
+								var deceleration = mui.os.ios ? 0.003 : 0.0009;//阻尼系数
+								mui('.mui-scroll-wrapper').scroll({
+									bounce: false,
+									indicators: true, //是否显示滚动条
+									deceleration: deceleration
+								});
+								mui.each(
+									document.querySelectorAll('.mui-slider-group .mui-scroll'),
+									function(index, pullRefreshEl) {
+										mui(pullRefreshEl).pullToRefresh({
+												up: {
+													callback: function() {
+														var self = this;
+														setTimeout(
+															function() {
+																var ul = self.element.querySelector('.mui-table-view');
+																<!--ul.appendChild(createFragment(ul,index,5));-->
+																self.endPullUpToRefresh();
+															},1000);
+													}
+												}
+											});
+									}
+								);
+							})
+						},
+						error: function(xhr,type,errorThrown) {
+							mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+						}
+					});
+				},
+			});
+		</script>
+	</body>
+
+</html>

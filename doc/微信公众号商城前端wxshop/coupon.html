@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	
+	<title>优惠卷</title>
+	<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<link rel="stylesheet" href="css/haitao/home.css">
+<link rel="stylesheet" type="text/css" href="css/haitao/icons-extra.css" />
+<link rel="stylesheet" type="text/css" href="css/haitao/app.css"/>
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<style>
+.pro-details {
+	left:0px;	
+}	
+ul.shopcart-item li{
+	height: 80px;
+}
+.pro-button{
+	float: right;
+	margin-right: 10px;
+	color: #dd2727;
+    font-size: 16px;
+    line-height:35px
+}
+.shopcart-tit span.fl{
+	position: absolute;
+}
+
+.coupon{position:relative;background:#d51d27;color:#fff;width:100%;height:120px;line-height:25px;overflow:hidden;margin-top:15px;}
+.coupon-diabled{background:#c3c3c3;color:#666;}
+.coupon:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.coupon-money .sum{font-size:40px;}
+.coupon-left{float:left;text-align:left;width:50%;font-size:12px;background:url(./circle-border-left.png) left center no-repeat;}
+.coupon-right{float:right;text-align: center;width:50%;font-size:14px;background:url(./circle-border-right.png) right center no-repeat;}
+.coupon-inner{padding:10px 1px;height:100px;position: relative;}
+.coupon-right .coupon-inner{border-left:2px dashed rgba(255,255,255,.5);}
+.coupon-money,.coupon-time{margin-top:1px;}
+.coupon-circle{display:inline-block;width:16px;height:16px;background:#fff;position: absolute;left:-9px;border-radius:50%}
+.coupon-circle.top{top:-8px;}
+.coupon-circle.bottom{bottom:-8px;}
+.coupon-light{position:absolute;top:20px;left:20%;height:150px;width:100%;background:rgba(255,255,255,.2);transform: rotate(-30deg);-webkit-transform: rotate(-30deg);-moz-transform: rotate(-30deg);}
+
+
+
+
+
+
+
+
+
+
+
+</style>
+</head>
+<body>
+<div id="indexVm" v-cloak>	
+<header class="header mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">优惠卷</h1>
+</header>
+<div class="mui-content">
+<div id="account1" class="mui-page ">
+	<div class="">
+		<div class="">
+			<div class="">
+				<div class="">
+					<div style="padding:5px 10px;"class="b-line">
+						<div id="segmentedControl" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
+							<a class="mui-active mui-control-item" href="#item1">可兑换</a>
+							<a class="mui-control-item" href="#item2">待使用</a>
+							<a class="mui-control-item" href="#item3">已使用</a>
+							<a class="mui-control-item" href="#item4">过期</a>
+						</div>
+					</div>
+					<div>
+						<div id="item1" class="mui-control-content mui-active">				
+							<div class="coupon" v-for="wsActivityCoupon in wsActivityCouponList">
+							 <a style="color:#FFF" v-bind:onclick="'convert(\''+wsActivityCoupon.id+'\')'">
+						        <div class="coupon-left">
+						            <div class="coupon-inner">
+						                <div class="coupon-money">
+						                    <span>¥</span>
+						                    <span class="sum">{{wsActivityCoupon.faceValue}}</span>
+						                </div>
+						                <div class="coupon-condition">
+						              
+						                    <p>{{wsActivityCoupon.title}}</p>
+						                </div>
+						                 <div class="coupon-condition">
+						                    <p>满{{wsActivityCoupon.orderMoney}}可用,兑换积分：{{wsActivityCoupon.score}}</p>
+						                </div>
+						            </div>
+						        </div>
+						         
+						        <div class="coupon-right">
+						            <div class="coupon-inner">
+						                <div class="coupon-time">
+						                    	开始日期
+						                    {{wsActivityCoupon.starttime}}
+						                </div>
+						                         <div class="coupon-time">
+						                    	截止日期
+						                    {{wsActivityCoupon.endtime}}
+						                </div>
+						      
+						                <i class="coupon-circle top"></i>
+						                <i class="coupon-circle bottom"></i>
+						            </div>
+						        </div>
+						        <div class="coupon-light"></div>
+						        </a>
+						   </div>
+						</div>	
+						<div id="item2" class="mui-control-content">
+							<div class="coupon" v-for="toUseCoupon in toUseCouponList">
+							<a style="color:#FFF" v-bind:onclick="'useCoupon(\''+toUseCoupon.wsActivityCoupon.id+'\')'">
+						        <div class="coupon-left">
+						            <div class="coupon-inner">
+						                <div class="coupon-money">
+						                    <span>¥</span>
+						                    <span class="sum">{{toUseCoupon.couponMoney}}</span>
+						                </div>
+						                <div class="coupon-condition">
+						              
+						                    <p>{{toUseCoupon.wsActivityCoupon.title}}</p>
+						                </div>
+						                 <div class="coupon-condition">
+						                    <p>满{{toUseCoupon.conditionMoney}}可用</p>
+						                </div>
+						            </div>
+						        </div>
+						         
+						        <div class="coupon-right">
+						            <div class="coupon-inner">
+						                <div class="coupon-time">
+						                    开始日期
+						                   {{toUseCoupon.startTime}}
+						                </div>
+						                         <div class="coupon-time">
+						                    截止日期
+						                   {{toUseCoupon.endTime}}
+						                </div>
+						      
+						                <i class="coupon-circle top"></i>
+						                <i class="coupon-circle bottom"></i>
+						            </div>
+						        </div>
+						        <div class="coupon-light"></div>
+						        </a>
+						    </div>
+						</div>	
+						<div id="item3" class="mui-control-content">
+							<div class="coupon" v-for="usedCoupon in usedCouponList">
+						        <div class="coupon-left">
+						            <div class="coupon-inner">
+						                <div class="coupon-money">
+						                    <span>¥</span>
+						                    <span class="sum">{{usedCoupon.couponMoney}}</span>
+						                </div>
+						                <div class="coupon-condition">
+						              
+						                    <p>{{usedCoupon.wsActivityCoupon.title}}</p>
+						                </div>
+						                 <div class="coupon-condition">
+						                    <p>满{{usedCoupon.conditionMoney}}可用</p>
+						                </div>
+						            </div>
+						        </div>
+						         
+						        <div class="coupon-right">
+						            <div class="coupon-inner">
+						                <div class="coupon-time">
+						                		已使用
+						                </div>
+						                <div class="coupon-time">
+						                    截止日期
+						                 {{usedCoupon.endTime}}
+						                </div>
+						      
+						                <i class="coupon-circle top"></i>
+						                <i class="coupon-circle bottom"></i>
+						            </div>
+						        </div>
+						        <div class="coupon-light"></div>
+						    </div>
+						</div>	
+						<div id="item4" class="mui-control-content">
+							<div class="coupon" v-for="expiredCoupon in expiredCouponList">
+						        <div class="coupon-left">
+						            <div class="coupon-inner">
+						                <div class="coupon-money">
+						                    <span>¥</span>
+						                    <span class="sum">{{expiredCoupon.couponMoney}}</span>
+						                </div>
+						                <div class="coupon-condition">
+						              
+						                    <p>{{expiredCoupon.wsActivityCoupon.title}}</p>
+						                </div>
+						                 <div class="coupon-condition">
+						                    <p>满{{expiredCoupon.conditionMoney}}可用</p>
+						                </div>
+						            </div>
+						        </div>
+						         
+						        <div class="coupon-right">
+						            <div class="coupon-inner">
+						                <div class="coupon-time">
+						                    已过期
+						                </div>
+						                         <div class="coupon-time">
+						                    截止日期
+						                   {{expiredCoupon.endTime}}
+						                </div>
+						      
+						                <i class="coupon-circle top"></i>
+						                <i class="coupon-circle bottom"></i>
+						            </div>
+						        </div>
+						        <div class="coupon-light"></div>
+						        
+						    </div>
+						</div>	
+
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+<script src="js/mui.min.js"></script>
+<script src="js/mui.pullToRefresh.js"></script>
+<script src="js/mui.pullToRefresh.material.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#indexVm',
+		data: {
+			wsActivityCouponList: [],
+			toUseCouponList: [],
+			usedCouponList: [],
+			expiredCouponList: [],
+		},
+		created: function () {
+			mui.ajax(wxshop.serverUrl+"/coupon", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code")
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+					}		
+					vm.wsActivityCouponList=data.wsActivityCouponList;
+					vm.toUseCouponList=data.toUseCouponList;
+					vm.usedCouponList=data.usedCouponList;
+					vm.expiredCouponList=data.expiredCouponList;
+				},
+				error: function(xhr,type,errorThrown) {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+		},
+	});
+	function convert(couponId){
+		var btnArray = ['否', '是'];
+		mui.confirm('是否确认兑换该优惠券？', '优惠券兑换确认', btnArray, function(e) {
+			if (e.index == 1) {
+				mui.ajax(wxshop.serverUrl+"/coupon/convert", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+					couponId:couponId,
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+					}else{
+						vm.toUseCouponList=data.toUseCouponList;
+						mui.toast("兑换优惠券成功");
+					}
+				},
+				error: function(xhr,type,errorThrown) {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+			}
+		})
+	}
+	function useCoupon(couponId){
+		mui.openWindow({url:"productCouponList.html?couponId="+couponId,});
+	}
+</script>
+
+
+
+</body>
+</html>

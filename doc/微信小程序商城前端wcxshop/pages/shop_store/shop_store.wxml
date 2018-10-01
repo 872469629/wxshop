@@ -1,0 +1,46 @@
+<!--pages/shop_store/shop_store.wxml-->
+<view class="dian">
+    <image class="log" src="{{shopInfo.logo}}"></image>
+    <view class="si">
+        <text>wshop微信商城</text>
+    </view>
+</view>
+
+<view class="tab"> 
+<!--头部-->
+      <view class="tab-left" bindtap="tabFun"> 
+          <view class="{{tabArr.curHdIndex=='0'? 'active' : ''}}" id="tab-hd01" data-id="0">简介</view><text style="color:#ccc">|</text>
+      </view> 
+
+<view class="tab-right"> 
+ <view class="right-item {{tabArr.curBdIndex=='0'? 'active' : ''}}"  >
+ <view class="boxx">
+    <view class="cl">
+        <import src="../../wxParse/wxParse.wxml"/> 
+        <view class="wxParse">
+            <scroll-view style="height:2000rpx;" scroll-y='true'>
+            <template is="wxParse" data="{{wxParseData:content.nodes}}"/>
+            </scroll-view>
+        </view>
+    </view>
+ </view>
+ </view> 
+<!--2-->
+
+</view> 
+</view>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

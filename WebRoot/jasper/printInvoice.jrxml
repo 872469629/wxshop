@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="printInvoice" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="04571adf-fad9-4fed-aa08-1f09252f4e4b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<title>
+		<band height="309" splitType="Stretch">
+			<staticText>
+				<reportElement x="181" y="19" width="122" height="27" uuid="19570761-a0f3-48c8-b777-7c64aa6df476"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="15" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[发货单]]></text>
+			</staticText>
+			<line>
+				<reportElement x="17" y="56" width="522" height="1" uuid="b7d4158a-ad7a-4fe3-a12f-d88825c10b9b"/>
+			</line>
+			<line>
+				<reportElement x="18" y="56" width="1" height="185" uuid="e66f4695-38e0-4ccd-bf78-2761a45cb41b"/>
+			</line>
+			<line>
+				<reportElement x="539" y="57" width="1" height="183" uuid="6ccbf4f2-9328-493a-b28d-c9dcf6959f8a"/>
+			</line>
+			<line>
+				<reportElement x="18" y="95" width="522" height="1" uuid="cd5504d8-53e9-4742-93c0-5410bf8ad2c2"/>
+			</line>
+			<line>
+				<reportElement x="18" y="141" width="522" height="1" uuid="ba98ebda-b822-49ac-a8df-8013774c4a99"/>
+			</line>
+			<line>
+				<reportElement x="17" y="240" width="522" height="1" uuid="10d95b87-dfb4-4eb2-b81a-c9ea7e844cb8"/>
+			</line>
+			<line>
+				<reportElement x="78" y="57" width="1" height="183" uuid="5fa27ed8-5e57-49fb-b6fa-e355b87e3ca1"/>
+			</line>
+			<staticText>
+				<reportElement x="18" y="67" width="60" height="28" uuid="5c7b5d28-8848-4a70-a75d-ceec729ea847"/>
+				<textElement>
+					<font pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[收货人姓名：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="18" y="107" width="60" height="34" uuid="7f010ccf-9570-47cf-9e88-86d313025011"/>
+				<textElement>
+					<font pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[收货人联系电话：]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="163" width="60" height="34" uuid="1c626017-fbdd-402f-895b-32acf0ded9cf"/>
+				<textElement>
+					<font pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[收货人联系地址]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="243" y="67" width="60" height="34" uuid="b0ee4165-59d8-412a-b06b-7373e20c7bc9"/>
+				<textElement>
+					<font pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[收货人邮编：]]></text>
+			</staticText>
+			<line>
+				<reportElement x="242" y="57" width="1" height="85" uuid="a5bb0461-6008-4136-a2f6-bde30b30acf4"/>
+			</line>
+			<line>
+				<reportElement x="338" y="56" width="1" height="85" uuid="8e698b17-33ec-42d4-b66e-050704ba5301"/>
+			</line>
+			<staticText>
+				<reportElement x="243" y="107" width="60" height="34" uuid="9fc9cb10-a125-4a82-9e9f-57f6cf8f1a7d"/>
+				<textElement>
+					<font pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[付款金额：]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="318" splitType="Stretch"/>
+	</detail>
+</jasperReport>

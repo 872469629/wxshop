@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report_user_num" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="82d4fd4b-2c69-4855-a3b2-e4993eead0cf">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="userNumPie" uuid="b6db34bd-8cf2-4935-9b51-0230f5b002fb">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="mrankNanme" class="java.lang.String">
+			<fieldDescription><![CDATA[mrankNanme]]></fieldDescription>
+		</field>
+		<field name="userCount" class="java.lang.Integer">
+			<fieldDescription><![CDATA[userCount]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="userNumPie" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="208" splitType="Stretch">
+			<pieChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="58" width="406" height="150" uuid="09d292ee-80ec-42e9-8d91-d188aa5ce5e7"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="userNumPie" uuid="7626d480-7d85-4736-87f5-3ad4053014a2">
+							<dataSourceExpression><![CDATA[$P{userNumPie}]]></dataSourceExpression>
+						</datasetRun>
+					</dataset>
+					<keyExpression><![CDATA[$F{mrankNanme}]]></keyExpression>
+					<valueExpression><![CDATA[$F{userCount}]]></valueExpression>
+				</pieDataset>
+				<piePlot>
+					<plot/>
+					<itemLabel/>
+				</piePlot>
+			</pieChart>
+			<staticText>
+				<reportElement x="179" y="11" width="175" height="36" uuid="7c3b594c-4628-4694-8b6e-a52e039a373e"/>
+				<textElement>
+					<font size="20" pdfFontName="STSong-Light" pdfEncoding="UniGB-UCS2-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[会员等级占比统计]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

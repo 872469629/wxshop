@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	
+	<title>订单列表</title>
+	<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<link rel="stylesheet" href="css/haitao/home.css">
+<link rel="stylesheet" type="text/css" href="css/haitao/icons-extra.css" />
+<link rel="stylesheet" type="text/css" href="css/haitao/app.css"/>
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<style>
+.pro-details {
+	left:0px;	
+}	
+ul.shopcart-item li{
+	height: 80px;
+}
+.pro-button{
+	float: right;
+	margin-right: 10px;
+	color: #dd2727;
+    font-size: 16px;
+    line-height:35px
+}
+.shopcart-tit span.fl{
+	position: absolute;
+}
+</style>
+</head>
+<body>
+<div id="indexVm" v-cloak>	
+<header class="header mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">订单列表</h1>
+</header>
+<div class="mui-content">
+<div id="account1" class="mui-page ">
+	<div class="">
+		<div class="">
+			<div class="">
+				<div class="">
+					<div style="padding:5px 10px;"class="b-line">
+						<div id="segmentedControl" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
+							<a v-bind:class="orderType =='0'?'mui-active mui-control-item':'mui-control-item'" href="#item0">待付款</a>
+							<a v-bind:class="orderType =='1'?'mui-active mui-control-item':'mui-control-item'" href="#item1">待发货</a>
+							<a v-bind:class="orderType =='2'?'mui-active mui-control-item':'mui-control-item'" href="#item2">待收货</a>
+							<a v-bind:class="orderType =='3'?'mui-active mui-control-item':'mui-control-item'" href="#item3">待评价</a>
+							<a v-bind:class="orderType =='5'?'mui-active mui-control-item':'mui-control-item'" href="#item5">已完成</a>
+							<a v-bind:class="orderType =='6'?'mui-active mui-control-item':'mui-control-item'" href="#item6">退款退货</a>
+						</div>
+					</div>
+					<div>
+						<!--待付款-->
+						<div id="item0" v-bind:class="orderType =='0'?'mui-control-content mui-active':'mui-control-content'">
+							<div class="shopcart-group" v-for="(wsWaitPayOrder,index) in wsWaitPayOrderList" v-bind:style="index==0?'':'padding-top: 50px;'">
+							    <div class="shopcart-tit">
+							    	<div class="check-box fl">
+							    	<label><input type="checkbox" value="" name="newslist" id="newslist-1" class="newslist"></label></div>
+							    	<span class="fl"><a href="#">订单号：{{wsWaitPayOrder.orderSn}}</a></span>
+							    </div>
+						    	<ul class="shopcart-item">
+						      		<li class="clearfix" v-for="wsWaitPayOrderItem in wsWaitPayOrderItemListFilter(wsAllOrderItemList,wsWaitPayOrder.id)">
+						        	<div class="pro-details">            
+						          		<div class="pro-details-l">
+						            		<a href="#"><img v-bind:src="wsWaitPayOrderItem.thumb"></a>
+						          		</div>            
+						         		<div class="pro-details-r">
+							              <div class="pro-details-top">
+							                <a href="#">
+							                  <h2 class="pro-details-text-tit">{{wsWaitPayOrderItem.wsProduct.title}}</h2>
+							                  <p class="pro-details-text-des">{{wsWaitPayOrderItem.skuSpec}}</p>
+							                </a>            
+							              </div> 
+							              <div class="pro-details-tips clearfix">
+							                <em>单价：￥{{wsWaitPayOrderItem.reallyUnitPrice}}</em>
+							                <div class="pro-number fr">x{{wsWaitPayOrderItem.quantity}}</div>
+							              </div>
+						          		</div>  
+						        	</div>
+						      		</li>
+						    	</ul>
+						    	<div class="pro-button">
+						    		<em>付款总计：￥{{wsWaitPayOrder.reallyPrice}}</em>
+						    		<button type="button" v-bind:onclick="'payOrder(\''+wsWaitPayOrder.id+'\')'" class="mui-btn mui-btn-danger mui-btn-outlined">去付款</button>
+						    		<button type="button" v-bind:onclick="'cancleOrder(\''+wsWaitPayOrder.id+'\')'" class="mui-btn mui-btn-danger mui-btn-outlined">取消订单</button>	
+						    	</div>
+					 		</div>
+							</div>
+							<!--待发货-->
+							<div id="item1" v-bind:class="orderType =='1'?'mui-control-content mui-active':'mui-control-content'">
+							<div class="shopcart-group" v-for="(wsWaitSendOrder,index) in wsWaitSendOrderList" v-bind:style="index==0?'':'padding-top: 50px;'">
+							    <div class="shopcart-tit">
+							    	<div class="check-box fl">
+							    	<label><input type="checkbox" value="" name="newslist" id="newslist-1" class="newslist"></label></div>
+							    	<span class="fl"><a href="#">订单号：{{wsWaitSendOrder.orderSn}}</a></span>
+							    </div>
+						    	<ul class="shopcart-item">
+						      		<li class="clearfix" v-for="wsWaitSendOrderItem in wsWaitSendOrderItemListFilter(wsAllOrderItemList,wsWaitSendOrder.id)">
+						        	<div class="pro-details">            
+						          		<div class="pro-details-l">
+						            		<a href="#"><img v-bind:src="wsWaitSendOrderItem.thumb"></a>
+						          		</div>            
+						         		<div class="pro-details-r">
+							              <div class="pro-details-top">
+							                <a href="#">
+							                  <h2 class="pro-details-text-tit">{{wsWaitSendOrderItem.wsProduct.title}}</h2>
+							                  <p class="pro-details-text-des">{{wsWaitSendOrderItem.skuSpec}}</p>
+							                </a>            
+							              </div> 
+							              <div class="pro-details-tips clearfix">
+							                <em>单价：￥{{wsWaitSendOrderItem.reallyUnitPrice}}</em>
+							                <div class="pro-number fr">x{{wsWaitSendOrderItem.quantity}}</div>
+							              </div>
+						          		</div>  
+						        	</div>
+						      		</li>
+						    	</ul>
+						    	<div class="pro-button">
+						    		<em>付款总计：￥{{wsWaitSendOrder.reallyPrice}}</em>
+						    		<button type="button" v-bind:onclick="'warnOrder(\''+wsWaitSendOrder.id+'\')'" class="mui-btn mui-btn-danger mui-btn-outlined">提醒发货</button>
+						    	</div>
+					 		</div>
+							</div>
+							<!--待收货-->
+							<div id="item2" v-bind:class="orderType =='2'?'mui-control-content mui-active':'mui-control-content'">
+							<div class="shopcart-group" v-for="(wsWaitReceviedOrder,index) in wsWaitReceviedOrderList" v-bind:style="index==0?'':'padding-top: 50px;'">
+							    <div class="shopcart-tit">
+							    	<div class="check-box fl">
+							    	<label><input type="checkbox" value="" name="newslist" id="newslist-1" class="newslist"></label></div>
+							    	<span class="fl"><a href="#">订单号：{{wsWaitReceviedOrder.orderSn}}</a></span>
+							    </div>
+						  		<ul class="shopcart-item">
+							      <li class="clearfix" v-for="wsWaitReceviedOrderItem in wsWaitReceviedOrderItemListFilter(wsAllOrderItemList,wsWaitReceviedOrder.id)">
+							        <div class="pro-details">            
+							          <div class="pro-details-l">
+							            <a href="#"><img v-bind:src="wsWaitReceviedOrderItem.thumb"></a>
+							           
+							          </div>            
+							          <div class="pro-details-r">
+							              <div class="pro-details-top">
+							                <a href="#">
+							                  <h2 class="pro-details-text-tit">{{wsWaitReceviedOrderItem.wsProduct.title}}</h2>
+							                  <p class="pro-details-text-des">{{wsWaitReceviedOrderItem.skuSpec}}</p>
+							                </a>            
+							              </div> 
+							              <div class="pro-details-tips clearfix">
+							                <em>单价：￥{{wsWaitReceviedOrderItem.reallyUnitPrice}}</em>
+							                <div class="pro-number fr">x{{wsWaitReceviedOrderItem.quantity}}</div>
+							              </div>
+							          	</div>  
+							        	</div>
+							      	</li>
+						    	</ul>
+						    	<div class="pro-button">
+						    		<em>付款总计：￥{{wsWaitReceviedOrder.reallyPrice}}</em>
+						    		<button type="button" v-bind:onclick="'payOrderRecevied(\''+wsWaitReceviedOrder.id+'\')'" class="mui-btn mui-btn-danger mui-btn-outlined">确认收货</button>
+						    	</div>
+					 		</div>
+							</div>
+							<!--待评价-->
+							<div id="item3" v-bind:class="orderType =='3'?'mui-control-content mui-active':'mui-control-content'">
+							<div class="shopcart-group" v-for="(wsWaitEvaluationOrder,index) in wsWaitEvaluationOrderList" v-bind:style="index==0?'':'padding-top: 50px;'">
+							    <div class="shopcart-tit">
+							    	<div class="check-box fl">
+							    	<label><input type="checkbox" value="" name="newslist" id="newslist-1" class="newslist"></label></div>
+							    	<span class="fl"><a href="#">订单号：{{wsWaitEvaluationOrder.orderSn}}</a></span>
+							    </div>
+						  		<ul class="shopcart-item">
+							      <li class="clearfix" v-for="wsWaitEvaluationOrderItem in wsWaitEvaluationOrderItemListFilter(wsAllOrderItemList,wsWaitEvaluationOrder.id)">
+							        <div class="pro-details">            
+							          <div class="pro-details-l">
+							           <a href="#"><img v-bind:src="wsWaitEvaluationOrderItem.thumb"></a>
+							           
+							          </div>            
+							          <div class="pro-details-r">
+							              <div class="pro-details-top">
+							                <a href="#">
+							                  <h2 class="pro-details-text-tit">{{wsWaitEvaluationOrderItem.wsProduct.title}}</h2>
+							                  <p class="pro-details-text-des">{{wsWaitEvaluationOrderItem.skuSpec}}</p>
+							                </a>            
+							              </div> 
+							              <div class="pro-details-tips clearfix">
+							                <em>单价：￥{{wsWaitEvaluationOrderItem.reallyUnitPrice}}</em>
+							                <div class="pro-number fr">x{{wsWaitEvaluationOrderItem.quantity}}</div>
+							              </div>
+							          	</div>  
+							        	</div>
+							      	</li>
+						    	</ul>
+						    	<div class="pro-button">
+						    		<em>付款总计：￥{{wsWaitEvaluationOrder.reallyPrice}}</em>
+						    		<button type="button" v-bind:onclick="'payConsulation(\''+wsWaitEvaluationOrder.id+'\')'" class="mui-btn mui-btn-danger mui-btn-outlined">评价</button>
+						    	</div>
+					 		</div>
+							</div>
+							<!--已完成-->
+							<div id="item5" v-bind:class="orderType =='5'?'mui-control-content mui-active':'mui-control-content'">
+							<div class="shopcart-group" v-for="(wsFinshOrder,index) in wsFinshOrderList" v-bind:style="index==0?'':'padding-top: 50px;'">
+							    <div class="shopcart-tit">
+							    	<div class="check-box fl">
+							    	<label><input type="checkbox" value="" name="newslist" id="newslist-1" class="newslist"></label></div>
+							    	<span class="fl"><a href="#">订单号：{{wsFinshOrder.orderSn}}</a></span>
+							    </div>
+						  		<ul class="shopcart-item">
+							      <li class="clearfix" v-for="wsFinshOrderItem in wsFinshOrderItemListFilter(wsAllOrderItemList,wsFinshOrder.id)">
+							        <div class="pro-details">            
+							          <div class="pro-details-l">
+							           <a href="#"><img v-bind:src="wsFinshOrderItem.thumb"></a>
+							           
+							          </div>            
+							          <div class="pro-details-r">
+							              <div class="pro-details-top">
+							                <a href="#">
+							                  <h2 class="pro-details-text-tit">{{wsFinshOrderItem.wsProduct.title}}</h2>
+							                  <p class="pro-details-text-des">{{wsFinshOrderItem.skuSpec}}</p>
+							                </a>            
+							              </div> 
+							              <div class="pro-details-tips clearfix">
+							                <em>单价：￥{{wsFinshOrderItem.reallyUnitPrice}}</em>
+							                <div class="pro-number fr">x{{wsFinshOrderItem.quantity}}</div>
+							              </div>
+							          	</div>  
+							        	</div>
+							      	</li>
+						    	</ul>
+						    	<div class="pro-button">
+						    		<em>付款总计：￥{{wsFinshOrder.reallyPrice}}</em>
+						    		<button v-if="wsFinshOrder.wsReturn==null" type="button" v-bind:onclick="'returnBack(\''+wsFinshOrder.id+'\')'" class="mui-btn mui-btn-danger mui-btn-outlined">申请退款</button>
+						    		<button v-if="wsFinshOrder.wsReturn!=null" type="button" v-bind:onclick="'showBack(\''+wsFinshOrder.id+'\')'" class="mui-btn mui-btn-danger mui-btn-outlined">有退款</button>
+						    	</div>
+					 		</div>
+							</div>
+							<!--待退款-->
+							<div id="item6" v-bind:class="orderType =='6'?'mui-control-content mui-active':'mui-control-content'">
+							<div class="shopcart-group" v-for="(wsReturn,index) in wsReturnList" v-bind:style="index==0?'':'padding-top: 50px;'">
+							    <div class="shopcart-tit">
+							    	<div class="check-box fl">
+							    	<label><input type="checkbox" value="" name="newslist" id="newslist-1" class="newslist"></label></div>
+							    	<span class="fl"><a href="#">退款号：{{wsReturn.refundSn}}</a></span>
+							    </div>
+						  		<ul class="shopcart-item">
+							      	<li class="clearfix" v-for="wsReturnBackItem in wsReturnBackItemListFilter(wsAllReturnItemList,wsReturn.id)">
+							        	<div class="pro-details">            
+								          	<div class="pro-details-l">
+								            	<a href="#"><img v-bind:src="wsReturnBackItem.thumb"></a>
+								          	</div>            
+								          	<div class="pro-details-r">
+								              	<div class="pro-details-top">
+								                <a href="#">
+								                  <h2 class="pro-details-text-tit">{{wsReturnBackItem.wsProduct.title}}</h2>
+								                  <p class="pro-details-text-des">{{wsReturnBackItem.skuName}}</p>
+								                </a>            
+								              	</div> 
+								             	<div class="pro-details-tips clearfix">
+								                <em>单价：￥{{wsReturnBackItem.reallyUnitPrice}}</em>
+								                <div class="pro-number fr">x{{wsReturnBackItem.quantity}}</div>
+								              	</div>
+								          	</div>  
+							        	</div>
+							      	</li>
+						    	</ul>
+						    	<div class="pro-button">
+						    		<em>退款总计：￥{{wsReturn.returnAmount}}</em>
+						    		<button type="button" class="mui-btn mui-btn-danger mui-btn-outlined">{{wsReturn.state}}</button>
+						    	</div>
+					 		</div>
+							</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script>
+    mui.init({
+        swipeBack: true //启用右滑关闭功能
+    });
+	var vm = new Vue({
+		el: '#indexVm',
+		data: {
+			orderType:"",
+			wsAllOrderList: [],
+			wsAllOrderItemList: [],
+			wsWaitPayOrderList: [],
+			wsWaitSendOrderList: [],
+			wsWaitReceviedOrderList: [],
+			wsWaitEvaluationOrderList: [],
+			wsFinshOrderList: [],
+			wsAllReturnItemList: [],
+			wsReturnList: [],
+		},
+		created: function () {
+			mui.ajax(wxshop.serverUrl+"/order/list", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code")
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+					}			
+					vm.orderType=wxshop.getUrlParam("orderType");
+					vm.wsAllOrderList=data.wsAllOrderList;
+					vm.wsAllOrderItemList=data.wsAllOrderItemList;
+					vm.wsWaitPayOrderList=data.wsWaitPayOrderList;
+					vm.wsWaitSendOrderList=data.wsWaitSendOrderList;
+					vm.wsWaitReceviedOrderList=data.wsWaitReceviedOrderList;
+					vm.wsWaitEvaluationOrderList=data.wsWaitEvaluationOrderList;
+					vm.wsFinshOrderList=data.wsFinshOrderList;
+					vm.wsAllReturnItemList=data.wsAllReturnItemList;
+					vm.wsReturnList=data.wsReturnList;
+					vm.$nextTick(function () {
+					    mui('#scroll').scroll({
+				            indicators: true //是否显示滚动条
+				        });
+				        var segmentedControl = document.getElementById('segmentedControl');
+				        mui('.mui-input-group').on('change', 'input', function() {
+				            if (this.checked) {
+				                var styleEl = document.querySelector('input[name="style"]:checked');
+				                var colorEl = document.querySelector('input[name="color"]:checked');
+				                if (styleEl && colorEl) {
+				                    var style = styleEl.value;
+				                    var color = colorEl.value;
+				                    segmentedControl.className = 'mui-segmented-control' + (style ? (' mui-segmented-control-' + style) : '') + ' mui-segmented-control-' + color;
+				                }
+				            }
+				        });
+					})
+				},
+				error: function(xhr,type,errorThrown) {
+							mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+		},
+		methods: {
+		  	wsWaitPayOrderItemListFilter: function (wsAllOrderItemList,orderId) {
+		      return wsAllOrderItemList.filter(function (wsWaitPayOrderItem) {
+		        return wsWaitPayOrderItem.wsOrder.id==orderId;
+		      })
+		    },
+		   	wsWaitSendOrderItemListFilter: function (wsAllOrderItemList,orderId) {
+		      return wsAllOrderItemList.filter(function (wsWaitSendOrderItem) {
+		        return wsWaitSendOrderItem.wsOrder.id==orderId;
+		      })
+		    },
+		   	wsWaitReceviedOrderItemListFilter: function (wsAllOrderItemList,orderId) {
+		      return wsAllOrderItemList.filter(function (wsWaitReceviedOrderItem) {
+		        return wsWaitReceviedOrderItem.wsOrder.id==orderId;
+		      })
+		    },
+		   	wsWaitEvaluationOrderItemListFilter: function (wsAllOrderItemList,orderId) {
+		      return wsAllOrderItemList.filter(function (wsWaitEvaluationOrderItem) {
+		        return wsWaitEvaluationOrderItem.wsOrder.id==orderId;
+		      })
+		    },
+		    wsFinshOrderItemListFilter: function (wsAllOrderItemList,orderId) {
+		      return wsAllOrderItemList.filter(function (wsFinshOrderItem) {
+		        return wsFinshOrderItem.wsOrder.id==orderId;
+		      })
+		    },
+		    wsReturnBackItemListFilter: function (wsAllReturnItemList,returnId) {
+		      return wsAllReturnItemList.filter(function (wsReturnBackItem) {
+		        return wsReturnBackItem.wsReturn.id==returnId;
+		      })
+		    },
+		}
+	});
+	//去付款
+	function payOrder(orderId){
+		mui.openWindow({url:"payOrder.html?orderId="+orderId});
+	}
+	//取消订单
+	function cancleOrder(orderId){
+		mui.ajax(wxshop.serverUrl+"/order/cancelOrder", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+					orderId:orderId,
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+						return;
+					}
+					mui.alert("取消订单成功");
+					vm.wsAllOrderList=data.wsAllOrderList;
+					vm.wsAllOrderItemList=data.wsAllOrderItemList;
+					vm.wsWaitPayOrderList=data.wsWaitPayOrderList;
+					vm.wsWaitReceviedOrderList=data.wsWaitReceviedOrderList;
+					vm.wsWaitEvaluationOrderList=data.wsWaitEvaluationOrderList;
+					vm.wsFinshOrderList=data.wsWaitBackOrderList;
+					vm.wsAllReturnItemList=data.wsAllReturnItemList;
+					vm.wsReturnList=data.wsReturnList;
+					vm.$nextTick(function () {
+					    mui('#scroll').scroll({
+				            indicators: true //是否显示滚动条
+				        });
+				        var segmentedControl = document.getElementById('segmentedControl');
+				        mui('.mui-input-group').on('change', 'input', function() {
+				            if (this.checked) {
+				                var styleEl = document.querySelector('input[name="style"]:checked');
+				                var colorEl = document.querySelector('input[name="color"]:checked');
+				                if (styleEl && colorEl) {
+				                    var style = styleEl.value;
+				                    var color = colorEl.value;
+				                    segmentedControl.className = 'mui-segmented-control' + (style ? (' mui-segmented-control-' + style) : '') + ' mui-segmented-control-' + color;
+				                }
+				            }
+				        });
+					})
+				},
+				error: function(xhr,type,errorThrown) {
+							mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+	}
+	//确认收货
+	function payOrderRecevied(orderId){
+		mui.ajax(wxshop.serverUrl+"/order/orderRecevied", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+					orderId:orderId,
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+						return;
+					}
+					mui.alert("确认收货成功");
+					vm.wsAllOrderList=data.wsAllOrderList;
+					vm.wsAllOrderItemList=data.wsAllOrderItemList;
+					vm.wsWaitPayOrderList=data.wsWaitPayOrderList;
+					vm.wsWaitReceviedOrderList=data.wsWaitReceviedOrderList;
+					vm.wsWaitEvaluationOrderList=data.wsWaitEvaluationOrderList;
+					vm.wsFinshOrderList=data.wsWaitBackOrderList;
+					vm.wsAllReturnItemList=data.wsAllReturnItemList;
+					vm.wsReturnList=data.wsReturnList;
+					vm.$nextTick(function () {
+					    mui('#scroll').scroll({
+				            indicators: true //是否显示滚动条
+				        });
+				        var segmentedControl = document.getElementById('segmentedControl');
+				        mui('.mui-input-group').on('change', 'input', function() {
+				            if (this.checked) {
+				                var styleEl = document.querySelector('input[name="style"]:checked');
+				                var colorEl = document.querySelector('input[name="color"]:checked');
+				                if (styleEl && colorEl) {
+				                    var style = styleEl.value;
+				                    var color = colorEl.value;
+				                    segmentedControl.className = 'mui-segmented-control' + (style ? (' mui-segmented-control-' + style) : '') + ' mui-segmented-control-' + color;
+				                }
+				            }
+				        });
+					})
+				},
+				error: function(xhr,type,errorThrown) {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+	}
+	//去评价
+	function payConsulation(orderId){
+		mui.openWindow({url:"userAddConsulation.html?orderId="+orderId});
+	}
+	//提醒发货哦
+	function warnOrder(orderId){
+		mui.ajax(wxshop.serverUrl+"/order/warnOrder", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+					orderId:orderId,
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+						return;
+					}
+					mui.alert("提醒发货成功");
+				},
+				error: function(xhr,type,errorThrown) {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+		});
+	}
+	//申请退款
+	function returnBack(orderId){
+		mui.openWindow({url:"returnBack.html?orderId="+orderId});
+	}
+</script>
+</body>
+</html>

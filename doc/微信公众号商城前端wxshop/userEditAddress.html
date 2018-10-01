@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<meta name="format-detection" content="telephone=no, email=no"/>
+	<meta charset="UTF-8">
+	<title>新建地址</title>
+	<link rel="stylesheet" href="css/mui.min.css">
+	<link rel="stylesheet" href="css/themes/css/core.css">
+	<link rel="stylesheet" href="css/themes/css/icon.css">
+	<link rel="stylesheet" href="css/themes/css/home.css">
+	<style>
+		.m-cell {background-color: #FFF;position: relative;z-index: 1;margin-bottom: .35rem;height: 3rem;line-height: 3rem;}
+	</style>
+</head>
+<body style="background:#eee">
+<div id="indexVm" v-cloak>
+<header class="aui-header-default aui-header-fixed aui-header-bg">
+	<a href="javascript:history.back(-1)" class="aui-header-item">
+		<i class="aui-icon aui-icon-back-white"></i>
+	</a>
+	<div class="aui-header-center aui-header-center-clear">
+		<div class="aui-header-center-logo">
+			<div class="aui-car-white-Typeface">新建地址</div>
+		</div>
+	</div>
+	<a href="#" class="aui-header-item-icon"   style="min-width:0">
+		<!--<i class="aui-icon aui-icon-search"></i>-->
+	</a>
+</header>
+
+
+<section class="aui-myOrder-content">
+	<div class="aui-prompt"><i class="aui-icon aui-prompt-sm"></i>填写您的地址信息</div>
+	<div class="aui-Address-box">
+		<p>
+			<input id="adressid" type="hidden" v-bind:value="wsAddress.id">
+			<input id="consignee" class="aui-Address-box-input" type="text" placeholder="收货人姓名" v-bind:value="wsAddress.consignee">
+		</p>
+		<p>
+			<input id="tel" class="aui-Address-box-input" type="text" placeholder="手机号码" v-bind:value="wsAddress.tel">
+		</p>
+		<p>
+			<input id="zipCode" class="aui-Address-box-input" type="text" placeholder="邮编" v-bind:value="wsAddress.zipCode">
+		</p>
+		<p>
+			<input  class="aui-Address-box-input" type="text" readonly id="city"  placeholder="所在地区" v-bind:value="wsAddress.city">
+		</p>
+		<p>
+			<textarea id="address" class="aui-Address-box-text" placeholder="街道， 小区门牌等详细地址" rows="3">{{wsAddress.address}}</textarea>
+		</p>
+
+	</div>
+	<div class="aui-out">
+		<a onclick="saveAddr()" class="red-color" style="color:#fff">保存并使用</a>
+	</div>
+</section>
+</div>
+
+<script type="text/javascript" src="css/themes/js/jquery.min.js"></script>
+<script type="text/javascript" src="css/themes/js/aui.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script>
+	var citys;
+	var cityArray= new Array();
+	var vm = new Vue({
+		el: '#indexVm',
+		data: {
+			messagenum: "",
+			wsAddress:"",
+		},
+		created: function () {
+			mui.ajax(wxshop.serverUrl+"/address/detail", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+					id:wxshop.getUrlParam("id"),
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+					}	
+					vm.messagenum=data.messagenum;
+					vm.wsAddress=data.wsAddress;
+					citys=data.citys;
+					window.YDUI_CITYS=citys
+					if(vm.wsAddress.city!=null && vm.wsAddress.city!=""){
+						cityArray=vm.wsAddress.city.split(" ");
+					}
+					vm.$nextTick(function () {
+					    var $target = $('#city');
+					    if(cityArray.length==3){
+					    	$target.citySelect({
+								provance: cityArray[0],
+					        	city: cityArray[1],
+					        	area: cityArray[2]
+				        	});
+					    }else{
+					    	$target.citySelect();
+					    }
+
+				        $target.on('click', function (event) {
+				            event.stopPropagation();
+				            $target.citySelect('open');
+				        });
+				        $target.on('done.ydui.cityselect', function (ret) {
+				            $(this).val(ret.provance + ' ' + ret.city + ' ' + ret.area);
+				        });
+					})
+				},
+				error: function() {
+					mui.alert("后台系统无法连接，请联系运营人员管理！");
+				}
+			});
+		},
+	});
+	
+	function saveAddr(){
+		var consignee=$("#consignee").val();
+		var tel=$("#tel").val();
+		var zipCode=$("#zipCode").val();
+		var city=$("#city").val();
+		var address=$("#address").val();
+		var adressid=$("#adressid").val();
+		if(consignee==null || consignee==""){
+			mui.alert("请填写收货人信息");
+			return;
+		}
+		if(tel==null || tel==""){
+			mui.alert("请填写联系方式信息");
+			return;
+		}
+		if(zipCode==null || zipCode==""){
+			mui.alert("请填写邮政编码信息");
+			return;
+		}
+		if(city==null || city==""){
+			mui.alert("请填写所在地区信息");
+			return;
+		}
+		if(address==null || address==""){
+			mui.alert("请填写详细地址信息");
+			return;
+		}
+		mui.ajax(wxshop.serverUrl+"/address/save", {
+			type: "post",
+			data:{
+				consignee:consignee,
+				tel:tel,
+				zipCode:zipCode,
+				city:city,
+				address:address,
+				id:adressid,
+			},
+			dataType: "json",
+			success: function(data) {
+				if(data.ret==0){
+					mui.alert(data.msg);
+					return;
+				}
+				if(data.ret==2){
+					wxshop.getOpenId();
+				}
+				mui.openWindow({url:"userAddres.html"});
+			},
+			error: function(xhr,type,errorThrown) {
+				mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+			}
+		});
+	}
+</script>
+</body>
+</html>

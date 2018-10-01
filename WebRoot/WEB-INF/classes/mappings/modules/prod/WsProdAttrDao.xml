@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.prod.dao.WsProdAttrDao">
+    
+	<sql id="wsProdAttrColumns">
+		a.id AS "id",
+		a.product_id AS "productId",
+		a.attrbute_code AS "attrbuteCode",
+		a.attrbute_name AS "attrbuteName",
+		a.attrbute_desc AS "attrbuteDesc",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsProdAttrJoins">
+	</sql>
+    
+	<select id="get" resultType="WsProdAttr">
+		SELECT 
+			<include refid="wsProdAttrColumns"/>
+		FROM ws_prod_attr a
+		<include refid="wsProdAttrJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsProdAttr">
+		SELECT 
+			<include refid="wsProdAttrColumns"/>
+		FROM ws_prod_attr a
+		<include refid="wsProdAttrJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsProdAttr">
+		SELECT 
+			<include refid="wsProdAttrColumns"/>
+		FROM ws_prod_attr a
+		<include refid="wsProdAttrJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_prod_attr(
+			id,
+			product_id,
+			attrbute_code,
+			attrbute_name,
+			attrbute_desc,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{productId},
+			#{attrbuteCode},
+			#{attrbuteName},
+			#{attrbuteDesc},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_prod_attr SET 	
+			product_id = #{productId},
+			attrbute_code = #{attrbuteCode},
+			attrbute_name = #{attrbuteName},
+			attrbute_desc = #{attrbuteDesc},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_prod_attr SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

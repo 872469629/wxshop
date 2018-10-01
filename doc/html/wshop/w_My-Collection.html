@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>首购</title>
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<!--消息 脚本-->
+<link rel="stylesheet" href="css/amazeui.min.css">
+<script src="js/amazeui.min.js"></script>
+<!--消息 脚本-->
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<style>
+  html,body {background-color: #efeff4;}	
+  .mui-scroll-wrapper{ left:20px; right:20px; width:auto;}
+</style>
+</head>
+
+<body>
+  <header class="header mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">我的收藏</h1>
+    <span class="my-collection-delete"></span>  
+    <div class="am-dropdown" data-am-dropdown>
+      <span class="am-btn am-dropdown-toggle" data-am-dropdown-toggle><em class="header-notice-tips"></em></span>
+      <ul class="am-dropdown-content">
+        <li class="clearfix"><a href="#"><i><img src="images/header-notice.png"></i>消息<em class="header-notice-tips fr"></em></a></li>
+        <li><a href="Index.html"><i><img src="images/header-home.png"></i>首页</a></li>
+      </ul>
+    </div>
+  </header>
+  <!--header-end-->
+
+<div class="mui-content">
+
+  <div class="my-collection-page">
+    <span><a class="my-collection-pagelink" href="#">精选推荐</a></span>
+    <span><a href="#">超级返</a></span>
+  </div> 
+  
+  <div class="my-collection-nav"> 
+    <div class="mui-scroll-wrapper">
+      <ul class="mui-scroll">
+        <li><a class="my-collection-active" href="#">服饰</a></li>
+        <li><a href="#">美妆</a></li>
+        <li><a href="#">居家</a></li>
+        <li><a href="#">生活</a></li>
+        <li><a href="#">食品</a></li>
+        <li><a href="#">美妆</a></li>
+        <li><a href="#">居家</a></li>
+        <li><a href="#">生活</a></li>
+        <li><a href="#">食品</a></li>
+      </ul>    
+    </div>
+  </div>
+
+  <div class="my-collection-con">
+      <ul>
+          <li class="my-footprints-item">
+            <a class="highlight" href="#">
+                <div class="my-footprints-item-l"><img src="images/footprints-img.jpg"></div>
+                <div class="my-footprints-item-r">
+                  <div class="my-footprints-item-tit">卓诗尼专柜同款2016春季新款圆头平跟单鞋女松糕底女鞋中跟乐福鞋</div>
+                  <div class="my-footprints-item-tips">
+                    <span>￥<em>128</em></span>
+                    <span class="tmall">天猫价：239元</span>
+                    <span class="details-icon"><img src="images/details-icon.png"></span>
+                  </div>
+                </div>
+            </a>
+          </li>
+          <li class="my-footprints-item">
+            <a class="highlight" href="#">
+                <div class="my-footprints-item-l"><img src="images/footprints-img.jpg"></div>
+                <div class="my-footprints-item-r">
+                  <div class="my-footprints-item-tit">卓诗尼专柜同款2016春季新款圆头平跟单鞋女松糕底女鞋中跟乐福鞋</div>
+                  <div class="my-footprints-item-tips">
+                    <span>￥<em>128</em></span>
+                    <span class="tmall">天猫价：239元</span>
+                    <span class="details-icon"><img src="images/details-icon.png"></span>
+                  </div>
+                </div>
+            </a>
+          </li>
+      </ul>
+  </div>     
+
+</div>
+<!--content-end-->
+<script src="js/mui.min.js"></script>
+<script>
+  mui('.mui-scroll-wrapper').scroll({
+	  deceleration: 0.0005, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+	  scrollY: false, //是否竖向滚动
+	  scrollX: true, //是否横向滚动
+	  startX: 0, //初始化时滚动至x
+	  startY: 0, //初始化时滚动至y
+	  bounce: true, //是否启用回弹
+	  bounceTime: 500, //回弹动画时间
+	  scrollTime: 500,
+	  directionLockThreshold: 5,
+	  indicators:false
+  });
+</script>
+
+</body>
+</html>

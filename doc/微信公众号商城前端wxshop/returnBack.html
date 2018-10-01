@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>申请退款</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<link rel="stylesheet" href="css/haitao/home.css">
+<link rel="stylesheet" type="text/css" href="css/haitao/icons-extra.css" />
+<link rel="stylesheet" type="text/css" href="css/haitao/app.css"/>
+
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+</head>
+
+<body>
+<div id="prodVm" v-cloak>
+  <header class="header mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		<h1 class="mui-title">申请退款</h1>
+		<!--<a id='setting' class=" mui-pull-right mui-btn-link">注册</a>-->
+  </header>
+  <!--header-end-->
+<div class="mui-content">
+	<div class="devider"></div>
+	<ul class="mui-table-view mui-table-view t-line" id="OA_task_1">
+		<li class="mui-table-view-cell  mui-table-view-cell mui-media b-line" v-for="wsOrderItem in wsOrderItemList">
+			<div class=" mui-input-row mui-checkbox mui-left"><input name="checkbox" value="Item 1" type="checkbox"></div>
+			<div class="mui-slider-handle mui-table">
+				<a href="javascript:;">
+					<img class="mui-order-img aui-ma-d mui-pull-left" v-bind:src="wsOrderItem.thumb">
+					<div class="pro-details-tips clearfix">
+						<em style="font-size: 30px;">￥{{wsOrderItem.reallyUnitPrice}}</em><span style="padding-left: 3px;">商城专享价</span>
+				    <h2 class="pro-details-text-tit">{{wsOrderItem.productTitle}}</h2>
+				    <p class="pro-details-text-des">商品：{{wsOrderItem.wsProduct.title}}</p>
+          	<p class="pro-details-text-des">规格：{{wsOrderItem.skuSpec}}</p>
+	            <div class="pro-number fr">数量：			
+	                <div class="mui-numbox" data-numbox-step='1' data-numbox-min='0' v-bind:data-numbox-max='wsOrderItem.quantity'>
+									  <button  class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+									  <input readonly="true" onchange="calculatedAmount()" class="mui-numbox-input" type="number" v-bind:value="0" v-bind:id="wsOrderItem.skuId" v-bind:skuId="wsOrderItem.skuId" v-bind:skuName="wsOrderItem.skuSpec"  v-bind:orderItemId="wsOrderItem.id" v-bind:reallyUnitPrice="wsOrderItem.reallyUnitPrice"/>
+									  <button class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+									</div>
+	            </div>
+						</p>
+					</div>
+				</a>
+			</div>
+		</li>
+	</ul>
+	<div class="devider b-line"></div>
+		<ul class="mui-table-view ">
+		<li class="mui-table-view-cell b-line" v-if="wsOrder.wsMemberCoupon!=null">返还优惠券: <span class="mui-pull-right">{{wsOrder.wsMemberCoupon.couponMoney}}</span></li>
+	</ul>
+</div>
+	<div class="mui-input-row" style="padding-top: 3px;">
+		<textarea class="mui-order-liuyan" id="reason" rows="5" placeholder="退款理由,请先联系客服，再进行退款操作" style="border:none"></textarea>
+	</div>
+<!--container-end-->
+<div style="height:49px"></div>
+<nav class="mui-bar mui-bar-tab" style="">
+	<div class="t-line aui-on-cell">
+		<div class="aui-onc">
+			<p style="display:inline-block"><span style="color:#fb4545" id="wsCartMoney"></span></p>
+			<a onclick="payOrder()" class="aui-got" >提交退款申请</a>
+		</div>
+	</div>
+</nav>
+</div>
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script type="text/javascript">
+	var skuId;
+	var prodId;
+	var couponMoney;
+	var vm = new Vue({
+		el: '#prodVm',
+		data: {
+			wsOrderItemList: [],
+			wsOrder:'',
+		},
+		created: function () {
+			mui.ajax(wxshop.serverUrl+"/returnBack", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+					orderId:wxshop.getUrlParam("orderId"),
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+					}	
+					vm.wsOrderItemList=data.wsOrderItemList;
+					vm.wsOrder=data.wsOrder;
+					if(data.wsOrder.wsMemberCoupon!=null){
+						couponMoney=wsOrder.wsMemberCoupon.couponMoney;
+					}else{
+						couponMoney=0;
+					}
+					vm.$nextTick(function () {
+							mui.init();
+							mui('.mui-numbox').numbox();
+							calculatedAmount();
+					})
+				},
+				error: function(xhr,type,errorThrown) {
+							mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+		},
+	});
+	
+	//选中之后计算金额
+	function calculatedAmount(){
+		var wsCartMoney=0;
+		$(".mui-numbox-input").each(function(){
+			var skuId=$(this).attr("skuId");
+			var quantity=$("#"+skuId).val();
+			var reallyUnitPrice=$(this).attr("reallyUnitPrice");
+			wsCartMoney=wsCartMoney+reallyUnitPrice*quantity;
+		});
+		wsCartMoney=wsCartMoney-couponMoney;
+		$("#wsCartMoney").html("合计：￥"+wsCartMoney+"(请勿邮费到付)");
+	}
+	//申请退款成功
+	function payOrder(){
+		calculatedAmount();
+		var arrParam=[];
+		$(".mui-numbox-input").each(function(){
+			var item={};
+			item.skuId=$(this).attr("skuId");
+			item.quantity=$("#"+item.skuId).val();
+			item.orderId=vm.wsOrder.id;
+			item.skuName=$(this).attr("skuName");
+			var wsOrderItem={};
+			wsOrderItem.id=$(this).attr("orderItemId");
+			item.wsOrderItem=wsOrderItem;
+			item.reason=$("#reason").val();
+			if(item.quantity>0){
+				arrParam.push(item);
+			}
+		});
+		if(arrParam.length<=0){
+			mui.alert("未选择退货商品，不能提交");
+			reutrn;
+		}
+		mui.ajax(wxshop.serverUrl+"/returnBack/saveReturnBack", {
+				type: "post",
+				data:JSON.stringify(arrParam),
+				dataType: "json",
+				contentType : "application/json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+						return;
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+					}	
+					mui.openWindow({
+							url:"orderlist.html",
+					});
+				},
+				error: function(xhr,type,errorThrown) {
+							mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+		});
+	}
+</script>

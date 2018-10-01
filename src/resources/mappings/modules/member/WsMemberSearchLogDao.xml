@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.member.dao.WsMemberSearchLogDao">
+    
+	<sql id="wsMemberSearchLogColumns">
+		a.id AS "id",
+		a.member_id AS "wsMember.id",
+		a.search_lable AS "searchLable",
+		a.last_search_date AS "lastSearchDate",
+		a.search_num AS "searchNum",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsMemberSearchLogJoins">
+	</sql>
+    
+	<select id="get" resultType="WsMemberSearchLog">
+		SELECT 
+			<include refid="wsMemberSearchLogColumns"/>
+		FROM ws_member_search_log a
+		<include refid="wsMemberSearchLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsMemberSearchLog">
+		SELECT 
+			<include refid="wsMemberSearchLogColumns"/>
+		FROM ws_member_search_log a
+		<include refid="wsMemberSearchLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsMember!=null and wsMember.id !=null and wsMember.id != null and wsMember.id != ''">
+				AND a.member_id = #{wsMember.id}
+			</if>
+			<if test="searchLable != null and searchLable != ''">
+				AND a.search_lable = #{searchLable}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsMemberSearchLog">
+		SELECT 
+			<include refid="wsMemberSearchLogColumns"/>
+		FROM ws_member_search_log a
+		<include refid="wsMemberSearchLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_member_search_log(
+			id,
+			member_id,
+			search_lable,
+			last_search_date,
+			search_num,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{wsMember.id},
+			#{searchLable},
+			#{lastSearchDate},
+			#{searchNum},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_member_search_log SET 	
+			member_id = #{wsMember.id},
+			search_lable = #{searchLable},
+			last_search_date = #{lastSearchDate},
+			search_num = #{searchNum},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_member_search_log SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

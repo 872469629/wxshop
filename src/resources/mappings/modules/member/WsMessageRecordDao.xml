@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.member.dao.WsMessageRecordDao">
+    
+	<sql id="wsMessageRecordColumns">
+		a.id AS "id",
+		a.message_id AS "messageId",
+		a.member_rank_id AS "memberRankId",
+		a.member_id AS "memberId",
+		t1.title AS "wsMessage.title",
+		t1.msg_content AS "wsMessage.msgContent",
+		t1.msg_type AS "wsMessage.msgType",
+		t1.send_date AS "wsMessage.sendDate",
+		a.read_flag AS "readFlag",
+		a.read_date AS "readDate",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsMessageRecordJoins">
+	left join ws_message t1 on a.message_id=t1.id
+	</sql>
+    
+	<select id="get" resultType="WsMessageRecord">
+		SELECT 
+			<include refid="wsMessageRecordColumns"/>
+		FROM ws_message_record a
+		<include refid="wsMessageRecordJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsMessageRecord">
+		SELECT 
+			<include refid="wsMessageRecordColumns"/>
+		FROM ws_message_record a
+		<include refid="wsMessageRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsMessage!=null and wsMessage.msgType != null and wsMessage.msgType != ''">
+				AND t1.msg_type = #{wsMessage.msgType}
+			</if>
+			<if test="memberRankId != null and memberRankId != ''">
+				AND a.member_rank_id = #{memberRankId}
+			</if>
+			<if test="memberId != null and memberId != ''">
+				AND a.member_id = #{memberId}
+			</if>
+			<if test="readFlag != null and readFlag != ''">
+				AND a.read_flag = #{readFlag}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsMessageRecord">
+		SELECT 
+			<include refid="wsMessageRecordColumns"/>
+		FROM ws_message_record a
+		<include refid="wsMessageRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findCount" resultType="java.lang.Integer">
+		SELECT 
+			count(1)
+		FROM ws_message_record a
+		<include refid="wsMessageRecordJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsMessage!=null and wsMessage.msgType != null and wsMessage.msgType != ''">
+				AND t1.msg_type = #{wsMessage.msgType}
+			</if>
+			<if test="memberId != null and memberId != ''">
+				AND a.member_id = #{memberId}
+			</if>
+			<if test="messageId != null and messageId != ''">
+				AND a.message_id = #{messageId}
+			</if>
+			<if test="readFlag != null and readFlag != ''">
+				AND a.read_flag = #{readFlag}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_message_record(
+			id,
+			message_id,
+			member_rank_id,
+			member_id,
+			read_flag,
+			read_date,
+			del_flag
+		) VALUES (
+			#{id},
+			#{messageId},
+			#{memberRankId},
+			#{memberId},
+			#{readFlag},
+			#{readDate},
+			#{delFlag}
+		)
+	</insert>
+	
+	
+	<insert id="insertByMrank">
+		INSERT INTO ws_message_record(
+			id,
+			message_id,
+			member_rank_id,
+			member_id,
+			read_flag,
+			del_flag
+		) select uuid(),#{messageId},t.member_rank_id,t.id,#{readFlag},#{delFlag}
+		 from ws_member t where t.member_rank_id=#{memberRankId}
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_message_record SET 	
+			message_id = #{messageId},
+			member_rank_id = #{memberRankId},
+			member_id = #{memberId},
+			read_flag = #{readFlag},
+			read_date = #{readDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_message_record SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

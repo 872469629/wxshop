@@ -1,0 +1,54 @@
+<view class="orderDetails" wx:for="{{toUseCouponList}}">
+	<view class="orderListDetails">
+		<view class="productInfo">
+           <text class="x">¥</text>
+           <text class="y">{{item.faceValue}}</text> 
+      
+	    </view>
+
+	    <view class="pr">
+           <text class="n">{{item.title}}</text>
+           <text class="b">{{item.couponContent}}</text>
+	    </view>
+      <view class="hh" bindtap="getvou" data-vid="{{item.id}}">
+        <view class="hb" >未使用</view>
+      </view>
+  </view>
+<view class="c">
+    开始日期：{{item.starttime}}</view>
+<view class="c">
+    结束日期：{{item.endtime}}</view>   
+</view>	
+
+<view class="orderDetails" wx:for="{{wsActivityCouponList}}">
+	<view class="orderListDetails">
+		<view class="productInfo">
+           <text class="x">¥</text>
+           <text class="y">{{item.faceValue}}</text> 
+      
+	    </view>
+
+	<view class="pr">
+           <text class="n">{{item.title}}</text>
+           <text class="b">{{item.couponContent}}</text>
+	    </view>
+    <view class="hh" bindtap="getvou" data-vid="{{item.id}}">
+      <view class="hb" >未使用</view>
+    </view>
+</view>
+<view class="c">
+    开始日期：{{item.starttime}}</view>
+<view class="c">
+    结束日期：{{item.endtime}}</view> 
+</view>	
+
+<!---底部开始-->
+<view class="cont">
+<view class="footfixed tc">
+    <view class="bg_red white w50 fl_l" bindtap="setModalStatus" data-status="2">可兑换</view>
+    <view class="w50 fl_l bg_cheng white" bindtap="setModalStatus" data-status="1">未使用</view>
+</view>
+</view>
+
+
+

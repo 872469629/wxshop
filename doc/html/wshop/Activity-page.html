@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>首购</title>
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<!--消息 脚本-->
+<link rel="stylesheet" href="css/amazeui.min.css">
+<script src="js/amazeui.min.js"></script>
+<!--消息 脚本-->
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<script src="js/TouchSlide.1.1.js"></script>
+<style>
+html,body,.mui-content{ max-width:100%; background-color:#dd2727; }
+.mui-bar-nav~.mui-content{ padding-top:84px;}
+.mui-scroll-wrapper{ height:40px; width:auto; right:10px;}
+.am-dropdown .am-btn{ background-image:url(images/h-notice-white-icon.png); }
+.nav-out{ position:fixed; top:44px;}
+.header{background-color:#dd2727;border-bottom:none;}
+em.header-notice-tips{background-color:#fff;}
+.am-dropdown .am-btn{background-image:url(images/h-notice-white-icon.png);}
+.mui-icon-back,.mui-icon-left-nav{background-image:url(images/h-back-white.png);}
+</style>
+</head>
+
+<body>
+  <header class="header mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <div class="shopping-cart-notice"><em>2</em></div>
+    <div class="am-dropdown" data-am-dropdown>
+      <span class="am-btn am-dropdown-toggle" data-am-dropdown-toggle><em class="header-notice-tips"></em></span>
+      <ul class="am-dropdown-content">
+        <li class="clearfix"><a href="javascript:void(0)"><i><img src="images/header-notice.png"></i>消息<em class="header-notice-tips fr"></em></a></li>
+        <li><a href="Index.html"><i><img src="images/header-home.png"></i>首页</a></li>
+      </ul>
+    </div>
+  </header>
+  <!--header-end-->
+
+<div class="mui-content">
+  <!--导航-->
+  <div class="nav-out">
+    <div class="hot-pro-nav">
+      <div class="mui-scroll-wrapper">
+          <ul class="mui-scroll clearfix">
+            <li><a class="active" href="javascript:void(0)">全部</a></li>
+            <li><a href="javascript:void(0)">服饰</a></li>
+            <li><a href="javascript:void(0)">美妆</a></li>
+            <li><a href="javascript:void(0)">居家</a></li>
+            <li><a href="javascript:void(0)">食品</a></li>
+            <li><a href="javascript:void(0)">全部</a></li>
+            <li><a href="javascript:void(0)">服饰</a></li>
+            <li><a href="javascript:void(0)">居家</a></li>
+            <li><a href="javascript:void(0)">食品</a></li>
+            <li><a href="javascript:void(0)">全部</a></li>
+            <li><a href="javascript:void(0)">服饰</a></li>
+          </ul>
+      </div>
+    </div>
+  </div>  
+  <!--导航-->
+  
+  <!--折叠展开列表内容-->
+  <div class="nav-con">
+    <ul class="clearfix">
+      <li><a href="javascript:void(0)">全部</a></li>
+      <li><a href="javascript:void(0)">全部</a></li>
+      <li><a href="javascript:void(0)">全部</a></li>
+      <li><a href="javascript:void(0)">全部</a></li>            
+      <li><a href="javascript:void(0)">全部</a></li>
+      <li><a href="javascript:void(0)">全部</a></li>
+      <li><a href="javascript:void(0)">全部</a></li>
+    </ul>
+  </div>
+  <!--折叠展开列表内容-->
+
+  <!--Banner-->
+  <div class="banner" id="index-banner">
+  <div class="banner-pics">
+    <ul class="banner-pics-list OnSale-banner">
+      <li><a href="#"><img src="images/banner640x386.jpg" alt=""/></a></li>
+      <li><a href="#"><img src="images/banner640x386.jpg" alt=""/></a></li>
+      <li><a href="#"><img src="images/banner640x386.jpg" alt=""/></a></li>
+    </ul>
+  </div>
+  <ul class="banner-tit">
+    <li class="on"></li>
+    <li></li>
+    <li></li>
+  </ul>
+  </div>
+  <script type="text/javascript">
+        TouchSlide({
+            slideCell:"#index-banner",
+            titCell:".banner-tit li",//开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+            mainCell:".banner-pics-list",
+            effect:"left",
+            autoPlay:true,//自动播放
+            //autoPage:true, //自动分页
+            })
+  </script> 
+  <!--banner-end-->   
+  
+  <div class="activity-con">
+    <!--活动列表-->
+    <div class="activity-group">
+      <div class="activity-group-tit"><a name="1f"><span><em>1F</em>家居</span></a></div>
+      <ul class="clearfix">
+        <li>
+          <a href="javascript:void(0)">
+            <div class="activity-group-img" style="background-image:url(images/activity-group-img.jpg);"></div>
+            <div class="activity-group-txt">
+              <div class="activity-group-name">恋人赢行包邮三对装 小兔耳朵立体发夹 可爱萌物儿童</div>
+              <div class="sales-volume">月销2080件</div>
+              <div class="sales-volume">天猫价：69.9元</div>
+              <div class="activity-group-tips clearfix">
+                <div class="activity-price">￥<em>6.5</em></div>
+                <div class="shopping-cart-btn"></div>
+              </div>
+            </div>
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)">
+            <div class="activity-group-img" style="background-image:url(images/activity-group-img.jpg);"></div>
+            <div class="activity-group-txt">
+              <div class="activity-group-name">恋人赢行包邮三对装 小兔耳朵立体发夹 可爱萌物儿童</div>
+              <div class="sales-volume">月销2080件</div>
+              <div class="sales-volume">天猫价：69.9元</div>
+              <div class="activity-group-tips clearfix">
+                <div class="activity-price">￥<em>6.5</em></div>
+                <div class="shopping-cart-btn"></div>
+              </div>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!--活动列表-->
+    <!--活动列表-->
+    <div class="activity-group">
+      <div class="activity-group-tit"><a name="2f"><span><em>2F</em>服饰</span></a></div>
+      <ul class="clearfix">
+        <li>
+          <a href="javascript:void(0)">
+            <div class="activity-group-img" style="background-image:url(images/activity-group-img.jpg);"></div>
+            <div class="activity-group-txt">
+              <div class="activity-group-name">恋人赢行包邮三对装 小兔耳朵立体发夹 可爱萌物儿童</div>
+              <div class="sales-volume">月销2080件</div>
+              <div class="sales-volume">天猫价：69.9元</div>
+              <div class="activity-group-tips clearfix">
+                <div class="activity-price">￥<em>6.5</em></div>
+                <div class="shopping-cart-btn"></div>
+              </div>
+            </div>
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)">
+            <div class="activity-group-img" style="background-image:url(images/activity-group-img.jpg);"></div>
+            <div class="activity-group-txt">
+              <div class="activity-group-name">恋人赢行包邮三对装 小兔耳朵立体发夹 可爱萌物儿童</div>
+              <div class="sales-volume">月销2080件</div>
+              <div class="sales-volume">天猫价：69.9元</div>
+              <div class="activity-group-tips clearfix">
+                <div class="activity-price">￥<em>6.5</em></div>
+                <div class="shopping-cart-btn"></div>
+              </div>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!--活动列表-->
+    <!--活动列表-->
+    <div class="activity-group">
+      <div class="activity-group-tit"><a name="3f"><span><em>3F</em>美妆</span></a></div>
+      <ul class="clearfix">
+        <li>
+          <a href="javascript:void(0)">
+            <div class="activity-group-img" style="background-image:url(images/activity-group-img.jpg);"></div>
+            <div class="activity-group-txt">
+              <div class="activity-group-name">恋人赢行包邮三对装 小兔耳朵立体发夹 可爱萌物儿童</div>
+              <div class="sales-volume">月销2080件</div>
+              <div class="sales-volume">天猫价：69.9元</div>
+              <div class="activity-group-tips clearfix">
+                <div class="activity-price">￥<em>6.5</em></div>
+                <div class="shopping-cart-btn"></div>
+              </div>
+            </div>
+          </a>
+        </li>
+        <li>
+          <a href="javascript:void(0)">
+            <div class="activity-group-img" style="background-image:url(images/activity-group-img.jpg);"></div>
+            <div class="activity-group-txt">
+              <div class="activity-group-name">恋人赢行包邮三对装 小兔耳朵立体发夹 可爱萌物儿童</div>
+              <div class="sales-volume">月销2080件</div>
+              <div class="sales-volume">天猫价：69.9元</div>
+              <div class="activity-group-tips clearfix">
+                <div class="activity-price">￥<em>6.5</em></div>
+                <div class="shopping-cart-btn"></div>
+              </div>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!--活动列表-->
+    <!--活动列表-->
+    <div class="activity-group">
+      <div class="activity-group-tit"><a name="4f"><span><em>4F</em>生活</span></a></div>
+      <ul class="clearfix">
+        <li>
+          <a href="javascript:void(0)">
+            <div class="activity-group-img" style="background-image:url(images/activity-group-img.jpg);"></div>
+            <div class="activity-group-txt">
+              <div class="activity-group-name">恋人赢行包邮三对装 小兔耳朵立体发夹 可爱萌物儿童恋人赢行包邮三对装 小兔耳朵立体发夹 可爱萌物儿童</div>
+              <div class="sales-volume">月销2080件</div>
+              <div class="sales-volume">天猫价：69.9元</div>
+              <div class="activity-group-tips clearfix">
+                <div class="activity-price">￥<em>6.5</em></div>
+                <div class="shopping-cart-btn"></div>
+              </div>
+            </div>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="activity-group-img" style="background-image:url(images/activity-group-img.jpg);"></div>
+            <div class="activity-group-txt">
+              <div class="activity-group-name">恋人赢行包邮三对装 小兔耳朵立体发夹 可爱萌物儿童</div>
+              <div class="sales-volume">月销2080件</div>
+              <div class="sales-volume">天猫价：69.9元</div>
+              <div class="activity-group-tips clearfix">
+                <div class="activity-price">￥<em>6.5</em></div>
+                <div class="shopping-cart-btn"></div>
+              </div>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!--活动列表-->
+  </div>    
+</div>
+<!--container-end-->
+<script src="js/mui.min.js"></script>
+<script>
+mui.init({
+   swipeBack: true, //启用右滑关闭功能
+});  
+mui('.mui-scroll-wrapper').scroll({
+	deceleration: 0.0005, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+	scrollY: false, //是否竖向滚动
+	scrollX: true, //是否横向滚动
+	startX: 0, //初始化时滚动至x
+	startY: 0, //初始化时滚动至y
+	bounce: true, //是否启用回弹
+	bounceTime: 500, //回弹动画时间
+	scrollTime: 500,
+	directionLockThreshold: 5,
+	indicators:false,
+});
+</script>
+</body>
+</html>

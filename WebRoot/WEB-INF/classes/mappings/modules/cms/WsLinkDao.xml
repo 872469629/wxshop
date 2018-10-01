@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.cms.dao.WsLinkDao">
+    
+	<sql id="wsLinkColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.link_category_id AS "linkCategoryId.id",
+		a.link_href AS "linkHref",
+		a.state AS "state",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		c.name AS "linkCategoryId.name",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsLinkJoins">
+	JOIN ws_link_category c ON c.id = a.link_category_id
+	</sql>
+    
+	<select id="get" resultType="WsLink">
+		SELECT 
+			<include refid="wsLinkColumns"/>
+		FROM ws_link a
+		<include refid="wsLinkJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsLink">
+		SELECT 
+			<include refid="wsLinkColumns"/>
+		FROM ws_link a
+		<include refid="wsLinkJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="linkCategoryId != null and linkCategoryId.id != ''">
+				AND a.link_category_id = #{linkCategoryId.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsLink">
+		SELECT 
+			<include refid="wsLinkColumns"/>
+		FROM ws_link a
+		<include refid="wsLinkJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_link(
+			id,
+			name,
+			link_category_id,
+			link_href,
+			state,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{linkCategoryId.id},
+			#{linkHref},
+			#{state},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_link SET 	
+			name = #{name},
+			link_category_id = #{linkCategoryId.id},
+			link_href = #{linkHref},
+			state = #{state},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_link SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

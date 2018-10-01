@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ws.dao.WxAccountDao">
+    
+	<sql id="wxAccountColumns">
+		a.id AS "id",
+		a.account_name AS "accountName",
+		a.account_number AS "accountNumber",
+		a.account_token AS "accountToken",
+		a.account_type AS "accountType",
+		a.account_appid AS "accountAppid",
+		a.account_appsecret AS "accountAppsecret",
+		a.wcx_appid AS "wcxAppid",
+		a.wcx_appsecret AS "wcxAppsecret",
+		a.account_accesstoken AS "accountAccesstoken",
+		a.account_accesstoken_time AS "accountAccesstokenTime",
+		a.encoding_aes_key AS "encodingAesKey",
+		a.mch_id AS "mchId",
+		a.cert_path AS "certPath",
+		a.pay_key AS "paykey",
+		a.api_ticket AS "apiTicket",
+		a.api_tickett_time AS "apiTickettTime",
+		a.jsapi_ticket AS "jsapiTicket",
+		a.jsapi_ticket_time AS "jsapiTicketTime",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wxAccountJoins">
+	</sql>
+    
+	<select id="get" resultType="WxAccount">
+		SELECT 
+			<include refid="wxAccountColumns"/>
+		FROM wx_account a
+		<include refid="wxAccountJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WxAccount">
+		SELECT 
+			<include refid="wxAccountColumns"/>
+		FROM wx_account a
+		<include refid="wxAccountJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="accountName != null and accountName != ''">
+				AND a.account_name = #{accountName}
+			</if>
+			<if test="accountNumber != null and accountNumber != ''">
+				AND a.account_number = #{accountNumber}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WxAccount">
+		SELECT 
+			<include refid="wxAccountColumns"/>
+		FROM wx_account a
+		<include refid="wxAccountJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO wx_account(
+			id,
+			account_name,
+			account_number,
+			account_token,
+			account_type,
+			account_appid,
+			account_appsecret,
+			wcx_appid,
+			wcx_appsecret,
+			account_accesstoken,
+			encoding_aes_key,
+			mch_id,
+			cert_path,
+			pay_key,
+			api_ticket,
+			api_tickett_time,
+			jsapi_ticket,
+			jsapi_ticket_time,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{accountName},
+			#{accountNumber},
+			#{accountToken},
+			#{accountType},
+			#{accountAppid},
+			#{accountAppsecret},
+			#{wcxAppid},
+			#{wcxAppsecret},
+			#{accountAccesstoken},
+			#{encodingAesKey},
+			#{mchId},
+			#{certPath},
+			#{payKey},
+			#{apiTicket},
+			#{apiTickettTime},
+			#{jsapiTicket},
+			#{jsapiTicketTime},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE wx_account SET 	
+			account_name = #{accountName},
+			account_number = #{accountNumber},
+			account_token = #{accountToken},
+			account_type = #{accountType},
+			account_appid = #{accountAppid},
+			account_appsecret = #{accountAppsecret},
+			wcx_appid = #{wcxAppid},
+			wcx_appsecret = #{wcxAppsecret},
+			account_accesstoken = #{accountAccesstoken},
+			account_accesstoken_time = #{accountAccesstokenTime},
+			encoding_aes_key = #{encodingAesKey},
+			mch_id = #{mchId},
+			cert_path = #{certPath},
+			pay_key = #{payKey},
+			api_ticket = #{apiTicket},
+			api_tickett_time = #{apiTickettTime},
+			jsapi_ticket = #{jsapiTicket},
+			jsapi_ticket_time = #{jsapiTicketTime},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE wx_account SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

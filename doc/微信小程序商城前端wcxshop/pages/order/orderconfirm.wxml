@@ -1,0 +1,55 @@
+<!--pay.wxml-->
+<view class="w100">
+		<view class="p_all bg_white df item" wx:for="{{wsOrderItemList}}">
+			<view class="cp_photo">			
+				<image src="{{item.thumb}}"></image>
+			</view>
+			<view class="df_1">
+				<view class="font_14 mt5 ovh1">
+		           {{item.wsProduct.title}}
+		        </view>
+			<text class="gm_ovh_1h red pt10">¥{{item.reallyUnitPrice}}</text>
+      <text class="gm_ovh_1h pt10">{{item.skuSpec}}</text>
+			    <view class="stepper">
+          <!-- 减号 -->
+                <text class="{{minusStatuses[index]}}" data-index="{{index}}" bindtap="bindMinus" data-cartid="{{item.id}}">-</text>
+          <!-- 数值 -->
+                    <input type="number" bindchange="bindManual" value="{{item.quantity}}" />
+          <!-- 加号 -->
+                  <text class="normal" data-index="{{index}}" bindtap="bindPlus" data-cartid="{{item.id}}">+</text>
+          </view>
+			</view>
+		</view>		
+		
+		<view class="p_all bg_white mt10 font_14" wx:if="{{wsAddress}}">
+		   <navigator url="../address/user-address/user-address?cartId={{cartId}}" hover-class="none">
+			<view class="df">
+				<view class="df_1 c6">
+				<view class="l_h20">收货人：{{wsAddress.consignee}}<text class="fl_r mr10">{{address.tel}}</text></view>
+				<view class="l_h20 mt5">地址：{{wsAddress.city}}{{wsAddress.address}}</view>
+				</view>
+				<image class="x_right mt15" src="/images/x_right.png"></image>			
+			</view>
+			</navigator>
+		</view>
+		<view class="p_all bg_white mt10 font_14" wx:else>
+		   <navigator url="../address/user-address/user-address?cartId={{cartId}}" hover-class="none">
+			<view class="df">
+				添加收货地址		
+			</view>
+			</navigator>
+		</view>
+		
+		<view class="p_all bg_white mt10 font_14">
+			<textarea class="min_60" auto-height name="remark" placeholder="备注" bindinput="remarkInput" value="{{remark}}"/> 
+		</view>	
+
+	<view class="zhifu mt10 tc">应共支付：<span class="font_20 red">¥ {{total}}</span></view>
+	<view class="p_all mt10">
+		<view class="btnGreen">
+			<button class="wx_pay_submit" type="primary" id="wxPay"  formType="submit" bindtap="createProductOrderByWX">去支付</button>
+			
+		</view>
+	</view>
+
+</view>

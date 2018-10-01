@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.prod.dao.WsBrandDao">
+    
+	<sql id="wsBrandColumns">
+		a.id AS "id",
+		a.cnname AS "cnname",
+		a.enname AS "enname",
+		a.description AS "description",
+		a.logo AS "logo",
+		a.state AS "state",
+		a.websiteurl AS "websiteurl",
+		a.brandstory AS "brandstory",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsBrandJoins">
+	</sql>
+    
+	<select id="get" resultType="WsBrand">
+		SELECT 
+			<include refid="wsBrandColumns"/>
+		FROM ws_brand a
+		<include refid="wsBrandJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsBrand">
+		SELECT 
+			<include refid="wsBrandColumns"/>
+		FROM ws_brand a
+		<include refid="wsBrandJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="cnname != null and cnname != ''">
+				AND a.cnname LIKE 
+					<if test="dbName == 'oracle'">'%'||#{cnname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{cnname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{cnname},'%')</if>
+			</if>
+			<if test="enname != null and enname != ''">
+				AND a.enname LIKE 
+					<if test="dbName == 'oracle'">'%'||#{enname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{enname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{enname},'%')</if>
+			</if>
+			<if test="websiteurl != null and websiteurl != ''">
+				AND a.websiteurl LIKE 
+					<if test="dbName == 'oracle'">'%'||#{websiteurl}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{websiteurl}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{websiteurl},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsBrand">
+		SELECT 
+			<include refid="wsBrandColumns"/>
+		FROM ws_brand a
+		<include refid="wsBrandJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_brand(
+			id,
+			cnname,
+			enname,
+			description,
+			logo,
+			state,
+			websiteurl,
+			brandstory,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{cnname},
+			#{enname},
+			#{description},
+			#{logo},
+			#{state},
+			#{websiteurl},
+			#{brandstory},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_brand SET 	
+			cnname = #{cnname},
+			enname = #{enname},
+			description = #{description},
+			logo = #{logo},
+			state = #{state},
+			websiteurl = #{websiteurl},
+			brandstory = #{brandstory},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_brand SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

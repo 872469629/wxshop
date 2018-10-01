@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>商城个人中心</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+</head>
+<body>
+<div id="indexVm" v-cloak>
+<div class="my-head">
+  <div class="my-head-top">
+    <a href="#">
+      <div class="my-head-face-box"><div class="my-head-face"><img v-bind:src="member.headimgurl"></div></div>
+      <h1>等级：{{member.memberRankName}}</h1>
+    </a>   
+  </div>
+  <div class="my-head-top">
+    <a href="#">
+    			<h1>昵称：{{member.nickname}}</h1>
+      	  <h1>余额：{{member.balance}}</h1>
+      	  <h1> &nbsp;&nbsp;积分：{{member.score}}</h1>  
+    </a>   
+  </div>
+  <div class="notice-box"><a href="message.html">
+    <span class="notice-icon"><img src="images/notice-icon.png"><em>{{messagenum}}</em></span>
+    <span>消息</span></a>
+  </div>
+</div>
+  <!--my-head-end-->
+		<footer class="footer ind-footer mui-bar-tab" id="footer">
+			<ul class="display-box-middle">
+				<li>
+					<a href="index.html">
+						<span class="footer-icon footer-index"></span><span>首页</span>
+					</a>
+				</li>
+				<li>
+					<a href="prodCat.html">
+						<span class="footer-icon footer-classification"></span><span>分类</span>
+					</a>
+				</li>
+				<li>
+					<a href="shoppingcart.html">
+						<span class="footer-icon footer-cart"></span><span>购物车</span>
+					</a>
+				</li>
+				<li>
+					<a href="userCenter.html"  class="on">
+						<span class="footer-icon footer-my"></span><span>个人中心</span>
+					</a>
+				</li>
+			</ul>
+		</footer>
+  <!--footer-end-->
+  <div class="mui-content">
+   <div class="cash clearfloat">
+			    		<div class="shang clearfloat">
+			    			<ul>
+			    				<li>
+			    					<a href="orderlist.html?orderType=0">
+			    						<center>
+				    						<img src="images/group1.png"/>
+				    						<span style="padding-top: 3px;">待付款</span><span style="width:30px;font-size:14px;" class="mui-badge mui-badge-success">{{waitPayOrderNum}}</span>
+			    						</center>
+			    					</a>
+			    				</li>
+			    				<li>
+			    					<a href="orderlist.html?orderType=1">
+				    					<center>	
+				    						<img src="images/group2.png"/>
+				    						<span>待发货</span><span style="width:30px;font-size:14px;" class="mui-badge mui-badge-success">{{waitSendOrderNum}}</span>
+			    						</center>
+			    						
+			    					</a>
+			    				</li>
+			    				<li>
+			    					<a href="orderlist.html?orderType=2">
+				    					<center>	
+				    						<img src="images/group3.png"/>
+				    						<span>待收货</span><span style="width:30px;font-size:14px;" class="mui-badge mui-badge-success">{{waitReceviedOrderNum}}</span>
+			    						</center>
+			    					</a>
+			    				</li>
+			    				<li>
+			    					<a href="orderlist.html?orderType=3">
+			    						<center>	
+				    						<img src="images/group4.png"/>
+				    						<span style="padding-top: 2px;">待评价</span><span style="width:30px;font-size:14px;" class="mui-badge mui-badge-success">{{waitEvakyatuibOrderNum}}</span>
+			    						</center>
+			    					</a>
+			    				</li>
+			    				<li>
+			    					<a href="orderlist.html?orderType=6">
+			    						<center>	
+				    						<img src="images/group5.png"/>
+				    						<span>退款/售后</span><span style="width:30px;font-size:14px;" class="mui-badge mui-badge-success">{{waitBackOrderNum}}</span>
+			    						</center>
+			    					</a>
+			    				</li>
+			    			</ul>
+			    		</div>
+			    </div>
+    <div class="my-group clearfix">
+      <div class="my-item">
+        <div class="my-item-box">
+          <a href="orderlist.html?orderType=5">
+            <span><img src="images/my-order.png"></span>
+            <h2>全部订单</h2>
+          </a>  
+        </div>  
+      </div>
+      <div class="my-item">
+        <div class="my-item-box">
+          <a href="coupon.html">
+            <span><img src="images/my-order.png"></span>
+            <h2>优惠券</h2>
+          </a>  
+        </div>  
+      </div>
+      <div class="my-item">
+        <div class="my-item-box">
+          <a href="userFoot.html">
+            <span><img src="images/my-footprints.png"></span>
+            <h2>我的足迹</h2>
+          </a>  
+        </div>  
+      </div>
+      <div class="my-item">
+        <div class="my-item-box">
+          <a href="userCollect.html">
+            <span><img src="images/my-collection.png"></span>
+            <h2>我的收藏</h2>
+          </a>  
+        </div>  
+      </div>
+      <div class="my-item">
+        <div class="my-item-box">
+          <a href="userConsulation.html">
+            <span><img src="images/my-comment.png"></span>
+            <h2>评论记录</h2>
+          </a>  
+        </div>  
+      </div>
+      	      <div class="my-item">
+        <div class="my-item-box">
+          <a href="invitationAward.html">
+            <span><img src="images/my-reward.png"></span>
+            <h2>邀请奖励</h2>
+          </a>  
+        </div> 
+         </div>
+      
+
+     
+      <div class="my-item">
+        <div class="my-item-box">
+          <a href="userAddres.html">
+            <span><img src="images/my-account-modification.png"></span>
+            <h2>收货地址</h2>
+          </a>  
+        </div>  
+      </div>
+      <div class="my-item">
+        <div class="my-item-box">
+          <a v-bind:href="'tel:'+tel">
+            <span><img src="images/my-feedback.png"></span>
+            <h2>联系客服</h2>
+          </a>  
+        </div>  
+      </div>
+      <div class="my-item">
+        <div class="my-item-box">
+          <a href="about.html">
+            <span><img src="images/my-set-up.png"></span>
+            <h2>关于我们</h2>
+          </a>  
+        </div>  
+      </div>
+    </div>
+    <!--栏目列表-->
+  </div>
+</div>
+<!--content-end-->
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#indexVm',
+		data: {
+			messagenum: "",
+			member: "",
+			waitPayOrderNum: "",
+			waitSendOrderNum: "",
+			waitReceviedOrderNum: "",
+			waitEvakyatuibOrderNum: "",
+			waitBackOrderNum: "",
+			tel: "",
+		},
+		created: function () {
+			mui.ajax(wxshop.serverUrl+"/usercenter", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code")
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+					}	
+					vm.messagenum=data.messagenum;
+					vm.member=data.member;
+					vm.waitPayOrderNum=data.waitPayOrderNum;
+					vm.waitSendOrderNum=data.waitSendOrderNum;
+					vm.waitReceviedOrderNum=data.waitReceviedOrderNum;
+					vm.waitEvakyatuibOrderNum=data.waitEvakyatuibOrderNum;
+					vm.waitBackOrderNum=data.waitBackOrderNum;
+					vm.tel=data.tel;
+				},
+				error: function(xhr,type,errorThrown) {
+							mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+		},
+	});
+</script>
+</body>
+</html>

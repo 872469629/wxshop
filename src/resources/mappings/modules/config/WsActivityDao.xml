@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.config.dao.WsActivityDao">
+    
+	<sql id="wsActivityColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.title AS "title",
+		a.activity_type AS "activityType",
+		a.activity_content AS "activityContent",
+		a.impl_class AS "implClass",
+		a.front_page AS "frontPage",
+		a.priority AS "priority",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsActivityJoins">
+	</sql>
+    
+	<select id="get" resultType="WsActivity">
+		SELECT 
+			<include refid="wsActivityColumns"/>
+		FROM ws_activity a
+		<include refid="wsActivityJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsActivity">
+		SELECT 
+			<include refid="wsActivityColumns"/>
+		FROM ws_activity a
+		<include refid="wsActivityJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="activityType != null and activityType != ''">
+				AND a.activity_type = #{activityType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsActivity">
+		SELECT 
+			<include refid="wsActivityColumns"/>
+		FROM ws_activity a
+		<include refid="wsActivityJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_activity(
+			id,
+			code,
+			title,
+			activity_type,
+			activity_content,
+			impl_class,
+			front_page,
+			priority,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{code},
+			#{title},
+			#{activityType},
+			#{activityContent},
+			#{implClass},
+			#{frontPage},
+			#{priority},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_activity SET 	
+			code = #{code},
+			title = #{title},
+			activity_type = #{activityType},
+			activity_content = #{activityContent},
+			impl_class = #{implClass},
+			front_page = #{frontPage},
+			priority = #{priority},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_activity SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

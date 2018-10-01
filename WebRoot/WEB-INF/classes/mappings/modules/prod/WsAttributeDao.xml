@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.prod.dao.WsAttributeDao">
+    
+	<sql id="wsAttributeColumns">
+		a.id AS "id",
+		a.prod_category_id AS "prodCategoryId.id",
+		a.attr_name AS "attrName",
+		a.attr_type AS "attrType",
+		a.input_type AS "inputType",
+		a.is_search AS "isSearch",
+		a.is_require AS "isRequire",
+		a.state AS "state",
+		a.sort AS "sort",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		c.name AS "prodCategoryId.name"
+		
+	</sql>
+	
+	<sql id="wsAttributeJoins">
+	JOIN ws_prod_category c ON c.id = a.prod_category_id
+	</sql>
+    
+	<select id="get" resultType="WsAttribute">
+		SELECT 
+			<include refid="wsAttributeColumns"/>
+		FROM ws_attribute a
+		<include refid="wsAttributeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsAttribute">
+		SELECT 
+			<include refid="wsAttributeColumns"/>
+		FROM ws_attribute a
+		<include refid="wsAttributeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="prodCategoryId != null and prodCategoryId.id != ''">
+				AND a.prod_category_id = #{prodCategoryId.id}
+			</if>
+			<if test="attrName != null and attrName != ''">
+				AND a.attr_name = #{attrName}
+			</if>
+			<if test="attrType != null and attrType != ''">
+				AND a.attr_type = #{attrType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsAttribute">
+		SELECT 
+			<include refid="wsAttributeColumns"/>
+		FROM ws_attribute a
+		<include refid="wsAttributeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_attribute(
+			id,
+			prod_category_id,
+			attr_name,
+			attr_type,
+			input_type,
+			is_search,
+			is_require,
+			state,
+			sort,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{prodCategoryId.id},
+			#{attrName},
+			#{attrType},
+			#{inputType},
+			#{isSearch},
+			#{isRequire},
+			#{state},
+			#{sort},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_attribute SET 	
+			prod_category_id = #{prodCategoryId.id},
+			attr_name = #{attrName},
+			attr_type = #{attrType},
+			input_type = #{inputType},
+			is_search = #{isSearch},
+			is_require = #{isRequire},
+			state = #{state},
+			sort = #{sort},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_attribute SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

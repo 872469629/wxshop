@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>我的足迹</title>
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<!--消息 脚本-->
+<link rel="stylesheet" href="css/amazeui.min.css">
+<script src="js/amazeui.min.js"></script>
+<!--消息 脚本-->
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+</head>
+<body>
+	<div id="indexVm" v-cloak>
+  <header class="header mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">我的足迹</h1>
+	<div class="notice-box"><a href="message.html">
+		<span class="notice-icon"><img src="images/notice-icon.png"><em>{{messagenum}}</em></span>
+		<span>消息</span></a>
+	</div>
+  </header>
+  <!--header-end-->
+<div class="mui-content">
+  <!--商品列表-->
+    <div class="my-footprints-group" v-for="wsMemberVisitLog in wsMemberVisitLogList">
+      
+      <div class="my-footprints-item">
+        <a class="highlight" v-bind:href="'productDetails.html?id='+wsMemberVisitLog.wsProduct.id">
+          <div class="my-footprints-item-l"><img v-bind:src="wsMemberVisitLog.wsProduct.prodImage"></div>
+          <div class="my-footprints-item-r">
+            <div class="my-footprints-item-tit">{{wsMemberVisitLog.wsProduct.title}}</div>
+            <div class="my-footprints-item-tips">
+              <span>￥<em>{{wsMemberVisitLog.wsProduct.defaultReallyPrice}}</em></span>
+              <span class="tmall">市场价：{{wsMemberVisitLog.wsProduct.defaultPrice}}元</span>
+            </div>
+          </div>
+        </a>
+      </div>
+      
+    </div>
+  <!--商品列表-->
+   
+</div>
+</div>
+<!--container-end-->
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script>
+	var citys;
+	var cityArray= new Array();
+	var vm = new Vue({
+		el: '#indexVm',
+		data: {
+			messagenum: "",
+			wsMemberVisitLogList:[],
+		},
+		created: function () {
+			mui.ajax(wxshop.serverUrl+"/usercenter/userFoot", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+					}
+					vm.messagenum=data.messagenum;
+					vm.wsMemberVisitLogList=data.wsMemberVisitLogList;
+				},
+				error: function() {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+		},
+	});
+</script>
+</body>
+</html>

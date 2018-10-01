@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.config.dao.WsAdDao">
+    
+	<sql id="wsAdColumns">
+		a.id AS "id",
+		a.img_type AS "imgType",
+		a.img_title AS "imgTitle",
+		a.url_type AS "urlType",
+		a.img_url AS "imgUrl",
+		a.img_href AS "imgHref",
+		a.img_href_title AS "imgHrefTitle",
+		a.priority AS "priority",
+		a.click_num AS "clickNum",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsAdJoins">
+	</sql>
+    
+	<select id="get" resultType="WsAd">
+		SELECT 
+			<include refid="wsAdColumns"/>
+		FROM ws_ad a
+		<include refid="wsAdJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsAd">
+		SELECT 
+			<include refid="wsAdColumns"/>
+		FROM ws_ad a
+		<include refid="wsAdJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="imgType != null and imgType != ''">
+				AND a.img_type = #{imgType}
+			</if>
+			<if test="imgTitle != null and imgTitle != ''">
+				AND a.img_title = #{imgTitle}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsAd">
+		SELECT 
+			<include refid="wsAdColumns"/>
+		FROM ws_ad a
+		<include refid="wsAdJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_ad(
+			id,
+			img_type,
+			img_title,
+			img_url,
+			img_href,
+			img_href_title,
+			url_type,
+			priority,
+			click_num,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{imgType},
+			#{imgTitle},
+			#{imgUrl},
+			#{imgHref},
+			#{imgHrefTitle},
+			#{urlType},
+			#{priority},
+			#{clickNum},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_ad SET 	
+			img_type = #{imgType},
+			img_title = #{imgTitle},
+			img_url = #{imgUrl},
+			img_href = #{imgHref},
+			img_href_title = #{imgHrefTitle},
+			url_type = #{urlType},
+			priority = #{priority},
+			click_num = #{clickNum},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_ad SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

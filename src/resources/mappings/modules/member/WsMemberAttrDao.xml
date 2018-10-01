@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.member.dao.WsMemberAttrDao">
+    
+	<sql id="wsMemberAttrColumns">
+		a.id AS "id",
+		a.member_id AS "wsMember.id",
+		a.attr_code AS "attrCode",
+		a.attr_name AS "attrName",
+		a.attr_value AS "attrValue",
+		a.attr_desc AS "attrDesc",
+		a.state AS "state",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsMemberAttrJoins">
+		LEFT JOIN ws_member b ON b.id = a.member_id
+	</sql>
+    
+	<select id="get" resultType="WsMemberAttr">
+		SELECT 
+			<include refid="wsMemberAttrColumns"/>
+		FROM ws_member_attr a
+		<include refid="wsMemberAttrJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsMemberAttr">
+		SELECT 
+			<include refid="wsMemberAttrColumns"/>
+		FROM ws_member_attr a
+		<include refid="wsMemberAttrJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsMember != null and wsMember.id != null and wsMember.id != ''">
+				AND a.member_id = #{wsMember.id}
+			</if>
+			<if test="attrName != null and attrName != ''">
+				AND a.attr_name = #{attrName}
+			</if>
+			<if test="attrValue != null and attrValue != ''">
+				AND a.attr_value = #{attrValue}
+			</if>
+			<if test="attrDesc != null and attrDesc != ''">
+				AND a.attr_desc = #{attrDesc}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsMemberAttr">
+		SELECT 
+			<include refid="wsMemberAttrColumns"/>
+		FROM ws_member_attr a
+		<include refid="wsMemberAttrJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_member_attr(
+			id,
+			member_id,
+			attr_code,
+			attr_name,
+			attr_value,
+			attr_desc,
+			state,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{wsMember.id},
+			#{attrCode},
+			#{attrName},
+			#{attrValue},
+			#{attrDesc},
+			#{state},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_member_attr SET 	
+			member_id = #{wsMember.id},
+			attr_code = #{attrCode},
+			attr_name = #{attrName},
+			attr_value = #{attrValue},
+			attr_desc = #{attrDesc},
+			state = #{state},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_member_attr SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE member_id = #{wsMember.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

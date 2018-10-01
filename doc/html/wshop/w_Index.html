@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>首购</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<script src="js/TouchSlide.1.1.js"></script>
+<style>
+html,body,.mui-content{ max-width:100%;}
+.mui-bar-nav~.mui-content{ padding-top:0;}
+.hot-pro-bot-box{ margin-top:40px;}
+.hot-pro-nav{border-bottom:1px solid #dd2727;}
+.mui-icon-back:before, .mui-icon-left-nav:before{ background-image:url(images/h-back-white.png);}
+.mui-bar{height:50px; background-color:transparent;border-bottom:none;}
+.notice-box span.notice-icon em{ background-color:#dd2727; color:#fff; }
+</style>
+</head>
+
+<body>
+
+  <header class="header mui-bar mui-bar-nav">      
+    <a class="ind-search" href="Search-page.html"><span>搜索想要的宝贝</span></a>
+    <div class="notice-box">
+      <span class="notice-icon"><img src="images/notice-icon.png"><em>2</em></span>
+      <span>消息</span>
+    </div>
+  </header>
+  <!--header-end-->
+  <!--Banner-->
+  <div class="banner" id="index-banner">
+  <div class="banner-pics">
+    <ul class="banner-pics-list OnSale-banner">
+      <li><a href="#"><img src="images/banner640x386.jpg" alt=""/></a></li>
+      <li><a href="#"><img src="images/banner640x386.jpg" alt=""/></a></li>
+      <li><a href="#"><img src="images/banner640x386.jpg" alt=""/></a></li>
+      <li><a href="#"><img src="images/banner640x386.jpg" alt=""/></a></li>
+      <li><a href="#"><img src="images/banner640x386.jpg" alt=""/></a></li>
+      <li><a href="#"><img src="images/banner640x386.jpg" alt=""/></a></li>
+    </ul>
+  </div>
+  <ul class="banner-tit">
+    <li class="on"></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+  </div>
+  <script type="text/javascript">
+        TouchSlide({
+            slideCell:"#index-banner",
+            titCell:".banner-tit li",//开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+            mainCell:".banner-pics-list",
+            effect:"left",
+            autoPlay:true,//自动播放
+            //autoPage:true, //自动分页
+            })
+  </script> 
+  <!--banner-end-->  
+<footer class="footer ind-footer mui-bar-tab" id="footer">
+    <ul class="display-box-middle">
+      <li>
+        <a class="on" href="Index.html">
+        <span class="footer-icon footer-index"></span><span>首页</span>
+        </a>
+      </li>
+      <li>
+        <a href="Classification.html">
+        <span class="footer-icon footer-classification"></span><span>分类</span>
+        </a>
+      </li>
+      <li>
+        <a href="Cash-back.html">
+        <span class="footer-icon footer-cash-back"></span><span>超级返</span>
+        </a>
+      </li>
+      <li>
+        <a href="Shopping-Cart.html">
+        <span class="footer-icon footer-cart"></span><span>购物车</span>
+        </a>
+      </li>
+      <li>
+        <a href="My.html">
+        <span class="footer-icon footer-my"></span><span>我的首购</span>
+        </a>
+      </li>
+    </ul>
+  </footer>
+  <!--footer-end-->
+<div class="mui-content">
+  <!--秒杀--包邮--爆款必抢-->
+  <div class="m-b-b-group clearfix">
+    <div class="fl"><a class="miaosha" href="Seckill.html" style="background-image:url(images/miaosha.jpg);"><div class="seckill-list-time"><span>05</span>:<span>34</span>:<span>25</span></div></a></div>
+    <div class="fr">
+      <a class="baoyou" href="Nine-pieces.html" style="background-image:url(images/baoyou.jpg);"></a>
+      <a class="baokuanbiqiang" href="Hot-pro.html" style="background-image:url(images/baokuanbiqiang.jpg);"></a>
+    </div>
+  </div>
+  <!--秒杀--包邮--爆款必抢-->
+  <!--栏目列表-->
+  <div class="ind-column">
+    <ul class="clearfix">
+      <li>
+        <a href="Maternal-Museum.html">
+          <div class="ind-column-img"><img src="images/ind-my.jpg"></div>
+          <h2 class="ind-column-tit1">母婴馆</h2>
+          <p>上千家母婴品牌限时特卖</p>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <div class="ind-column-img"><img src="images/ind-mz.jpg"></div>
+          <h2 class="ind-column-tit2">美妆馆</h2>
+          <p>美妆个护&nbsp;|&nbsp;面部护理套装 </p>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <div class="ind-column-img"><img src="images/ind-bh.jpg"></div>
+          <h2 class="ind-column-tit3">百货馆</h2>
+          <p>价格实惠,诚信可靠!</p>
+        </a>
+      </li>
+      <li>
+        <a href="Activity-page.html">
+          <div class="ind-column-img"><img src="images/ind-sgzy.jpg"></div>
+          <h2 class="ind-column-tit4">首购自营</h2>
+          <p>全场100%正品保障!</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!--栏目列表-->
+  
+  <!--合肥地区专属公告-->
+  <div class="tg-banner"><a href="Hefei-area.html"><img src="images/tg-banner.jpg"></a></div>
+  <!--合肥地区专属公告-->
+  
+  <!--产品列表-->
+    <div class="ind-pro-list">
+      <div class="ind-pro-list-img">
+        <a href="Cash-back-details.html"><img src="images/ind-pro-list-img.jpg"></a>
+        <span class="cart-btn"><a href="Cash-back-details.html"></a></span>
+      </div>
+      <div class="ind-pro-list-txt"><p>冻龄肌秘密，欧莱雅玻尿酸系列25岁是女孩跨入女人的阶段，也是女生最美好的时期。爱情事业都处于双赢时刻，但同时伴随的困扰就是，肌肤初老症状开始出现。新陈代谢慢了，皮肤也总觉得缺水，且干纹细纹都开始出现。就是因为玻尿酸的流失哦！！玻尿酸在护肤中一直很受追捧，相信很多姑娘冻龄肌秘密，欧莱雅玻尿酸系列25岁是女孩跨入女人的阶段，也是女生最美好的时期。爱情事业都处于双赢时刻，但同时伴随的困扰就是，肌肤初老症状开始出现。新陈代谢慢了，皮肤也总觉得缺水，且干纹细纹都开始出现。就是因为玻尿酸的流失哦！！玻尿酸在护肤中一直很受追捧，相信很多姑娘</p><span class="ind-more-btn"></span></div>    
+      <div class="relation-list">
+        <h2>关联推荐</h2>
+        <ul class="clearfix">
+          <li><a href="#"><span>编辑精选</span></a></li>
+          <li><a href="#"><span>个护彩妆</span></a></li>
+          <li><a href="#"><span>玉兰油</span></a></li>
+        </ul>
+      </div>
+      <div class="ind-pro-tips">
+        <span class="ind-guanzhu on">263</span>
+        <span class="ind-shoucang on">128</span>
+        <span class="ind-fenxiang on">分享</span>
+      </div>
+    </div>
+
+    <div class="ind-pro-list">
+      <div class="ind-pro-list-img">
+        <a href="Cash-back-details.html"><img src="images/ind-pro-list-img.jpg"></a>
+        <span class="cart-btn"><a href="Cash-back-details.html"></a></span>
+      </div>
+      <div class="ind-pro-list-txt"><p>冻龄肌秘密，欧莱雅玻尿酸系列25岁是女孩跨入女人的阶段，也是女生最美好的时期。爱情事业都处于双赢时刻，但同时伴随的困扰就是，肌肤初老症状开始出现。新陈代谢慢了，皮肤也总觉得缺水，且干纹细纹都开始出现。就是因为玻尿酸的流失哦！！玻尿酸在护肤中一直很受追捧，相信很多姑娘冻龄肌秘密，欧莱雅玻尿酸系列25岁是女孩跨入女人的阶段，也是女生最美好的时期。爱情事业都处于双赢时刻，但同时伴随的困扰就是，肌肤初老症状开始出现。新陈代谢慢了，皮肤也总觉得缺水，且干纹细纹都开始出现。就是因为玻尿酸的流失哦！！玻尿酸在护肤中一直很受追捧，相信很多姑娘</p><span class="ind-more-btn"></span></div>    
+      <div class="relation-list">
+        <h2>关联推荐</h2>
+        <ul class="clearfix">
+          <li><a href="#"><span>编辑精选</span></a></li>
+          <li><a href="#"><span>个护彩妆</span></a></li>
+          <li><a href="#"><span>玉兰油</span></a></li>
+        </ul>
+      </div>
+      <div class="ind-pro-tips">
+        <span class="ind-guanzhu">263</span>
+        <span class="ind-shoucang">128</span>
+        <span class="ind-fenxiang">分享</span>
+      </div>
+    </div>
+    
+    <div class="ind-pro-list">
+      <div class="ind-pro-list-img">
+        <a href="Cash-back-details.html"><img src="images/ind-pro-list-img.jpg"></a>
+        <span class="cart-btn"><a href="Cash-back-details.html"></a></span>
+      </div>
+      <div class="ind-pro-list-txt"><p>冻龄肌秘密，欧莱雅玻尿酸系列25岁是女孩跨入女人的阶段，也是女生最美好的时期。爱情事业都处于双赢时刻，但同时伴随的困扰就是，肌肤初老症状开始出现。新陈代谢慢了，皮肤也总觉得缺水，且干纹细纹都开始出现。就是因为玻尿酸的流失哦！！玻尿酸在护肤中一直很受追捧，相信很多姑娘冻龄肌秘密，欧莱雅玻尿酸系列25岁是女孩跨入女人的阶段，也是女生最美好的时期。爱情事业都处于双赢时刻，但同时伴随的困扰就是，肌肤初老症状开始出现。新陈代谢慢了，皮肤也总觉得缺水，且干纹细纹都开始出现。就是因为玻尿酸的流失哦！！玻尿酸在护肤中一直很受追捧，相信很多姑娘</p><span class="ind-more-btn"></span></div>    
+      <div class="relation-list">
+        <h2>关联推荐</h2>
+        <ul class="clearfix">
+          <li><a href="#"><span>编辑精选</span></a></li>
+          <li><a href="#"><span>个护彩妆</span></a></li>
+          <li><a href="#"><span>玉兰油</span></a></li>
+        </ul>
+      </div>
+      <div class="ind-pro-tips">
+        <span class="ind-guanzhu on">263</span>
+        <span class="ind-shoucang on">128</span>
+        <span class="ind-fenxiang on">分享</span>
+      </div>
+    </div>
+
+    <div class="ind-pro-list">
+      <div class="ind-pro-list-img">
+        <a href="Cash-back-details.html"><img src="images/ind-pro-list-img.jpg"></a>
+        <span class="cart-btn"><a href="Cash-back-details.html"></a></span>
+      </div>
+      <div class="ind-pro-list-txt"><p>冻龄肌秘密，欧莱雅玻尿酸系列25岁是女孩跨入女人的阶段，也是女生最美好的时期。爱情事业都处于双赢时刻，但同时伴随的困扰就是，肌肤初老症状开始出现。新陈代谢慢了，皮肤也总觉得缺水，且干纹细纹都开始出现。就是因为玻尿酸的流失哦！！玻尿酸在护肤中一直很受追捧，相信很多姑娘冻龄肌秘密，欧莱雅玻尿酸系列25岁是女孩跨入女人的阶段，也是女生最美好的时期。爱情事业都处于双赢时刻，但同时伴随的困扰就是，肌肤初老症状开始出现。新陈代谢慢了，皮肤也总觉得缺水，且干纹细纹都开始出现。就是因为玻尿酸的流失哦！！玻尿酸在护肤中一直很受追捧，相信很多姑娘</p><span class="ind-more-btn"></span></div>    
+      <div class="relation-list">
+        <h2>关联推荐</h2>
+        <ul class="clearfix">
+          <li><a href="#"><span>编辑精选</span></a></li>
+          <li><a href="#"><span>个护彩妆</span></a></li>
+          <li><a href="#"><span>玉兰油</span></a></li>
+        </ul>
+      </div>
+      <div class="ind-pro-tips">
+        <span class="ind-guanzhu">263</span>
+        <span class="ind-shoucang">128</span>
+        <span class="ind-fenxiang">分享</span>
+      </div>
+    </div>
+
+  <!--产品列表-->
+
+</div>
+<!--container-end-->
+<script src="js/mui.min.js"></script>
+<script>  
+
+  $(window).bind("scroll",function() { 
+  if ($(document).scrollTop() > 100) { 
+	   $(".header").css({'background-color':'#dd2727','transition':'0.4s'});
+  }else{
+	   $(".header").css({'background-color':'transparent','transition':'0.4s'});
+	  } 
+  });
+  
+  
+  $(".ind-pro-list").each(function(){	
+	var self = $(this); 
+	  self.find(".ind-more-btn").click(function(){
+	  $(this).prev().toggleClass("height-auto");
+	});
+  });
+  mui.init({
+	  swipeBack: true, //启用右滑关闭功能
+  });
+</script>
+</body>
+</html>

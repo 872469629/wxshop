@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.report.dao.ReportUserNumDao">
+    
+	<sql id="reportUserNumColumns">
+		a.id AS "id",
+		a.count_date AS "countDate",
+		a.user_count AS "userCount",
+		a.add_user_count AS "addUserCount",
+		a.sel_user_count AS "selUserCount",
+		a.visit_user_count AS "visitUserCount",
+		a.mrank_nanme AS "mrankNanme",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="reportUserNumJoins">
+	</sql>
+    
+	<select id="get" resultType="ReportUserNum">
+		SELECT 
+			<include refid="reportUserNumColumns"/>
+		FROM report_user_num a
+		<include refid="reportUserNumJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ReportUserNum">
+		SELECT 
+			<include refid="reportUserNumColumns"/>
+		FROM report_user_num a
+		<include refid="reportUserNumJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="countDate != null and countDate != ''">
+				AND a.count_date = #{countDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ReportUserNum">
+		SELECT 
+			<include refid="reportUserNumColumns"/>
+		FROM report_user_num a
+		<include refid="reportUserNumJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO report_user_num(
+			id,
+			count_date,
+			user_count,
+			add_user_count,
+			sel_user_count,
+			visit_user_count,
+			mrank_nanme,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{countDate},
+			#{userCount},
+			#{addUserCount},
+			#{selUserCount},
+			#{visitUserCount},
+			#{mrankNanme},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE report_user_num SET 	
+			count_date = #{countDate},
+			user_count = #{userCount},
+			add_user_count = #{addUserCount},
+			sel_user_count = #{selUserCount},
+			visit_user_count = #{visitUserCount},
+			mrank_nanme = #{mrankNanme},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE report_user_num SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.order.dao.WsOrderDao">
+    
+	<sql id="wsOrderColumns">
+		a.id AS "id",
+		a.order_sn AS "orderSn",
+		a.order_state AS "orderState",
+		a.js_pay_state AS "jsPayState",
+		a.buys_words AS "buysWords",
+		a.member_id AS "memberId.id",
+		a.ruid AS "ruid.id",
+		u4.username AS "memberId.username",
+		u4.mobile AS "memberId.mobile",
+		u4.nickname AS "memberId.nickname",
+		a.logistics_method AS "logisticsMethod",
+		a.paytime AS "paytime",
+		a.payment AS "payment",
+		a.trackingno AS "trackingno",
+		a.express AS "express",
+		a.postage AS "postage",
+		a.mrank_id AS "mrankId",
+		a.mrank_scale AS "mrankScale",
+		a.mrank_money AS "mrankMoney",
+		a.coupon_id AS "wsMemberCoupon.id",
+		a.coupon_money AS "wsMemberCoupon.couponMoney",
+		a.coupon_title AS "wsMemberCoupon.wsActivityCoupon.title",
+		a.price AS "price",
+		a.really_price AS "reallyPrice",
+		a.score AS "score",
+		a.address_id AS "address.id",
+		a.zip_code AS "address.zipCode",
+		a.city AS "address.city",
+		a.address AS "address.address",
+		a.consignee AS "address.consignee",
+		a.tel AS "address.tel",
+		a.prepay_id AS "prepayId",
+		a.prepay_date AS "prepayDate",
+		a.return_id AS "wsReturn.id",
+		a.return_money AS "wsReturn.returnAmount",
+		a.send_time AS "sendTime",
+		a.recevice_time AS "receviceTime",
+		a.return_state AS "returnState",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsOrderJoins">
+		LEFT JOIN ws_member u4 ON u4.id = a.member_id
+	</sql>
+    
+	<select id="get" resultType="WsOrder">
+		SELECT 
+			<include refid="wsOrderColumns"/>
+		FROM ws_order a
+		<include refid="wsOrderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByOrderSn" resultType="WsOrder">
+		SELECT 
+			<include refid="wsOrderColumns"/>
+		FROM ws_order a
+		<include refid="wsOrderJoins"/>
+		WHERE a.order_sn = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsOrder">
+		SELECT 
+			<include refid="wsOrderColumns"/>
+		FROM ws_order a
+		<include refid="wsOrderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="orderSn != null and orderSn != ''">
+				AND a.order_sn=#{orderSn}
+			</if>
+			<if test="memberId!=null and memberId.id != null and memberId.id != ''">
+				AND a.member_id = #{memberId.id}
+			</if>
+			<if test="ruid!=null and ruid.id != null and ruid.id != ''">
+				AND a.ruid = #{ruid.id}
+			</if>
+			<if test="orderState != null and orderState != ''">
+				AND a.order_state = #{orderState}
+			</if>
+			<if test="paytime != null and paytime != ''">
+				AND a.paytime = #{paytime}
+			</if>
+			<if test="trackingno != null and trackingno != ''">
+				AND a.trackingno =#{trackingno}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsOrder">
+		SELECT 
+			<include refid="wsOrderColumns"/>
+		FROM ws_order a
+		<include refid="wsOrderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findCount" resultType="int">
+		SELECT 
+			count(1)
+		FROM ws_order a
+		<include refid="wsOrderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="memberId!=null and memberId.id != null and memberId.id != ''">
+				AND a.member_id = #{memberId.id}
+			</if>
+			<if test="orderState != null and orderState != ''">
+				AND a.order_state = #{orderState}
+			</if>
+		</where>		
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_order(
+			id,
+			order_sn,
+			order_state,
+			js_pay_state,
+			buys_words,
+			member_id,
+			ruid,
+			logistics_method,
+			paytime,
+			payment,
+			trackingno,
+			express,
+			postage,
+			mrank_id,
+			mrank_scale,
+			mrank_money,
+			coupon_id,
+			coupon_title,
+			coupon_money,
+			price,
+			really_price,
+			score,
+			address_id,
+			zip_code,
+			city,
+			address,
+			consignee,
+			tel,
+			prepay_id,
+			prepay_date,
+			return_id,
+			return_money,
+			send_time,
+			recevice_time,
+			return_state,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{orderSn},
+			#{orderState},
+			#{jsPayState},
+			#{buysWords},
+			#{memberId.id},
+			#{ruid.id},
+			#{logisticsMethod},
+			#{paytime},
+			#{payment},
+			#{trackingno},
+			#{express},
+			#{postage},	
+			#{mrankId},			
+			#{mrankScale},			
+			#{mrankMoney},					
+			#{wsMemberCoupon.id},
+			#{wsMemberCoupon.wsActivityCoupon.title},
+			#{wsMemberCoupon.couponMoney},
+			#{price},
+			#{reallyPrice},
+			#{score},
+			#{address.id},
+			#{address.zipCode},
+			#{address.city},
+			#{address.address},
+			#{address.consignee},
+			#{address.tel},
+			#{prepayId},
+			#{prepayDate},
+			#{wsReturn.id},
+			#{wsReturn.returnAmount},
+			#{sendTime},
+			#{receviceTime},
+			#{returnState},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_order SET 	
+			order_sn = #{orderSn},
+			order_state = #{orderState},
+			js_pay_state = #{jsPayState},
+			buys_words = #{buysWords},
+			member_id = #{memberId.id},
+			ruid = #{ruid.id},
+			logistics_method = #{logisticsMethod},
+			paytime = #{paytime},
+			payment = #{payment},
+			trackingno = #{trackingno},
+			express = #{express},
+			postage = #{postage},
+			mrank_id = #{mrankId},
+			mrank_scale = #{mrankScale},
+			mrank_money = #{mrankMoney},
+			coupon_id = #{wsMemberCoupon.id},
+			coupon_money = #{wsMemberCoupon.couponMoney},
+			coupon_title = #{wsMemberCoupon.wsActivityCoupon.title},
+			price = #{price},
+			really_price = #{reallyPrice},
+			score = #{score},
+			address_id = #{address.id},
+			prepay_id = #{prepayId},
+			prepay_date = #{prepayDate},
+			return_id = #{wsReturn.id},
+			return_money = #{wsReturn.returnAmount},
+			send_time = #{sendTime},
+			recevice_time = #{receviceTime},
+			return_state = #{returnState},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updatSaveRemark">
+		UPDATE ws_order SET 	
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	
+	
+	<update id="delete">
+		UPDATE ws_order SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<select id="findOverTimeList" resultType="WsOrder">
+		SELECT 
+			<include refid="wsOrderColumns"/>
+		FROM ws_order a
+		<include refid="wsOrderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="orderState != null and orderState != ''">
+				AND a.order_state = #{orderState}
+			</if>
+			<if test="sendTime != null and sendTime != ''">
+				AND a.send_time &lt; #{sendTime}
+			</if>
+			<if test="receviceTime != null and receviceTime != ''">
+				AND a.recevice_time &lt; #{receviceTime}
+			</if>
+		</where>
+	</select>
+	
+</mapper>

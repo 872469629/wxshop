@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.member.dao.WsMemberCouponDao">
+    
+	<sql id="wsMemberCouponColumns">
+		a.id AS "id",
+		a.member_id AS "wsMember.id",
+		a.activity_coupon_id AS "wsActivityCoupon.id",
+		c.title AS "wsActivityCoupon.title",
+		a.coupon_money AS "couponMoney",
+		a.condition_money AS "conditionMoney",
+		a.start_time AS "startTime",
+		a.end_time AS "endTime",
+		a.state AS "state",
+		a.use_time AS "useTime",
+		a.order_id AS "wsOrder.id",
+		d.order_sn AS "wsOrder.orderSn",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		b.username AS "wsMember.username",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsMemberCouponJoins">
+		LEFT JOIN ws_member b ON b.id = a.member_id
+		LEFT JOIN ws_activity_coupon c on c.id=a.activity_coupon_id
+		LEFT JOIN ws_order d on d.id=a.order_id
+	</sql>
+    
+	<select id="get" resultType="WsMemberCoupon">
+		SELECT 
+			<include refid="wsMemberCouponColumns"/>
+		FROM ws_member_coupon a
+		<include refid="wsMemberCouponJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsMemberCoupon">
+		SELECT 
+			<include refid="wsMemberCouponColumns"/>
+		FROM ws_member_coupon a
+		<include refid="wsMemberCouponJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsMember != null and wsMember.username != null and wsMember.username != ''">
+				AND b.username like
+					<if test="dbName == 'oracle'">'%'||#{wsMember.username}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{wsMember.username}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{wsMember.username},'%')</if>
+			</if>
+			<if test="wsMember != null and wsMember.id != null and wsMember.id != ''">
+				AND b.id = #{wsMember.id}
+			</if>
+			<if test="state != null and state != '' and state=='1'.toString() ">			
+				AND a.start_time	&lt;= now() AND a.end_time &gt;= now()
+				AND a.state = #{state}
+			</if>
+			<if test="state != null and state != '' and state=='2'.toString() ">			
+				AND a.state = #{state}
+			</if>
+			<if test="state != null and state != '' and state=='3'.toString() ">
+				AND (a.end_time &lt;= now() OR a.state = #{state})
+			</if>
+			<if test="conditionMoney != null and conditionMoney != '' ">			
+				AND a.condition_money &lt;= #{conditionMoney}
+			</if>
+			<if test="wsOrder != null and wsOrder.orderSn != null and wsOrder.orderSn != ''">
+				AND d.order_sn = #{wsOrder.orderSn}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsMemberCoupon">
+		SELECT 
+			<include refid="wsMemberCouponColumns"/>
+		FROM ws_member_coupon a
+		<include refid="wsMemberCouponJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_member_coupon(
+			id,
+			member_id,
+			activity_coupon_id,
+			title,
+			coupon_money,
+			condition_money,
+			start_time,
+			end_time,
+			state,
+			use_time,
+			order_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{wsMember.id},
+			#{wsActivityCoupon.id},
+			#{wsActivityCoupon.title},
+			#{couponMoney},
+			#{conditionMoney},
+			#{startTime},
+			#{endTime},
+			#{state},
+			#{useTime},
+			#{wsOrder.id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_member_coupon SET 	
+			member_id = #{wsMember.id},
+			activity_coupon_id = #{wsActivityCoupon.id},
+			title = #{wsActivityCoupon.title},
+			coupon_money = #{couponMoney},
+			condition_money = #{conditionMoney},
+			start_time = #{startTime},
+			end_time = #{endTime},
+			state = #{state},
+			use_time = #{useTime},
+			order_id = #{wsOrder.id},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_member_coupon SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE member_id = #{wsMember.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable" />
+		<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+		<meta content="telephone=no" name="format-detection" />
+		<title>商城首页</title>
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="css/base.css">
+		<link rel="stylesheet" type="text/css" href="css/common.css">
+		<link rel="stylesheet" type="text/css" href="css/index.css">
+		<script src="js/jquery.min.js"></script>
+		<script src="js/common.js"></script>
+		<script src="js/TouchSlide.1.1.js"></script>
+	</head>
+
+	<body>
+		<div id="indexVm" v-cloak>
+		<header class="header mui-bar mui-bar-nav">
+			<a class="ind-search" href="searchPage.html"><span>搜索想要的宝贝</span></a>
+			<div class="notice-box"><a href="message.html">
+				<span class="notice-icon"><img src="images/notice-icon.png"><em>{{messagenum}}</em></span>
+				<span>消息</span></a>
+			</div>
+		</header>
+		<!--header-end-->
+		<!--Banner-->
+		<div class="banner" id="index-banner">
+			<div class="banner-pics">
+				<ul class="banner-pics-list OnSale-banner">
+					<li v-for="adBanner in adBannerList">
+						<a v-bind:href="adBanner.imgHref"><img v-bind:src="adBanner.imgUrl" v-bind:alt="adBanner.imgTitle" style="width: 100%;height: 100%;"/></a>
+					</li>
+				</ul>
+			</div>
+			<ul class="banner-tit">
+				<li v-for="(adBanner,index) in adBannerList" class="on"></li>
+			</ul>
+		</div>
+		<!--banner-end-->
+		<footer class="footer ind-footer mui-bar-tab" id="footer">
+			<ul class="display-box-middle">
+				<li>
+					<a class="on" href="index.html">
+						<span class="footer-icon footer-index"></span><span>首页</span>
+					</a>
+				</li>
+				<li>
+					<a href="prodCat.html">
+						<span class="footer-icon footer-classification"></span><span>分类</span>
+					</a>
+				</li>
+				<li>
+					<a href="shoppingcart.html">
+						<span class="footer-icon footer-cart"></span><span>购物车</span>
+					</a>
+				</li>
+				<li>
+					<a href="userCenter.html">
+						<span class="footer-icon footer-my"></span><span>个人中心</span>
+					</a>
+				</li>
+			</ul>
+		</footer>
+	<!--footer-end-->
+	<!--活动列表，一个商城活动占据一行-->
+  	<div class="tg-banner" v-for="(adActivity,index) in adActivityList">
+  		<a v-bind:href="adActivity.imgHref"><img v-bind:src="adActivity.imgUrl"></a>
+  	</div>
+  	<!--活动列表-->
+  	
+	<!--栏目列表-->
+	<div class="ind-column">
+	<ul class="clearfix">
+	  <li v-for="(adBand,index) in adBandList">
+	    <a v-bind:href="adBand.imgHref">
+	      <div class="ind-column-img"><img v-bind:src="adBand.imgUrl"></div>
+	      <h2 class="ind-column-tit1">{{adBand.imgTitle}}</h2>
+	      <p>{{adBand.imgTitle}}</p>
+	    </a>
+	  </li>
+	</ul>
+	  </div>
+	  <!--栏目列表-->
+
+  <!--产品列表-->
+
+<div class="indexactivity-group" v-for="(wsProdCategory,index) in wsProdCategoryRootFilter(wsProdCategoryList)">
+   <div class="activity-group-tit"><a name="1f"><span><em>{{index+1}}F</em><span style="color: #ff900c;">{{wsProdCategory.name}}</span></span></a></div>
+    <ul class="clearfix">
+      <div v-for="prodCat in wsProdCategoryChildFilter(wsProdCategoryList,wsProdCategory.id)">
+      <li v-for="wsProduct in wsProductListFilter(wsProductList,prodCat.id)">
+        <a v-bind:href="'productDetails.html?id='+wsProduct.id">
+          <div class="indexactivity-group-img" v-bind:style="'background-image:url('+wsProduct.prodImage+');'"></div>
+          <div class="activity-group-txt">
+            <div class="activity-group-name">{{wsProduct.title}}</div>
+            <div class="sales-volume">销量{{wsProduct.selNum}}件</div>
+            <div class="sales-volume">市场价：{{wsProduct.defaultPrice}}元</div>
+            <div class="activity-group-tips clearfix">
+              <div class="activity-price">￥<em>{{wsProduct.minPrice}}元</em></div>
+              <div class="shopping-cart-btn"></div>
+            </div>
+          </div>
+        </a>
+      </li>
+      </div>
+    </ul>
+ </div>
+<div class="mui-content"></div> 
+<!--container-end-->
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script type="text/javascript" charset="UTF-8" src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<script>
+			var title,desc,link,imgUrl,type;
+			var vm = new Vue({
+				el: '#indexVm',
+				data: {
+					messagenum: "",
+					adBannerList: [],
+					adActivityList: [],
+					adBandList: [],
+					wsProductList: [],
+					wsProdCategoryList: [],
+				},
+				created: function () {
+					localStorage.ruid=wxshop.getUrlParam("ruid");
+					mui.ajax(wxshop.serverUrl+"/index", {
+						type: "post",
+						data:{
+							code:wxshop.getUrlParam("code")
+						},
+						dataType: "json",
+						success: function(data) {
+							if(data.ret==0){
+								mui.alert(data.msg);
+								return;
+							}
+							if(data.ret==2){
+								wxshop.getOpenId(data.appid);
+								return;
+							}	
+							if(data.ret==3){
+								window.location=wxshop.frontUrl+"/index.html";
+								return;
+							}	
+							localStorage.uid=data.member.id;
+							vm.messagenum=data.messagenum;
+							vm.adBannerList=data.adBannerList;
+							vm.adActivityList=data.adActivityList;
+							vm.adBandList=data.adBandList;
+							vm.wsProductList=data.wsProductList;
+							vm.wsProdCategoryList=data.wsProdCategoryList;
+							title=data.title;
+							desc=data.desc;
+							imgUrl=data.imgUrl;
+							link=data.link;
+							vm.$nextTick(function () {
+								wxshop.wx_config(function () {
+									wxshop.wxShareFriend(title,desc,link,imgUrl);
+								});
+							    TouchSlide({
+									slideCell: "#index-banner",
+									mainCell: ".banner-pics-list",
+									effect: "left",
+									delayTime: 1000,
+									autoPlay: true, //自动播放
+								});
+
+							})
+						},
+						error: function(xhr,type,errorThrown) {
+							mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+						}
+					});
+				},
+				methods: {
+				  	wsProdCategoryRootFilter: function (wsProdCategoryList) {
+				      return wsProdCategoryList.filter(function (wsProdCategory) {
+				        return wsProdCategory.parentId=='0';
+				      })
+				  	},
+				  	wsProdCategoryChildFilter: function (wsProdCategoryList,parentId) {
+				      return wsProdCategoryList.filter(function (wsProdCategory) {
+				        return wsProdCategory.parentId==parentId;
+				      })
+				    },
+				    wsProductListFilter: function (wsProductList,catId) {
+				      return wsProductList.filter(function (wsProduct) {
+				        return wsProduct.prodCategoryId==catId;
+				      })
+				    }
+				}
+			});
+
+			$(document).ready(function() {
+				$(window).bind("scroll", function() {
+					if($(document).scrollTop() > 100) {
+						$(".header").css({
+							'background-color': '#dd2727',
+							'transition': '0.4s'
+						});
+					} else {
+						$(".header").css({
+							'background-color': 'transparent',
+							'transition': '0.4s'
+						});
+					}
+				});
+				$(".ind-pro-list").each(function() {
+					var self = $(this);
+					self.find(".ind-more-btn").click(function() {
+						$(this).prev().toggleClass("height-auto");
+					});
+				});
+				mui.init({
+					swipeBack: true, //启用右滑关闭功能
+				});
+			});
+		</script>
+	</body>
+
+</html>

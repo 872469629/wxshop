@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>支付定单</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<link rel="stylesheet" href="css/haitao/home.css">
+<link rel="stylesheet" type="text/css" href="css/haitao/icons-extra.css" />
+<link rel="stylesheet" type="text/css" href="css/haitao/app.css"/>
+
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+</head>
+<body>
+<div id="orderVm" v-cloak>
+  <header class="header mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		<h1 class="mui-title">支付定单</h1>
+<!--<a id='setting' class=" mui-pull-right mui-btn-link">注册</a>-->
+  </header>
+  <!--header-end-->
+<div class="mui-content">
+  <ul class="mui-table-view mui-table-view-radio t-line" v-if="wsAddress!=null">
+		<li class="mui-table-view-cell b-line">
+			<p>{{wsAddress.consignee}} {{wsAddress.tel}}</p>
+			<p>{{wsAddress.city}}&nbsp;{{wsAddress.address}}</p>
+		</li>
+	</ul>
+	<div class="mui-content">
+		<form class="mui-input-group">
+			<div class="mui-input-row mui-radio b-line">
+				<label><span class="mui-icon mui-icon-weixin" style="color:#57dc0f"></span>微信支付</label>
+				<input name="radio1" type="radio" checked="">
+			</div>
+		</form>
+	</div>
+
+	<div class="devider"></div>
+	<ul class="mui-table-view mui-table-view t-line" id="OA_task_1">
+		<li class="mui-table-view-cell  mui-table-view-cell mui-media b-line" v-for="wsOrderItem in wsOrderItemList">
+			<div class="mui-slider-handle mui-table">
+				<a href="#">
+					<img class="mui-order-img aui-ma-d mui-pull-left" v-bind:src="wsOrderItem.thumb">
+					<div class="mui-media-body-order">¥{{wsOrderItem.reallyUnitPrice}}
+						<p class="mui-ellipsis">{{wsOrderItem.wsProduct.title}}</p>
+						<p>数量：{{wsOrderItem.quantity}}</p>
+						<p>规格：{{wsOrderItem.skuSpec}}</p>
+					</div>
+				</a>
+			</div>
+		</li>
+	</ul>
+	
+  
+  <div class="devider b-line"></div>
+	<ul class="mui-table-view ">
+		<li class="mui-table-view-cell b-line">配送方式: <span class="mui-pull-right">{{expressWay}}</span></li>
+		<li class="mui-table-view-cell b-line" v-if="wsOrder.postage>0">快递费用: <span class="mui-pull-right">+¥{{wsOrder.postage}}</span></li>
+		<li class="mui-table-view-cell b-line" v-if="wsOrder.wsMemberCoupon!=null">优惠券: <span class="mui-pull-right">-¥{{wsOrder.wsMemberCoupon.wsActivityCoupon.title}}</span></li>
+		<li class="mui-table-view-cell b-line" v-if="wsOrder.mrankMoney!=null">会员优惠: <span class="mui-pull-right">-¥{{wsOrder.mrankMoney}}</span></li>
+	</ul>
+	<div class="mui-input-row" style="margin:15px;">
+		<textarea class="mui-order-liuyan" id="buysWords" rows="5" placeholder="留言..." style="border:none"></textarea>
+	</div>
+  
+</div>
+<!--container-end-->
+<div style="height:49px"></div>
+<nav class="mui-bar mui-bar-tab" style="">
+	<div class="t-line aui-on-cell">
+
+		<div class="aui-onc">
+			<p style="display:inline-block"><span style="color:#fb4545" id="wsPayMoney">实际付款：{{totalMoney}}</span></p>
+			<a onclick="pay()" class="aui-got" style="padding:0 40px">去付款</a>
+		</div>
+	</div>
+</nav>
+</div>
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script type="text/javascript" charset="UTF-8" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>	
+	var appId,timeStamp,nonceStr,package,signType,paySign,orderId;
+	function onBridgeReady(){ 
+   WeixinJSBridge.invoke(
+       'getBrandWCPayRequest', {
+           "appId":appId,     //公众号名称，由商户传入     
+           "timeStamp":timeStamp,         //时间戳，自1970年以来的秒数     
+           "nonceStr":nonceStr, //随机串     
+           "package":package,     
+           "signType":signType,         //微信签名方式：     
+           "paySign":paySign //微信签名 
+       },
+       function(res){     
+          if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+          	//保存用户留言、js前端支付状态、推荐人信息
+          	mui.ajax(wxshop.serverUrl+"/pay/savePayJs", {
+								type: "post",
+								data:{
+									code:wxshop.getUrlParam("code"),
+									id:orderId,
+									buysWords:$("#buysWords").val(),
+									ruid:localStorage.ruid,
+								},
+								dataType: "json",
+								success: function(data) {
+									if(data.ret==0){
+										mui.alert(data.msg);
+									}
+									mui.openWindow({
+										url:"paysuccess.html",
+									});
+								},
+								error: function(xhr,type,errorThrown) {
+									mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+								}
+						});
+          }else if (res.err_msg == 'get_brand_wcpay_request:cancel') {
+          	mui.toast('取消支付!');
+          } else {
+            alert(JSON.stringify(res));
+          }
+       }
+   ); 
+	}
+	
+	function pay(){
+		if (typeof WeixinJSBridge == "undefined"){  
+		   if( document.addEventListener ){  
+		       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);  
+		   }else if (document.attachEvent){  
+		       document.attachEvent('WeixinJSBridgeReady', onBridgeReady);   
+		       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);  
+		   }  
+		}else{  
+		   onBridgeReady();  
+		}               
+  }  
+	
+	var vm = new Vue({
+		el: '#orderVm',
+		data: {
+			messagenum: "0",
+			wsOrderItemList: [],
+			wsOrder:"",
+			wsAddress:"",
+			totalMoney:"",
+			expressWay:"",
+		},
+		created: function () {
+			 orderId=wxshop.getUrlParam("orderId");
+			if(orderId==null || orderId==""){
+				mui.ajax(wxshop.serverUrl+"/pay", {
+					type: "post",
+					data:localStorage.wsPayOrder,
+					dataType: "json",
+					contentType : "application/json",
+					success: function(data) {
+						if(data.ret==0){
+							mui.alert(data.msg);
+						}
+						if(data.ret==2){
+							wxshop.getOpenId(data.appid);
+						}			
+						vm.messagenum=data.messagenum;
+						vm.wsOrderItemList=data.wsOrderItemList;
+						vm.wsOrder=data.wsOrder;
+						vm.wsAddress=data.wsAddress;
+						vm.totalMoney=data.totalMoney;
+						vm.expressWay=data.expressWay;
+						appId=data.appId;
+						timeStamp=data.timeStamp;
+						nonceStr=data.nonceStr;
+						package=data.package;
+						signType=data.signType;
+						paySign=data.paySign;
+						orderId=data.wsOrder.id;
+					},
+					error: function(xhr,type,errorThrown) {
+								mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+					}
+				});
+			}else{
+					mui.ajax(wxshop.serverUrl+"/pay/payByOrderId", {
+					type: "post",
+					data:{
+						orderId:orderId,
+					},
+					dataType: "json",
+					success: function(data) {
+						if(data.ret==0){
+							mui.alert(data.msg);
+						}
+						vm.messagenum=data.messagenum;
+						vm.wsOrderItemList=data.wsOrderItemList;
+						vm.wsOrder=data.wsOrder;
+						vm.wsAddress=data.wsAddress;
+						vm.totalMoney=data.totalMoney;
+						vm.expressWay=data.expressWay;
+						appId=data.appId;
+						timeStamp=data.timeStamp;
+						nonceStr=data.nonceStr;
+						package=data.package;
+						signType=data.signType;
+						paySign=data.paySign;
+					},
+					error: function(xhr,type,errorThrown) {
+								mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+					}
+				});
+			}
+
+		},
+	});
+</script>
+</body>
+</html>

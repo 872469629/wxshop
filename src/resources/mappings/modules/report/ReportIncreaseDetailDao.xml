@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.report.dao.ReportIncreaseDetailDao">
+    
+	<sql id="reportIncreaseDetailColumns">
+		a.id AS "id",
+		a.count_date AS "countDate",
+		a.add_user_count AS "addUserCount",
+		a.sel_money AS "selMoney",
+		a.order_count AS "orderCount",
+		a.back_money AS "backMoney",
+		a.visit_member_count AS "visitMemberCount",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="reportIncreaseDetailJoins">
+	</sql>
+    
+	<select id="get" resultType="ReportIncreaseDetail">
+		SELECT 
+			<include refid="reportIncreaseDetailColumns"/>
+		FROM report_increase_detail a
+		<include refid="reportIncreaseDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ReportIncreaseDetail">
+		SELECT 
+			<include refid="reportIncreaseDetailColumns"/>
+		FROM report_increase_detail a
+		<include refid="reportIncreaseDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="countDate != null and countDate != ''">
+				AND a.count_date = #{countDate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ReportIncreaseDetail">
+		SELECT 
+			<include refid="reportIncreaseDetailColumns"/>
+		FROM report_increase_detail a
+		<include refid="reportIncreaseDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO report_increase_detail(
+			id,
+			count_date,
+			add_user_count,
+			sel_money,
+			order_count,
+			back_money,
+			visit_member_count,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{countDate},
+			#{addUserCount},
+			#{selMoney},
+			#{orderCount},
+			#{backMoney},
+			#{visitMemberCount},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE report_increase_detail SET 	
+			count_date = #{countDate},
+			add_user_count = #{addUserCount},
+			sel_money = #{selMoney},
+			order_count = #{orderCount},
+			back_money = #{backMoney},
+			visit_member_count = #{visitMemberCount},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE report_increase_detail SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

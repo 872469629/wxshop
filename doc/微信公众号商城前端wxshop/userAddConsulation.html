@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>商品评价</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<link rel="stylesheet" href="css/mui.min.css">
+	<link rel="stylesheet" href="css/haitao/css/home.css">
+	<link rel="stylesheet" type="text/css" href="css/haitao/css/icons-extra.css" />
+	<link rel="stylesheet" type="text/css" href="css/haitao/css/app.css"/>
+	<link href="favicon.ico" type="image/x-icon" rel="icon">
+	<link rel="stylesheet" type="text/css" href="css/haitao/css/feedback.css" />
+	<script src="js/jquery.min.js" ></script>
+	<script src="js/common.js" ></script>
+	<!--消息 脚本-->
+	<link rel="stylesheet" href="css/amazeui.min.css">
+	<script src="js/amazeui.min.js"></script>
+	<!--消息 脚本-->
+	<!--标准mui.css-->
+	<link rel="stylesheet" href="css/mui.min.css">
+	<!--App自定义的css-->
+	<link rel="stylesheet" type="text/css" href="css/base.css">
+	<link rel="stylesheet" type="text/css" href="css/common.css">	
+</head>
+<body>
+<header class="header mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">商品评价</h1>
+</header>
+ <!--header-end-->
+<div id="indexVm" v-cloak>
+<div id="feedback" class="feedback" style="padding-top: 30px;">
+<div class="mui-content">
+	<div v-for="wsOrderItem in wsOrderItemList">
+	<div class="my-footprints-item">
+        <a class="highlight" href="#">
+          <div class="my-footprints-item-l"><img v-bind:src="wsOrderItem.thumb"></div>
+          <div class="my-footprints-item-r">
+            <div class="my-footprints-item-tit">{{wsOrderItem.wsProduct.title}}</div>
+            <div class="my-footprints-item-tips">
+              <span>￥<em>{{wsOrderItem.reallyUnitPrice}}</em></span>
+              <span class="tmall">规格：{{wsOrderItem.skuSpec}}</span>
+            </div>
+          </div>
+        </a>
+    </div>
+	<div class="mui-page-content">
+		<div class="mui-content-padded">
+			<div class="mui-inline">问题和意见</div>	
+		</div>
+		<div class="row mui-input-row">
+			<textarea v-bind:id="'question'+wsOrderItem.wsProduct.id" style="height: 150px" placeholder="请详细描述你的问题和意见..."></textarea>
+		</div>
+		<div id='image-list' class="row"></div>
+		<div class="mui-content-padded">
+			<div class="mui-inline">商品评分</div>
+			<input type="hidden" v-bind:id="'prodConsulationLevel'+wsOrderItem.wsProduct.id" />
+			<div class="icons mui-inline" style="margin-left: 6px;">
+				<i data-index="1" v-bind:id="wsOrderItem.wsProduct.id" class="mui-icon mui-icon-star" ></i>
+				<i data-index="2" v-bind:id="wsOrderItem.wsProduct.id" class="mui-icon mui-icon-star" ></i>
+				<i data-index="3" v-bind:id="wsOrderItem.wsProduct.id" class="mui-icon mui-icon-star" ></i>
+				<i data-index="4" v-bind:id="wsOrderItem.wsProduct.id" class="mui-icon mui-icon-star" ></i>
+				<i data-index="5" v-bind:id="wsOrderItem.wsProduct.id" class="mui-icon mui-icon-star" ></i>
+			</div>		
+		</div><br/>
+	</div>
+	</div>
+</div>
+<div style="height:49px"></div>
+<nav class="mui-bar mui-bar-tab" style="">
+	<div class="t-line aui-on-cell">
+
+		<div class="aui-onc">
+		
+			<a class="aui-got" style="padding:0 40px" onclick="addConsulation()">提交评价</a>
+		</div>
+	</div>
+</nav>
+</div>
+</div>
+</body>
+<script src="css/haitao/js/mui.min.js "></script>
+<script src="css/haitao/js/mui.view.js "></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script>
+	var vm = new Vue({
+		el: '#indexVm',
+		data: {
+			wsOrderItemList:[],
+		},
+		created: function () {
+			mui.ajax(wxshop.serverUrl+"/consulation/findConsulactionOrder", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+					orderId:wxshop.getUrlParam("orderId"),
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+					}	
+					vm.wsOrderItemList=data.wsOrderItemList;
+					vm.$nextTick(function () {
+						//应用评分
+						mui('.icons').on('tap','i',function(){
+						  	var index = parseInt(this.getAttribute("data-index"));
+						  	var parent = this.parentNode;
+						  	var children = parent.children;
+						  	if(this.classList.contains("mui-icon-star")){
+						  		for(var i=0;i<index;i++){
+					  				children[i].classList.remove('mui-icon-star');
+					  				children[i].classList.add('mui-icon-star-filled');
+						  		}
+						  	}else{
+						  		for (var i = index; i < 5; i++) {
+						  			children[i].classList.add('mui-icon-star')
+						  			children[i].classList.remove('mui-icon-star-filled')
+						  		}
+						  	}
+						  	$("#prodConsulationLevel"+this.id).val(index);
+					  	});
+					})
+				},
+				error: function(xhr,type,errorThrown) {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+		},
+	});
+	//新增商品评价
+	function addConsulation(){
+		var orderId=wxshop.getUrlParam("orderId");
+		var arrParam=[];
+		for(var i=0;i<vm.wsOrderItemList.length;i++){
+			var item={};
+			item.orderId=orderId;
+			item.productId=vm.wsOrderItemList[i].wsProduct.id;
+			item.consulationContent=$("#question"+item.productId).val();
+			item.prodConsulationLevel=$("#prodConsulationLevel"+item.productId).val();
+			if(item.prodConsulationLevel==null||item.prodConsulationLevel==""||item.prodConsulationLevel=="0"){
+				alert("请选择商品评分!");
+				return;
+			}
+			arrParam.push(item);
+		}
+		mui.ajax(wxshop.serverUrl+"/consulation/save", {
+			type: "post",
+			data:JSON.stringify(arrParam),
+			dataType: "json",
+			contentType : "application/json",
+			success: function(data) {
+				if(data.ret==0){
+					mui.alert(data.msg);
+					return;
+				}
+				if(data.ret==2){
+					wxshop.getOpenId(data.appid);
+				}
+				mui.toast("发表评价成功");
+				mui.openWindow({url:"orderlist.html?orderType=3"})
+			},
+			error: function(xhr,type,errorThrown) {
+				mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+			}
+		});
+	}
+</script>
+</html>

@@ -1,0 +1,75 @@
+<!--pages/user/user.wxml-->
+<view class="page" >
+    <view class="userinfo" wx:if="{{flag}}">
+			<image class="userinfo-avatar fl_l" src="{{member.headimgurl}}" background-size="cover"></image>
+			<text class="fl_l">{{member.nickname}}</text>
+    </view>
+    <view class='userInfo' wx:if="{{!flag}}">
+      <button  open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">同意授权,同步用户信息</button>
+    </view>
+    <!--订单详情-->
+    <view class="qbdd mt10">
+    <span class="font_14 c3">全部订单</span>
+    <navigator class="fl_r c9 font_12 l_h20" url="../user/dingdan?currentTab=0" hover-class="none" >查看全部订单 ></navigator>
+    </view>
+    <view class="sc df tc bte ">
+    <navigator class="df_1" url="/pages/user/dingdan?currentTab=0&otype=pay" hover-class="none" >
+        <view>
+        <image src="/images/dfk.png"></image> 
+       </view>
+        <text class="font_12">待付款<text style="color:red">({{waitPayOrderNum}})</text></text>
+      </navigator>
+
+      <navigator class="df_1" url="../user/dingdan?currentTab=2&otype=pay" hover-class="none" >
+      <view><image src="/images/dfh.png"></image></view>
+        <text class="font_12">待发货<text style="color:red">{{waitSendOrderNum}}</text></text>      
+      </navigator> 
+
+      <navigator class="df_1" url="/pages/user/dingdan?currentTab=3&otype=receive" hover-class="none" >
+          <view><image src="/images/dpl.png"></image></view>
+          <text class="font_12">待收货<text style="color:red">({{waitReceviedOrderNum}})</text></text>
+      </navigator>
+
+    <navigator class="df_1" url="/pages/user/dingdan?currentTab=4&otype=finish" hover-class="none" >
+          <view><image src="/images/dsh.png"></image></view>
+          <text  class="font_12">待评价<text style="color:red">({{waitEvakyatuibOrderNum}})</text></text>
+      </navigator>
+
+    
+    <navigator class="df_1" url="../user/dingdan?currentTab=5" hover-class="none" >
+          <view><image src="/images/tksh.png"></image></view>
+          <text class="font_12">退款<text style="color:red">({{waitBackOrderNum}})</text></text>
+       </navigator>
+    </view>
+<view class="qbdd mt10">
+ <navigator url="../address/user-address/user-address">
+    <span class="font_14 c3">地址管理</span>
+    <span class="fl_r c9 font_12 l_h20" hover-class="none"> ></span>
+    </navigator>
+    </view>
+    <view class="qbdd mt10">
+ <navigator url="../rituall/rituall">
+    <span class="font_14 c3">优惠劵</span>
+    <span class="fl_r c9 font_12 l_h20" hover-class="none"> ></span>
+    </navigator>
+    </view>
+        <view class="qbdd mt10">
+ <navigator url="../user/shoucang">
+    <span class="font_14 c3">我的收藏</span>
+    <span class="fl_r c9 font_12 l_h20" hover-class="none"> ></span>
+    </navigator>
+    </view>
+    <view class="qbdd mt10">
+ <navigator url="../shop_store/shop_store">
+    <span class="font_14 c3">关于我们</span>
+    <span class="fl_r c9 font_12 l_h20" hover-class="none"> ></span>
+    </navigator>
+    </view>
+    <view class="qbdd mt10" bindtap="contact">
+    <span class="font_14 c3">联系客服</span>
+    <span class="fl_r c9 font_12 l_h20" hover-class="none"> ></span>
+    </view>
+
+</view>
+
+

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>首购</title>
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<!--消息 脚本-->
+<link rel="stylesheet" href="css/amazeui.min.css">
+<script src="js/amazeui.min.js"></script>
+<!--消息 脚本-->
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<script src="js/TouchSlide.1.1.js"></script>
+</head>
+
+<body>
+  <header class="header mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">母婴馆</h1>
+    <div class="am-dropdown" data-am-dropdown>
+      <span class="am-btn am-dropdown-toggle" data-am-dropdown-toggle><em class="header-notice-tips"></em></span>
+      <ul class="am-dropdown-content">
+        <li class="clearfix"><a href="#"><i><img src="images/header-notice.png"></i>消息<em class="header-notice-tips fr"></em></a></li>
+        <li><a href="Index.html"><i><img src="images/header-home.png"></i>首页</a></li>
+      </ul>
+    </div>
+  </header>
+  <!--header-end-->
+  
+<div class="mui-content">
+<!--Banner-->
+<div class="banner" id="index-banner">
+  <div class="banner-pics">
+    <ul class="banner-pics-list OnSale-banner">
+      <li><a href="#"><img src="images/banner750x360.jpg" alt=""/></a></li>
+      <li><a href="#"><img src="images/banner750x360.jpg" alt=""/></a></li>
+      <li><a href="#"><img src="images/banner750x360.jpg" alt=""/></a></li>
+    </ul>
+  </div>
+  <ul class="banner-tit">
+    <li class="on"></li>
+    <li></li>
+    <li></li>
+  </ul>
+</div>
+<script type="text/javascript">
+        TouchSlide({
+            slideCell:"#index-banner",
+            titCell:".banner-tit li",//开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+            mainCell:".banner-pics-list",
+            effect:"left",
+            autoPlay:true,//自动播放
+            //autoPage:true, //自动分页
+            })
+</script> 
+<!--banner-end-->
+
+<!--栏目列表开始-->
+<div id="picScroll" class="maternal-museum-group">
+  <div class="hd">
+          <span class="next"></span>
+          <ul style="display:none;"></ul>
+          <span class="prev"></span>
+  </div>
+  <div class="bd">
+    <ul class="clearfix">
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>妈咪宝贝</span></a></li>
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>妈咪宝贝</span></a></li>
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>妈咪宝贝</span></a></li>
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>妈咪宝贝</span></a></li>
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>妈咪宝贝</span></a></li>
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>妈咪宝贝</span></a></li>
+    </ul>
+    <ul class="clearfix">
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>帮宝适</span></a></li>
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>帮宝适</span></a></li>
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>帮宝适</span></a></li>
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>帮宝适</span></a></li>
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>帮宝适</span></a></li>
+      <li><a href="#"><span><img src="images/maternal-museum-img.jpg"></span><span>帮宝适</span></a></li>
+    </ul> 
+  </div>  
+</div>
+<script type="text/javascript">
+	TouchSlide({ 
+		slideCell:"#picScroll",
+		titCell:".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+		autoPage:true, //自动分页
+		pnLoop:"false", // 前后按钮不循环
+	});
+</script>
+<!--栏目列表结束-->
+
+<div class="zones-group">
+  <!--专区1-->
+  <div class="zones-item">
+    <div class="zones-item-tit">洗护专区</div>
+    <ul class="zones-list clearfix">
+      <li>
+        <a href="#">
+          <div class="zones-list-img"><img src="images/zones-img.jpg"></div>
+          <div class="zones-list-txt">
+            <h2>哈罗闪婴儿</h2>
+            <em>￥<strong>89</strong></em>
+            <span>天猫价：69.9元</span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <div class="zones-list-img"><img src="images/zones-img.jpg"></div>
+          <div class="zones-list-txt">
+            <h2>哈罗闪婴儿柔润护肤乳50ml</h2>
+            <em>￥<strong>89</strong></em>
+            <span>天猫价：69.9元</span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <div class="zones-list-img"><img src="images/zones-img.jpg"></div>
+          <div class="zones-list-txt">
+            <h2>哈罗闪婴儿柔润护肤乳50ml哈罗闪婴儿柔润护肤乳50ml</h2>
+            <em>￥<strong>89</strong></em>
+            <span>天猫价：69.9元</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!--专区1-->
+  <!--专区2-->
+  <div class="zones-item">
+    <div class="zones-item-tit">纸尿裤专区</div>
+    <ul class="zones-list clearfix">
+      <li>
+        <a href="#">
+          <div class="zones-list-img"><img src="images/zones-img.jpg"></div>
+          <div class="zones-list-txt">
+            <h2>哈罗闪婴儿柔润护肤乳50ml</h2>
+            <em>￥<strong>89</strong></em>
+            <span>天猫价：69.9元</span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <div class="zones-list-img"><img src="images/zones-img.jpg"></div>
+          <div class="zones-list-txt">
+            <h2>哈罗闪婴儿柔润护肤乳50ml</h2>
+            <em>￥<strong>89</strong></em>
+            <span>天猫价：69.9元</span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <div class="zones-list-img"><img src="images/zones-img.jpg"></div>
+          <div class="zones-list-txt">
+            <h2>哈罗闪婴儿柔润护肤乳50ml</h2>
+            <em>￥<strong>89</strong></em>
+            <span>天猫价：69.9元</span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!--专区2-->
+</div>
+
+</div>
+<!--container-end-->
+<script src="js/mui.min.js"></script>
+</body>
+</html>

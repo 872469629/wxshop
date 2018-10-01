@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.member.dao.WsMemberConsumeLogDao">
+    
+	<sql id="wsMemberConsumeLogColumns">
+		a.id AS "id",
+		a.member_id AS "wsMember.id",
+		d.order_sn AS "wsOrder.orderSn",
+		a.consume_score AS "consumeScore",
+		a.consume_money AS "consumeMoney",
+		a.consume_time AS "consumeTime",
+		a.score AS "score",
+		a.balance AS "balance",
+		a.payment AS "payment",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		b.nickname AS "wsMember.nickname",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsMemberConsumeLogJoins">
+		LEFT JOIN ws_member b ON b.id = a.member_id
+		LEFT JOIN ws_order d on d.id=a.order_id
+	</sql>
+    
+	<select id="get" resultType="WsMemberConsumeLog">
+		SELECT 
+			<include refid="wsMemberConsumeLogColumns"/>
+		FROM ws_member_consume_log a
+		<include refid="wsMemberConsumeLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsMemberConsumeLog">
+		SELECT 
+			<include refid="wsMemberConsumeLogColumns"/>
+		FROM ws_member_consume_log a
+		<include refid="wsMemberConsumeLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsMember != null and wsMember.id != null and wsMember.id != ''">
+				AND a.member_id = #{wsMember.id}
+			</if>
+			<if test="wsMember != null and wsMember.nickname != null and wsMember.nickname != ''">
+				AND b.nickname like
+					<if test="dbName == 'oracle'">'%'||#{wsMember.nickname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{wsMember.nickname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{wsMember.nickname},'%')</if>
+			</if>
+			<if test="wsOrder != null and wsOrder.id != null and wsOrder.id != ''">
+				AND a.order_id =#{wsOrder.id}
+			</if>
+			<if test="payment != null and payment != ''">
+				AND a.payment = #{payment}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsMemberConsumeLog">
+		SELECT 
+			<include refid="wsMemberConsumeLogColumns"/>
+		FROM ws_member_consume_log a
+		<include refid="wsMemberConsumeLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_member_consume_log(
+			id,
+			member_id,
+			order_id,
+			consume_score,
+			consume_money,
+			consume_time,
+			score,
+			balance,
+			payment,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{wsMember.id},
+			#{wsOrder.id},
+			#{consumeScore},
+			#{consumeMoney},
+			#{consumeTime},
+			#{score},
+			#{balance},
+			#{payment},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_member_consume_log SET 	
+			member_id = #{wsMember.id},
+			order_id = #{orderId},
+			consume_score = #{consumeScore},
+			consume_money = #{consumeMoney},
+			consume_time = #{consumeTime},
+			score = #{score},
+			balance = #{balance},
+			payment = #{payment},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_member_consume_log SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE member_id = #{wsMember.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

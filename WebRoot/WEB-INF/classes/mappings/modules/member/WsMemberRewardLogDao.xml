@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.member.dao.WsMemberRewardLogDao">
+    
+	<sql id="wsMemberRewardLogColumns">
+		a.id AS "id",
+		a.member_id AS "wsMember.id",
+		a.reward_money AS "rewardMoney",
+		a.reward_score AS "rewardScore",
+		a.recharge_time AS "rechargeTime",
+		a.score AS "score",
+		a.balance AS "balance",
+		a.reward_type AS "rewardType",
+		a.reward_desc AS "rewardDesc",
+		a.reward_prod_id AS "rewardProdId",
+		a.reward_prod_name AS "rewardProdName",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		b.username AS "wsMember.username",
+		b.nickname AS "wsMember.nickname",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsMemberRewardLogJoins">
+		LEFT JOIN ws_member b ON b.id = a.member_id
+	</sql>
+    
+	<select id="get" resultType="WsMemberRewardLog">
+		SELECT 
+			<include refid="wsMemberRewardLogColumns"/>
+		FROM ws_member_reward_log a
+		<include refid="wsMemberRewardLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getSumReward" resultType="WsMemberRewardLog">
+		SELECT 
+			sum(a.reward_money) AS "rewardMoney",
+			sum(a.reward_score) AS "rewardScore"
+		FROM ws_member_reward_log a
+		WHERE a.member_id = #{wsMember.id}
+	</select>
+	
+	<select id="findList" resultType="WsMemberRewardLog">
+		SELECT 
+			<include refid="wsMemberRewardLogColumns"/>
+		FROM ws_member_reward_log a
+		<include refid="wsMemberRewardLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsMember != null and wsMember.id != null and wsMember.id != ''">
+				AND a.member_id = #{wsMember.id}
+			</if>
+			<if test="wsMember != null and wsMember.nickname != null and wsMember.nickname != ''">
+				AND b.nickname like
+					<if test="dbName == 'oracle'">'%'||#{wsMember.nickname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{wsMember.nickname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{wsMember.nickname},'%')</if>
+			</if>
+			<if test="rewardType != null and rewardType != ''">
+				AND a.reward_type = #{rewardType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsMemberRewardLog">
+		SELECT 
+			<include refid="wsMemberRewardLogColumns"/>
+		FROM ws_member_reward_log a
+		<include refid="wsMemberRewardLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_member_reward_log(
+			id,
+			member_id,
+			reward_money,
+			reward_score,
+			recharge_time,
+			score,
+			balance,
+			reward_type,
+			reward_desc,
+			reward_prod_id,
+			reward_prod_name,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{wsMember.id},
+			#{rewardMoney},
+			#{rewardScore},
+			#{rechargeTime},
+			#{score},
+			#{balance},
+			#{rewardType},
+			#{rewardDesc},
+			#{rewardProdId},
+			#{rewardProdName},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_member_reward_log SET 	
+			member_id = #{wsMember.id},
+			reward_money = #{rewardMoney},
+			reward_score = #{rewardScore},
+			recharge_time = #{rechargeTime},
+			score = #{score},
+			balance = #{balance},
+			reward_type = #{rewardType},
+			reward_desc = #{rewardDesc},
+			reward_prod_id = #{rewardProdId},
+			reward_prod_name = #{rewardProdName},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_member_reward_log SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE member_id = #{wsMember.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.prod.dao.WsProductDao">
+    
+	<sql id="wsProductColumns">
+		a.id AS "id",
+		a.prod_category_id AS "prodCategoryId",
+		a.prod_category_name AS "prodCategoryName",
+		a.brand_id AS "brandId",
+		a.brand_name AS "brandName",
+		a.pname AS "pname",
+		a.title AS "title",
+		a.prod_images AS "prodImages",
+		a.prod_image AS "prodImage",
+		a.is_home_recommd AS "isHomeRecommd",
+		a.range_price AS "rangePrice",
+		a.min_price AS "minPrice",
+		a.default_price AS "defaultPrice",
+		a.default_really_price AS "defaultReallyPrice",
+		a.default_reward_money AS "defaultRewardMoney",
+		a.default_num AS "defaultNum",
+		a.on_good_state AS "onGoodState",
+		a.on_good_time AS "onGoodTime",
+		a.reward_rate AS "rewardRate",
+		a.pnumber AS "pnumber",
+		a.volume AS "volume",
+		a.weight AS "weight",
+		a.express_id AS "expressId",
+		a.is_gift AS "isGift",
+		a.keyword AS "keyword",
+		a.warehouse AS "warehouse",
+		a.prod_content AS "prodContent",
+		a.is_return AS "isReturn",
+		a.return_date AS "returnDate",
+		a.sel_num AS "selNum",
+		a.click_num AS "clickNum",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsProductJoins">
+	</sql>
+    
+	<select id="get" resultType="WsProduct">
+		SELECT 
+			<include refid="wsProductColumns"/>
+		FROM ws_product a
+		<include refid="wsProductJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsProduct">
+		SELECT 
+			<include refid="wsProductColumns"/>
+		FROM ws_product a
+		<include refid="wsProductJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="isHomeRecommd != null and isHomeRecommd != ''">
+				AND a.is_home_recommd = #{isHomeRecommd}
+			</if>
+			<if test="prodCategoryName != null and prodCategoryName != ''">
+				AND a.prod_category_name = #{prodCategoryName}
+			</if>
+			<if test="brandId != null and brandId != ''">
+				AND a.brand_id = #{brandId}
+			</if>
+			<if test="prodCategoryId != null and prodCategoryId != ''">
+				AND a.prod_category_id = #{prodCategoryId}
+			</if>
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="onGoodState != null and onGoodState != ''">
+				AND a.on_good_state = #{onGoodState}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsProduct">
+		SELECT 
+			<include refid="wsProductColumns"/>
+		FROM ws_product a
+		<include refid="wsProductJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_product(
+			id,
+			prod_category_id,
+			prod_category_name,
+			brand_id,
+			brand_name,
+			pname,
+			title,
+			is_home_recommd,
+			prod_images,
+			prod_image,
+			range_price,
+			min_price,
+			default_price,
+			default_really_price,
+			default_reward_money,
+			default_num,
+			on_good_state,
+			on_good_time,
+			reward_rate,
+			pnumber,
+			volume,
+			weight,
+			express_id,
+			is_gift,
+			keyword,
+			warehouse,
+			prod_content,
+			is_return,
+			return_date,
+			sel_num,
+			click_num,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{prodCategoryId},
+			#{prodCategoryName},
+			#{brandId},
+			#{brandName},
+			#{pname},
+			#{title},
+			#{isHomeRecommd},
+			#{prodImages},
+			#{prodImage},
+			#{rangePrice},
+			#{minPrice},
+			#{defaultPrice},
+			#{defaultReallyPrice},
+			#{defaultRewardMoney},
+			#{defaultNum},
+			#{onGoodState},
+			#{onGoodTime},
+			#{rewardRate},
+			#{pnumber},
+			#{volume},
+			#{weight},
+			#{expressId},
+			#{isGift},
+			#{keyword},
+			#{warehouse},
+			#{prodContent},
+			#{isReturn},
+			#{returnDate},
+			#{selNum},
+			#{clickNum},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_product SET 	
+			prod_category_id = #{prodCategoryId},
+			prod_category_name = #{prodCategoryName},
+			brand_id = #{brandId},
+			brand_name = #{brandName},
+			pname = #{pname},
+			title = #{title},
+			is_home_recommd = #{isHomeRecommd},
+			prod_images = #{prodImages},
+			prod_image = #{prodImage},
+			range_price = #{rangePrice},
+			min_price = #{minPrice},
+			default_price = #{defaultPrice},
+			default_really_price = #{defaultReallyPrice},
+			default_reward_money = #{defaultRewardMoney},
+			default_num = #{defaultNum},
+			on_good_state = #{onGoodState},
+			on_good_time = #{onGoodTime},
+			reward_rate = #{rewardRate},
+			pnumber = #{pnumber},
+			volume = #{volume},
+			weight = #{weight},
+			express_id = #{expressId},
+			is_gift = #{isGift},
+			keyword = #{keyword},
+			warehouse = #{warehouse},
+			prod_content = #{prodContent},
+			is_return = #{isReturn},
+			return_date = #{returnDate},
+			sel_num = #{selNum},
+			click_num = #{clickNum},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		delete from ws_product
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

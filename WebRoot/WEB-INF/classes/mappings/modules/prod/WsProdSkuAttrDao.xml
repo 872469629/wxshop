@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.prod.dao.WsProdSkuAttrDao">
+    
+	<sql id="wsProdSkuAttrColumns">
+		a.id AS "id",
+		a.prod_id AS "prodId",
+		a.attrbute_id AS "attrbuteId",
+		a.attrbute_name AS "attrbuteName",
+		a.attrbute_value AS "attrbuteValue",
+		a.attrbute_value_name AS "attrbuteValueName",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsProdSkuAttrJoins">
+	</sql>
+    
+	<select id="get" resultType="WsProdSkuAttr">
+		SELECT 
+			<include refid="wsProdSkuAttrColumns"/>
+		FROM ws_prod_sku_attr a
+		<include refid="wsProdSkuAttrJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsProdSkuAttr">
+		SELECT 
+			<include refid="wsProdSkuAttrColumns"/>
+		FROM ws_prod_sku_attr a
+		<include refid="wsProdSkuAttrJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="prodId != null and prodId != ''">
+				AND a.prod_id = #{prodId}
+			</if>
+			<if test="attrbuteId != null and attrbuteId != ''">
+				AND a.attrbute_id = #{attrbuteId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<select id="findAttrbuteIdList" resultType="WsProdSkuAttr">
+		SELECT
+			distinct
+			a.prod_id AS "prodId",
+			a.attrbute_id AS "attrbuteId"
+			FROM ws_prod_sku_attr a
+		<include refid="wsProdSkuAttrJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="prodId != null and prodId != ''">
+				AND a.prod_id = #{prodId}
+			</if>
+			<if test="attrbuteId != null and attrbuteId != ''">
+				AND a.attrbute_id = #{attrbuteId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findAllList" resultType="WsProdSkuAttr">
+		SELECT 
+			<include refid="wsProdSkuAttrColumns"/>
+		FROM ws_prod_sku_attr a
+		<include refid="wsProdSkuAttrJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_prod_sku_attr(
+			id,
+			prod_id,
+			attrbute_id,
+			attrbute_name,
+			attrbute_value,
+			attrbute_value_name,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{prodId},
+			#{attrbuteId},
+			#{attrbuteName},
+			#{attrbuteValue},
+			#{attrbuteValueName},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_prod_sku_attr SET 	
+			prod_id = #{prodId},
+			attrbute_id = #{attrbuteId},
+			attrbute_name = #{attrbuteName},
+			attrbute_value = #{attrbuteValue},
+			attrbute_value_name = #{attrbuteValueName},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_prod_sku_attr SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteByProId">
+		delete from ws_prod_sku_attr where prod_id = #{prodId}
+	</update>
+	
+</mapper>

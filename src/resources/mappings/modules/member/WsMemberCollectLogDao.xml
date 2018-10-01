@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.member.dao.WsMemberCollectLogDao">
+    
+	<sql id="wsMemberCollectLogColumns">
+		a.id AS "id",
+		a.member_id AS "wsMember.id",
+		a.product_id AS "wsProduct.id",
+		b.title AS "wsProduct.title",
+		b.default_price AS "wsProduct.defaultPrice",
+		b.default_really_price AS "wsProduct.defaultReallyPrice",
+		b.prod_image AS "wsProduct.prodImage",
+		a.collect_date AS "collectDate",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsMemberCollectLogJoins">
+		join ws_product b on a.product_id=b.id
+	</sql>
+    
+	<select id="get" resultType="WsMemberCollectLog">
+		SELECT 
+			<include refid="wsMemberCollectLogColumns"/>
+		FROM ws_member_collect_log a
+		<include refid="wsMemberCollectLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsMemberCollectLog">
+		SELECT 
+			<include refid="wsMemberCollectLogColumns"/>
+		FROM ws_member_collect_log a
+		<include refid="wsMemberCollectLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsMember!=null and wsMember.id != null and wsMember.id != ''">
+				AND a.member_id = #{wsMember.id}
+			</if>
+			<if test="wsProduct !=null and wsProduct.id != null and wsProduct.id != ''">
+				AND a.product_id = #{wsProduct.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsMemberCollectLog">
+		SELECT 
+			<include refid="wsMemberCollectLogColumns"/>
+		FROM ws_member_collect_log a
+		<include refid="wsMemberCollectLogJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_member_collect_log(
+			id,
+			member_id,
+			product_id,
+			collect_date,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{wsMember.id},
+			#{wsProduct.id},
+			#{collectDate},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_member_collect_log SET 	
+			member_id = #{wsMember.id},
+			product_id = #{wsProduct.id},
+			collect_date = #{collectDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_member_collect_log SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

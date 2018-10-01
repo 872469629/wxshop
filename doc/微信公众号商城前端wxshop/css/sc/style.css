@@ -1,0 +1,9 @@
+
+.contaniner .detail .chose{ width: 100%; margin-top:2% ;}
+.contaniner .detail .chose ul{ width: 94%; padding: 3% 2%; border-bottom: solid 1px #c8c8c8; background-color: #fff; overflow: hidden;}
+.contaniner .detail .chose ul:last-child{ border: none;}
+.contaniner .detail .chose ul h3{ font-size: 1.35em; color: #666; font-weight: normal; margin-bottom: 2%;}
+.contaniner .detail .chose ul li{ width: 20%; padding: 2% 0; text-align: center; border: solid 1px #c8c8c8; float: left; margin: 2% 2%; border-radius: 0.2em;}
+.contaniner .detail .chose ul .chose-active{ border: solid 1px rgba(0,0,0,0); background-image: url(../images/detail-icon03.png); background-repeat: no-repeat; background-size: 100% 100%; }
+.contaniner .detail .seven{ width: 100%; display: block; background-color: #fff; padding: 3% 5%; margin-top: 2%; color: #666; font-size: 1.169em; background-image: url(../images/right.png); background-repeat: no-repeat; background-size: 2%; background-position: 85%;}
+.contaniner .detail .seven b{  color: #FC605A; font-weight: normal;}

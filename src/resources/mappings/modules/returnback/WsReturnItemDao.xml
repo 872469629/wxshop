@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.returnback.dao.WsReturnItemDao">
+    
+	<sql id="wsReturnItemColumns">
+		a.id AS "id",
+		a.return_id AS "wsReturn.Id",
+		a.order_item_id AS "wsOrderItem.Id",
+		a.product_id AS "wsProduct.id",
+		a.product_title AS "wsProduct.title",
+		a.sku_id AS "skuId",
+		a.sku_name AS "skuName",
+		a.thumb AS "thumb",
+		a.quantity AS "quantity",
+		a.activity_id AS "activityId",
+		a.favorable_desc AS "favorableDesc",
+		a.unit_price AS "unitPrice",
+		a.really_unit_price AS "reallyUnitPrice",
+		a.really_price AS "reallyPrice",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsReturnItemJoins">
+		LEFT JOIN ws_return b ON b.id = a.return_id
+	</sql>
+    
+	<select id="get" resultType="WsReturnItem">
+		SELECT 
+			<include refid="wsReturnItemColumns"/>
+		FROM ws_return_item a
+		<include refid="wsReturnItemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsReturnItem">
+		SELECT 
+			<include refid="wsReturnItemColumns"/>
+		FROM ws_return_item a
+		<include refid="wsReturnItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsReturn !=null and wsReturn.id != null and wsReturn.id != ''">
+				AND a.return_id = #{wsReturn.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsReturnItem">
+		SELECT 
+			<include refid="wsReturnItemColumns"/>
+		FROM ws_return_item a
+		<include refid="wsReturnItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_return_item(
+			id,
+			return_id,
+			order_item_id,
+			product_id,
+			product_title,
+			sku_id,
+			sku_name,
+			thumb,
+			quantity,
+			activity_id,
+			favorable_desc,
+			unit_price,
+			really_unit_price,
+			really_price,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{wsReturn.id},
+			#{wsOrderItem.id},
+			#{wsProduct.id},
+			#{wsProduct.title},
+			#{skuId},
+			#{skuName},
+			#{thumb},
+			#{quantity},
+			#{activityId},
+			#{favorableDesc},
+			#{unitPrice},
+			#{reallyUnitPrice},
+			#{reallyPrice},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_return_item SET 	
+			return_id = #{wsReturn.id},
+			order_item_id = #{wsOrderItem.id},
+			product_id = #{wsProduct.id},
+			product_title = #{wsProduct.title},
+			sku_id = #{skuId},
+			sku_name = #{skuName},
+			thumb = #{thumb},
+			quantity = #{quantity},
+			activity_id = #{activityId},
+			favorable_desc = #{favorableDesc},
+			unit_price = #{unitPrice},
+			really_unit_price = #{reallyUnitPrice},
+			really_price = #{reallyPrice},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_return_item SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE return_id = #{returnId}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

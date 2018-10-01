@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.member.dao.WsMemberDao">
+    
+	<sql id="wsMemberColumns">
+		a.id AS "id",
+		a.username AS "username",
+		a.password AS "password",
+		a.nickname AS "nickname",
+		a.open_id AS "openId",
+		a.headimgurl AS "headimgurl",
+		a.token AS "token",
+		a.mobile AS "mobile",
+		a.member_rank_id AS "memberRankId",
+		a.member_rank_name AS "memberRankName",
+		a.score AS "score",
+		a.balance AS "balance",
+		a.award_friend AS "awardFriend",
+		a.award_prod AS "awardProd",
+		a.award_qr_code AS "awardQrCode",
+		a.default_addr_id AS "wsAddress.id",
+		a.locked_date AS "lockedDate",
+		a.is_locked AS "isLocked",
+		a.lock_flag AS "lockFlag",
+		a.email AS "email",
+		a.birth AS "birth",
+		a.recommend_member_id AS "recommendMemberId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsMemberJoins">
+	
+	LEFT JOIN ws_mrank b ON b.id = a.member_rank_id
+	</sql>
+    
+	<select id="get" resultType="WsMember">
+		SELECT 
+			<include refid="wsMemberColumns"/>
+		FROM ws_member a
+		<include refid="wsMemberJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="getByOpenId" resultType="WsMember">
+		SELECT 
+			<include refid="wsMemberColumns"/>
+		FROM ws_member a
+		<include refid="wsMemberJoins"/>
+		WHERE a.open_id = #{openId} and a.del_flag = '0'
+	</select>
+	
+	<select id="findList" resultType="WsMember">
+		SELECT 
+			<include refid="wsMemberColumns"/>
+		FROM ws_member a
+		<include refid="wsMemberJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="username != null and username != ''">
+				AND a.username LIKE 
+					<if test="dbName == 'oracle'">'%'||#{username}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{username}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{username},'%')</if>
+			</if>
+			<if test="nickname != null and nickname != ''">
+				AND a.nickname LIKE 
+					<if test="dbName == 'oracle'">'%'||#{nickname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{nickname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{nickname},'%')</if>
+			</if>
+			<if test="mobile != null and mobile != ''">
+				AND a.mobile LIKE 
+					<if test="dbName == 'oracle'">'%'||#{mobile}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{mobile}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{mobile},'%')</if>
+			</if>
+			<if test="memberRankId != null and memberRankId != ''">
+				AND a.member_rank_id = #{memberRankId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsMember">
+		SELECT 
+			<include refid="wsMemberColumns"/>
+		FROM ws_member a
+		<include refid="wsMemberJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findCount" resultType="int">
+		SELECT 
+			count(1)
+		FROM ws_member a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="createDate != null and createDate != ''">
+				AND a.create_date >= #{createDate}
+			</if>
+		</where>		
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_member(
+			id,
+			username,
+			password,
+			nickname,
+			open_id,
+			headimgurl,
+			token,
+			mobile,
+			member_rank_id,
+			member_rank_name,
+			score,
+			balance,
+			award_friend,
+			award_prod,
+			award_qr_code,
+			default_addr_id,
+			locked_date,
+			is_locked,
+			lock_flag,
+			email,
+			birth,
+			recommend_member_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{username},
+			#{password},
+			#{nickname},
+			#{openId},
+			#{headimgurl},
+			#{token},
+			#{mobile},
+			#{memberRankId},
+			#{memberRankName},
+			#{score},
+			#{balance},
+			#{awardFriend},
+			#{awardProd},
+			#{awardQrCode},
+			#{wsAddress.id},
+			#{lockedDate},
+			#{isLocked},
+			#{lockFlag},
+			#{email},
+			#{birth},
+			#{recommendMemberId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_member SET 	
+			username = #{username},
+			password = #{password},
+			nickname = #{nickname},
+			open_id = #{openId},
+			headimgurl = #{headimgurl},
+			token = #{token},
+			mobile = #{mobile},
+			member_rank_id = #{memberRankId},
+			member_rank_name = #{memberRankName},
+			score = #{score},
+			balance = #{balance},
+			award_friend = #{awardFriend},
+			award_prod = #{awardProd},
+			award_qr_code = #{awardQrCode},
+			default_addr_id = #{wsAddress.id},
+			locked_date = #{lockedDate},
+			is_locked = #{isLocked},
+			lock_flag = #{lockFlag},
+			email = #{email},
+			birth = #{birth},
+			recommend_member_id = #{recommendMemberId},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_member SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="lock">
+		SELECT 1 FROM ws_member WHERE id = #{id} FOR UPDATE
+	</update>
+</mapper>

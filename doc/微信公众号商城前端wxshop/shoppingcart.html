@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>商城购物车页</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<style type="text/css">
+body{ max-width:100%; } 
+.mui-bar .mui-title{ height:50px; line-height:50px; color:#fff;}
+.mui-bar-nav~.mui-content { padding-top:50px;}
+</style>
+</head>
+
+<body>
+<div id="indexVm" v-cloak>
+<div id="header" class="search-head header mui-bar mui-bar-nav">
+  <h1 class="mui-title">购物车</h1>
+	<a id="ceshi" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<div class="am-dropdown" data-am-dropdown>
+		<span class="am-btn am-dropdown-toggle" data-am-dropdown-toggle><em class="header-notice-tips"></em></span>
+	</div>
+  <div class="notice-box"><a href="message.html">
+    <span class="notice-icon"><img src="images/notice-icon.png"><em>{{messagenum}}</em></span>
+    <span>消息</span></a>
+  </div>
+</div>
+  <!--my-head-end-->
+		<footer class="footer ind-footer mui-bar-tab" id="footer">
+			<ul class="display-box-middle">
+				<li>
+					<a  href="index.html">
+						<span class="footer-icon footer-index"></span><span>首页</span>
+					</a>
+				</li>
+				<li>
+					<a href="prodCat.html">
+						<span class="footer-icon footer-classification"></span><span>分类</span>
+					</a>
+				</li>
+				<li>
+					<a href="shoppingcart.html" class="on">
+						<span class="footer-icon footer-cart"></span><span>购物车</span>
+					</a>
+				</li>
+				<li>
+					<a href="userCenter.html">
+						<span class="footer-icon footer-my"></span><span>个人中心</span>
+					</a>
+				</li>
+			</ul>
+		</footer>
+  <!--footer-end-->
+  
+  <div class="mui-content">
+  
+  <div class="shopcart-group" >
+    <div class="shopcart-tit clearfix">
+    <div class="check-box fl"><label><input type="checkbox" onclick="selectCheck()" name="allCartCheck" id="allCartCheck" class="newslist"/></label></div>
+    <span class="fl"><a href="#">购物车</a></span>
+    <span class="fr clearfix"><a href="coupon.html">领券</a><a href="#" onclick="delectCart()">删除</a></span>
+    </div>
+   <ul class="shopcart-item">
+      <li class="clearfix" v-for="wsCart in wsCartList">
+        <div class="check-box">
+        	<label>
+        		<input onclick="calculatedAmount()" type="checkbox" v-bind:skuId="wsCart.skuId" v-bind:cardId="wsCart.id" v-bind:unitPrice="wsCart.unitPrice" name="cartCheck" id="cartCheck" class="newslist">
+        	</label>
+        </div>
+        <div class="pro-details">            
+          <div class="pro-details-l">
+            <a ><img v-bind:src="wsCart.thumb"></a>
+          </div>            
+          <div class="pro-details-r" style="padding-top: 2px;">
+              <div class="pro-details-top">
+                <a v-bind:href="'productDetails.html?id='+wsCart.productId">
+                  <h2 class="pro-details-text-tit">{{wsCart.title}}</h2>
+                  <p class="pro-details-text-des">{{wsCart.skuSpec}}</p>
+                </a>            
+              </div>  
+              <div class="pro-details-tips clearfix">
+                <em>￥{{wsCart.unitPrice}}</em>
+                <del>￥{{wsCart.unit_default_price}}</del>
+                <span>商城专享价</span>
+                <div class="pro-number fr">数量：			
+	                <div class="mui-numbox" data-numbox-step='1' data-numbox-min='1' data-numbox-max='1000'>
+									  <button   class="mui-btn mui-numbox-btn-minus" type="button">-</button>
+									  <input onchange="calculatedAmount()" class="mui-numbox-input" type="number" v-bind:value="wsCart.quantity" v-bind:id="wsCart.skuId"/>
+									  <button  class="mui-btn mui-numbox-btn-plus" type="button">+</button>
+									</div>
+                </div>
+              </div>
+          </div>  
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+    <div id="shopcart-footer" class="shopcart-footer">
+       <div class="check-box"><label class="checkall"><input id="checkAll" class="allselect" type="checkbox">&nbsp;全选</label></div>
+       <div class="total">
+         <em id="wsCartMoney">合计：￥0</em>
+         <span>不含运费和优惠</span>
+       </div>
+       <div class="closing"><a onclick="balance()" class="btn-sub">去结算</a></div>
+    </div>
+  </div>
+</div>
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+		<script>
+			var vm = new Vue({
+				el: '#indexVm',
+				data: {
+					messagenum: "0",
+					wsCartList: [],
+				},
+				created: function () {
+					mui.ajax(wxshop.serverUrl+"/cart", {
+						type: "post",
+						data:{
+							code:wxshop.getUrlParam("code")
+						},
+						dataType: "json",
+						success: function(data) {
+							if(data.ret==0){
+								mui.alert(data.msg);
+							}
+							vm.messagenum=data.messagenum;
+							vm.wsCartList=data.wsCartList;
+							vm.$nextTick(function () {
+								mui.init();
+								mui('.mui-numbox').numbox();
+							})
+						},
+						error: function(xhr,type,errorThrown) {
+							mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+						}
+					});
+				},
+			});
+			//全选
+			function selectCheck(){
+				if($("#allCartCheck").prop("checked")){
+					$("input[name='cartCheck']").each(function(){
+						 $(this).attr("checked", true);
+					});
+				}else{
+					$("input[name='cartCheck']").each(function(){
+						 $(this).attr("checked", false);
+					});
+				}
+				calculatedAmount();
+			}
+			//选中之后计算金额
+			function calculatedAmount(){
+				var wsCartMoney=0;
+				$("input[name='cartCheck']:checked").each(function(){
+					var skuId=$(this).attr("skuId");
+					var unitPrice=$(this).attr("unitPrice");
+					var quantity=$("#"+skuId).val();
+					wsCartMoney=wsCartMoney+unitPrice*quantity;
+				});
+				$("#wsCartMoney").html("合计：￥"+wsCartMoney);
+			}
+			//去结算
+			function balance(){
+				var arrParam=[];
+				$("input[name='cartCheck']:checked").each(function(){
+					var item={};
+					item.skuId=$(this).attr("skuId");
+					item.quantity=$("#"+item.skuId).val();
+					arrParam.push(item);
+				});
+				if(arrParam.length==0){
+					mui.alert("请选择购买商品");
+					return;
+				}
+				localStorage.wsCartOrder = JSON.stringify(arrParam);
+				mui.openWindow({
+						url:"prodOrderConfirm.html",
+				});
+			}
+			//删除购物车
+			function delectCart(){
+				var arrParam=[];
+				$("input[name='cartCheck']:checked").each(function(){
+					var item={};
+					item.id=$(this).attr("cardId");
+					arrParam.push(item);
+				});
+				mui.ajax(wxshop.serverUrl+"/cart/deleteCard", {
+					type: "post",
+					data:JSON.stringify(arrParam),
+					dataType: "json",
+					contentType : "application/json",
+					success: function(data) {
+						if(data.ret==0){
+							mui.alert(data.msg);
+							return;
+						}
+						if(data.ret==2){
+							wxshop.getOpenId(data.appid);
+						}		
+						mui.toast("删除购物车商品成功!");
+						vm.wsCartList=data.wsCartList;
+						vm.$nextTick(function () {
+							mui.init();
+							mui('.mui-numbox').numbox();
+							calculatedAmount();
+						})
+					},
+					error: function(xhr,type,errorThrown) {
+						mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+					}
+				});
+			}
+		</script>
+</body>
+</html>

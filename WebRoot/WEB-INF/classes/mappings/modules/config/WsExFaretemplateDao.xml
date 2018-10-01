@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.config.dao.WsExFaretemplateDao">
+    
+	<sql id="wsExFaretemplateColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.dispatch_time AS "dispatchTime",
+		a.shop_addr AS "shopAddr",
+		a.valuation_model AS "valuationModel",
+		a.is_incl_post_age_byif AS "isInclPostAgeByif",
+		a.carry_way AS "carryWay",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsExFaretemplateJoins">
+	</sql>
+    
+	<select id="get" resultType="WsExFaretemplate">
+		SELECT 
+			<include refid="wsExFaretemplateColumns"/>
+		FROM ws_ex_faretemplate a
+		<include refid="wsExFaretemplateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsExFaretemplate">
+		SELECT 
+			<include refid="wsExFaretemplateColumns"/>
+		FROM ws_ex_faretemplate a
+		<include refid="wsExFaretemplateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsExFaretemplate">
+		SELECT 
+			<include refid="wsExFaretemplateColumns"/>
+		FROM ws_ex_faretemplate a
+		<include refid="wsExFaretemplateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_ex_faretemplate(
+			id,
+			name,
+			dispatch_time,
+			shop_addr,
+			valuation_model,
+			is_incl_post_age_byif,
+			carry_way,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{name},
+			#{dispatchTime},
+			#{shopAddr},
+			#{valuationModel},
+			#{isInclPostAgeByif},
+			#{carryWay},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_ex_faretemplate SET 	
+			name = #{name},
+			dispatch_time = #{dispatchTime},
+			shop_addr = #{shopAddr},
+			valuation_model = #{valuationModel},
+			is_incl_post_age_byif = #{isInclPostAgeByif},
+			carry_way = #{carryWay},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_ex_faretemplate SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

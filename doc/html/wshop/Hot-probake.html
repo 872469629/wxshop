@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>首购</title>
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<!--消息 脚本-->
+<link rel="stylesheet" href="css/amazeui.min.css">
+<script src="js/amazeui.min.js"></script>
+<!--消息 脚本-->
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			.mui-bar~.mui-content .mui-fullscreen {
+				top: 44px;
+				height: auto;
+			}
+			.mui-pull-top-tips {
+				position: absolute;
+				top: -20px;
+				left: 50%;
+				margin-left: -25px;
+				width: 40px;
+				height: 40px;
+				border-radius: 100%;
+				z-index: 1;
+			}
+			.mui-bar~.mui-pull-top-tips {
+				top: 24px;
+			}
+			.mui-pull-top-wrapper {
+				width: 42px;
+				height: 42px;
+				display: block;
+				text-align: center;
+				background-color: #efeff4;
+				border: 1px solid #ddd;
+				border-radius: 25px;
+				background-clip: padding-box;
+				box-shadow: 0 4px 10px #bbb;
+				overflow: hidden;
+			}
+			.mui-pull-top-tips.mui-transitioning {
+				-webkit-transition-duration: 200ms;
+				transition-duration: 200ms;
+			}
+			.mui-pull-top-tips .mui-pull-loading {
+				margin: 0;
+			}
+			.mui-pull-top-wrapper .mui-icon,
+			.mui-pull-top-wrapper .mui-spinner {
+				margin-top: 7px;
+			}
+			.mui-pull-bottom-tips {
+				text-align: center;
+				background-color: #efeff4;
+				font-size: 15px;
+				line-height: 40px;
+				color: #777;
+			}
+			.mui-pull-top-canvas {
+				overflow: hidden;
+				background-color: #fafafa;
+				border-radius: 40px;
+				box-shadow: 0 4px 10px #bbb;
+				width: 40px;
+				height: 40px;
+				margin: 0 auto;
+			}
+			.mui-pull-top-canvas canvas {
+				width: 40px;
+			}
+			.slider-tit{background-color: #ffffff; border-bottom:1px solid #cccccc; position:relative;}
+			.mui-slider-indicator.mui-segmented-control {
+				 width:85%;
+			}
+			.mui-table-view{ background-color:transparent;}
+			.mui-fullscreen .mui-segmented-control~.mui-slider-group{ top:70px;}
+			.mui-slider .mui-segmented-control.mui-segmented-control-inverted~.mui-slider-group .mui-slider-item{ border-top:none;}
+.mui-slider .mui-segmented-control.mui-segmented-control-inverted .mui-control-item.mui-active{color: #dd2727;
+    height: 38px;
+    line-height:38px;
+    border-bottom: 3px solid #dd2727;}
+		.mui-segmented-control.mui-scroll-wrapper .mui-control-item{ padding:0 5px; margin:0 5px; height:38px;}
+		.mui-scroll-wrapper{ bottom:76px;}
+		</style>
+</head>
+
+<body>
+  <header class="header mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">爆款必抢</h1>
+    <div class="am-dropdown" data-am-dropdown>
+      <span class="am-btn am-dropdown-toggle" data-am-dropdown-toggle><em class="header-notice-tips"></em></span>
+      <ul class="am-dropdown-content">
+        <li class="clearfix"><a href="#"><i><img src="images/header-notice.png"></i>消息<em class="header-notice-tips fr"></em></a></li>
+        <li><a href="Index.html"><i><img src="images/header-home.png"></i>首页</a></li>
+      </ul>
+    </div>
+  </header>
+  <!--header-end-->
+<div class="mui-content">
+
+    <div id="slider" class="mui-slider mui-fullscreen">
+        <div class="slider-tit">
+          <div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+                <div class="mui-scroll">
+                    <a class="mui-control-item mui-active" href="#item1mobile">全部</a>
+                    <a class="mui-control-item" href="#item2mobile">服饰</a>
+                    <a class="mui-control-item" href="#item3mobile">美妆</a>
+                    <a class="mui-control-item" href="#item4mobile">居家</a>
+                    <a class="mui-control-item" href="#item5mobile">111111111</a>
+                    <a class="mui-control-item" href="#item6mobile">222222222</a>
+                </div>
+          </div>
+          <div class="open-btn"><span></span></div>
+        </div> 
+        
+        <!--折叠展开列表内容-->
+        <div class="nav-con">
+          <ul class="clearfix">
+            <li><a href="#">全部</a></li>
+            <li><a href="#">全部</a></li>
+            <li><a href="#">全部</a></li>
+            <li><a href="#">全部</a></li>            
+            <li><a href="#">全部</a></li>
+            <li><a href="#">全部</a></li>
+            <li><a href="#">全部</a></li>
+            <li><a href="#">全部</a></li>
+          </ul>
+        </div>
+        <!--折叠展开列表内容-->
+        
+        <!--排序-->
+        <div class="sort-list">
+          <ul class="goods-all-tit-list clearfix">
+              <li><a class="on" href="#">最新上线</a></li>
+              <li><a href="#">销量优先</a></li>
+              <li><a href="#">价格排序</a><div class="up-down-icon"><span class="sort-up active"></span><span class="sort-down"></span></div></li>
+          </ul>
+        </div>
+        <!--排序-->
+        
+        <div class="mui-slider-group">
+            <div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+                <div id="scroll1" class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-table-view">
+                            <!--爆款列表-->
+                            <a class="hot-pro-list" href="Seckill.html">
+                                <div class="hot-pro-list-l"><img src="images/hot-pro-img.jpg"></div>
+                                <div class="hot-pro-list-r">
+                                  <div class="hot-pro-list-r-top">
+                                    <h2>厚底运动松糕板鞋</h2>
+                                    <span>2016新品 真材实料 运动休闲 时尚百搭 潮流</span>
+                                  </div>
+                                  <div class="hot-pro-list-r-bot">
+                                    <div class="hot-pro-price"><span>￥<em>58</em></span></div>
+                                    <div class="tmall-price">
+                                      <div class="tmall-rmb">天猫价：69.9元</div>
+                                      <div class="tmall-pay"><em>2371</em>件已付款</div>
+                                    </div>
+                                    <div class="rob-btn">抢!</div>
+                                  </div>
+                                </div>
+                            </a>    
+                            <!--爆款列表--> 
+                            
+                            <!--爆款列表-->
+                            <a class="hot-pro-list" href="Seckill.html">
+                                <div class="hot-pro-list-l"><img src="images/hot-pro-img.jpg"></div>
+                                <div class="hot-pro-list-r">
+                                  <div class="hot-pro-list-r-top">
+                                    <h2>厚底运动松糕板鞋</h2>
+                                    <span>2016新品 真材实料 运动休闲 时尚百搭 潮流</span>
+                                  </div>
+                                  <div class="hot-pro-list-r-bot">
+                                    <div class="hot-pro-price"><span>￥<em>58</em></span></div>
+                                    <div class="tmall-price">
+                                      <div class="tmall-rmb">天猫价：69.9元</div>
+                                      <div class="tmall-pay"><em>2371</em>件已付款</div>
+                                    </div>
+                                    <div class="rob-btn">抢!</div>
+                                  </div>
+                                </div>
+                            </a>    
+                            <!--爆款列表--> 
+                            
+                            <!--爆款列表-->
+                            <a class="hot-pro-list" href="Seckill.html">
+                                <div class="hot-pro-list-l"><img src="images/hot-pro-img.jpg"></div>
+                                <div class="hot-pro-list-r">
+                                  <div class="hot-pro-list-r-top">
+                                    <h2>厚底运动松糕板鞋</h2>
+                                    <span>2016新品 真材实料 运动休闲 时尚百搭 潮流</span>
+                                  </div>
+                                  <div class="hot-pro-list-r-bot">
+                                    <div class="hot-pro-price"><span>￥<em>58</em></span></div>
+                                    <div class="tmall-price">
+                                      <div class="tmall-rmb">天猫价：69.9元</div>
+                                      <div class="tmall-pay"><em>2371</em>件已付款</div>
+                                    </div>
+                                    <div class="rob-btn">抢!</div>
+                                  </div>
+                                </div>
+                            </a>    
+                            <!--爆款列表--> 
+                            
+                            <!--爆款列表-->
+                            <a class="hot-pro-list" href="Seckill.html">
+                                <div class="hot-pro-list-l"><img src="images/hot-pro-img.jpg"></div>
+                                <div class="hot-pro-list-r">
+                                  <div class="hot-pro-list-r-top">
+                                    <h2>厚底运动松糕板鞋</h2>
+                                    <span>2016新品 真材实料 运动休闲 时尚百搭 潮流</span>
+                                  </div>
+                                  <div class="hot-pro-list-r-bot">
+                                    <div class="hot-pro-price"><span>￥<em>58</em></span></div>
+                                    <div class="tmall-price">
+                                      <div class="tmall-rmb">天猫价：69.9元</div>
+                                      <div class="tmall-pay"><em>2371</em>件已付款</div>
+                                    </div>
+                                    <div class="rob-btn">抢!</div>
+                                  </div>
+                                </div>
+                            </a>    
+                            <!--爆款列表--> 
+                            
+                            <!--爆款列表-->
+                            <a class="hot-pro-list" href="Seckill.html">
+                                <div class="hot-pro-list-l"><img src="images/hot-pro-img.jpg"></div>
+                                <div class="hot-pro-list-r">
+                                  <div class="hot-pro-list-r-top">
+                                    <h2>厚底运动松糕板鞋</h2>
+                                    <span>2016新品 真材实料 运动休闲 时尚百搭 潮流</span>
+                                  </div>
+                                  <div class="hot-pro-list-r-bot">
+                                    <div class="hot-pro-price"><span>￥<em>58</em></span></div>
+                                    <div class="tmall-price">
+                                      <div class="tmall-rmb">天猫价：69.9元</div>
+                                      <div class="tmall-pay"><em>2371</em>件已付款</div>
+                                    </div>
+                                    <div class="rob-btn">抢!</div>
+                                  </div>
+                                </div>
+                            </a>    
+                            <!--爆款列表--> 
+                            
+                            <!--爆款列表-->
+                            <a class="hot-pro-list" href="Seckill.html">
+                                <div class="hot-pro-list-l"><img src="images/hot-pro-img.jpg"></div>
+                                <div class="hot-pro-list-r">
+                                  <div class="hot-pro-list-r-top">
+                                    <h2>厚底运动松糕板鞋</h2>
+                                    <span>2016新品 真材实料 运动休闲 时尚百搭 潮流</span>
+                                  </div>
+                                  <div class="hot-pro-list-r-bot">
+                                    <div class="hot-pro-price"><span>￥<em>58</em></span></div>
+                                    <div class="tmall-price">
+                                      <div class="tmall-rmb">天猫价：69.9元</div>
+                                      <div class="tmall-pay"><em>2371</em>件已付款</div>
+                                    </div>
+                                    <div class="rob-btn">抢!</div>
+                                  </div>
+                                </div>
+                            </a>    
+                            <!--爆款列表--> 
+                        </div>    
+                    </div>
+                </div>
+            </div>
+            <div id="item2mobile" class="mui-slider-item mui-control-content">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-table-view">
+                            <!--爆款列表-->
+                            <a class="hot-pro-list" href="Seckill.html">
+                                <div class="hot-pro-list-l"><img src="images/hot-pro-img.jpg"></div>
+                                <div class="hot-pro-list-r">
+                                  <div class="hot-pro-list-r-top">
+                                    <h2>厚底运动松糕板鞋</h2>
+                                    <span>2016新品 真材实料 运动休闲 时尚百搭 潮流</span>
+                                  </div>
+                                  <div class="hot-pro-list-r-bot">
+                                    <div class="hot-pro-price"><span>￥<em>58</em></span></div>
+                                    <div class="tmall-price">
+                                      <div class="tmall-rmb">天猫价：69.9元</div>
+                                      <div class="tmall-pay"><em>2371</em>件已付款</div>
+                                    </div>
+                                    <div class="rob-btn">抢!</div>
+                                  </div>
+                                </div>
+                            </a>    
+                            <!--爆款列表--> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="item3mobile" class="mui-slider-item mui-control-content">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-table-view">
+                            <!--爆款列表-->
+                            <a class="hot-pro-list" href="Seckill.html">
+                                <div class="hot-pro-list-l"><img src="images/hot-pro-img.jpg"></div>
+                                <div class="hot-pro-list-r">
+                                  <div class="hot-pro-list-r-top">
+                                    <h2>厚底运动松糕板鞋</h2>
+                                    <span>2016新品 真材实料 运动休闲 时尚百搭 潮流</span>
+                                  </div>
+                                  <div class="hot-pro-list-r-bot">
+                                    <div class="hot-pro-price"><span>￥<em>58</em></span></div>
+                                    <div class="tmall-price">
+                                      <div class="tmall-rmb">天猫价：69.9元</div>
+                                      <div class="tmall-pay"><em>2371</em>件已付款</div>
+                                    </div>
+                                    <div class="rob-btn">抢!</div>
+                                  </div>
+                                </div>
+                            </a>    
+                            <!--爆款列表--> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="item4mobile" class="mui-slider-item mui-control-content">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-table-view">
+                            <!--爆款列表-->
+                            <a class="hot-pro-list" href="Seckill.html">
+                                <div class="hot-pro-list-l"><img src="images/hot-pro-img.jpg"></div>
+                                <div class="hot-pro-list-r">
+                                  <div class="hot-pro-list-r-top">
+                                    <h2>厚底运动松糕板鞋</h2>
+                                    <span>2016新品 真材实料 运动休闲 时尚百搭 潮流</span>
+                                  </div>
+                                  <div class="hot-pro-list-r-bot">
+                                    <div class="hot-pro-price"><span>￥<em>58</em></span></div>
+                                    <div class="tmall-price">
+                                      <div class="tmall-rmb">天猫价：69.9元</div>
+                                      <div class="tmall-pay"><em>2371</em>件已付款</div>
+                                    </div>
+                                    <div class="rob-btn">抢!</div>
+                                  </div>
+                                </div>
+                            </a>    
+                            <!--爆款列表--> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="item5mobile" class="mui-slider-item mui-control-content">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-table-view">
+                            <!--爆款列表-->
+                            <a class="hot-pro-list" href="Seckill.html">
+                                <div class="hot-pro-list-l"><img src="images/hot-pro-img.jpg"></div>
+                                <div class="hot-pro-list-r">
+                                  <div class="hot-pro-list-r-top">
+                                    <h2>厚底运动松糕板鞋</h2>
+                                    <span>2016新品 真材实料 运动休闲 时尚百搭 潮流</span>
+                                  </div>
+                                  <div class="hot-pro-list-r-bot">
+                                    <div class="hot-pro-price"><span>￥<em>58</em></span></div>
+                                    <div class="tmall-price">
+                                      <div class="tmall-rmb">天猫价：69.9元</div>
+                                      <div class="tmall-pay"><em>2371</em>件已付款</div>
+                                    </div>
+                                    <div class="rob-btn">抢!</div>
+                                  </div>
+                                </div>
+                            </a>    
+                            <!--爆款列表--> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="item6mobile" class="mui-slider-item mui-control-content">
+                <div class="mui-scroll-wrapper">
+                    <div class="mui-scroll">
+                        <div class="mui-table-view">
+                            <!--爆款列表-->
+                            <a class="hot-pro-list" href="Seckill.html">
+                                <div class="hot-pro-list-l"><img src="images/hot-pro-img.jpg"></div>
+                                <div class="hot-pro-list-r">
+                                  <div class="hot-pro-list-r-top">
+                                    <h2>厚底运动松糕板鞋</h2>
+                                    <span>2016新品 真材实料 运动休闲 时尚百搭 潮流</span>
+                                  </div>
+                                  <div class="hot-pro-list-r-bot">
+                                    <div class="hot-pro-price"><span>￥<em>58</em></span></div>
+                                    <div class="tmall-price">
+                                      <div class="tmall-rmb">天猫价：69.9元</div>
+                                      <div class="tmall-pay"><em>2371</em>件已付款</div>
+                                    </div>
+                                    <div class="rob-btn">抢!</div>
+                                  </div>
+                                </div>
+                            </a>    
+                            <!--爆款列表--> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+</div>
+<!--container-end-->
+<script src="js/mui.min.js"></script>
+<script src="js/mui.pullToRefresh.js"></script>
+<script src="js/mui.pullToRefresh.material.js"></script>
+<script>
+
+	mui.init();
+	(function($) {
+		//阻尼系数
+		var deceleration = mui.os.ios?0.003:0.0009;
+		$('.mui-scroll-wrapper').scroll({
+			bounce: false,
+			indicators: true, //是否显示滚动条
+			deceleration:deceleration
+		});	
+	mui('.nav-con').scroll({
+	  deceleration: 0.0005, //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+	  scrollY: true, //是否竖向滚动
+	  scrollX: false, //是否横向滚动
+	  startX: 0, //初始化时滚动至x
+	  startY: 0, //初始化时滚动至y
+	  bounce: true, //是否启用回弹
+	  bounceTime: 500, //回弹动画时间
+	  scrollTime: 500,
+	  directionLockThreshold: 5,
+	  indicators:false,
+	});
+		$.ready(function() {
+			//循环初始化所有下拉刷新，上拉加载。
+			$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+				$(pullRefreshEl).pullToRefresh({
+					down: {
+						callback: function() {
+							var self = this;
+							setTimeout(function() {
+								var ul = self.element.querySelector('.mui-table-view');
+								ul.insertBefore(createFragment(ul, index, 10, true), ul.firstChild);
+								self.endPullDownToRefresh();
+							}, 1000);
+						}
+					},
+					up: {
+						callback: function() {
+							var self = this;
+							setTimeout(function() {
+								var ul = self.element.querySelector('.mui-table-view');
+								ul.appendChild(createFragment(ul, index, 5));
+								self.endPullUpToRefresh();
+							}, 1000);
+						}
+					}
+				});
+			});
+			var createFragment = function(ul, index, count, reverse) {
+				var length = ul.querySelectorAll('li').length;
+				var fragment = document.createDocumentFragment();
+				var li;
+				for (var i = 0; i < count; i++) {
+					li = document.createElement('li');
+					li.className = 'mui-table-view-cell';
+					li.innerHTML = '第' + (index + 1) + '个选项卡子项-' + (length + (reverse ? (count - i) : (i + 1)));
+					fragment.appendChild(li);
+				}
+				return fragment;
+			};
+		});
+	})(mui);
+</script>
+</body>
+</html>

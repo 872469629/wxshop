@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+<meta content="telephone=no" name="format-detection" />
+<title>我的收藏</title>
+<script src="js/jquery.min.js" ></script>
+<script src="js/common.js" ></script>
+<!--消息 脚本-->
+<link rel="stylesheet" href="css/amazeui.min.css">
+<script src="js/amazeui.min.js"></script>
+<!--消息 脚本-->
+<!--标准mui.css-->
+<link rel="stylesheet" href="css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/common.css">
+</head>
+<body>
+	<div id="indexVm" v-cloak>
+  <header class="header mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">我的收藏</h1>
+	<div class="notice-box"><a href="message.html">
+		<span class="notice-icon"><img src="images/notice-icon.png"><em>{{messagenum}}</em></span>
+		<span>消息</span></a>
+	</div>
+  </header>
+  <!--header-end-->
+<div class="mui-content">
+  <!--商品列表-->
+    <div class="my-footprints-group" v-for="wsMemberCollectLog in wsMemberCollectLogList">
+      
+      <div class="my-footprints-item">
+        <a class="highlight" >
+          <div class="my-footprints-item-l" v-bind:onclick="'showProd(\''+wsMemberCollectLog.wsProduct.id+'\')'"><img v-bind:src="wsMemberCollectLog.wsProduct.prodImage"></div>
+          <div class="my-footprints-item-r">
+            <div class="my-footprints-item-tit" v-bind:onclick="'showProd(\''+wsMemberCollectLog.wsProduct.id+'\')'">{{wsMemberCollectLog.wsProduct.title}}</div>
+            <div class="my-footprints-item-tips">
+              <span>￥<em>{{wsMemberCollectLog.wsProduct.defaultReallyPrice}}</em></span>
+              <span class="tmall">市场价：{{wsMemberCollectLog.wsProduct.defaultPrice}}元</span>
+              <span class="fr" v-bind:onclick="'deleteCollectLog(\''+wsMemberCollectLog.id+'\')'">删除</span>
+            </div>
+          </div>
+        </a>
+      </div>
+      
+    </div>
+  <!--商品列表-->
+   
+</div>
+</div>
+<!--container-end-->
+<script src="js/mui.min.js"></script>
+<script src="js/wxshop.js"></script>
+<script src="js/vue.js"></script>
+<script>
+	var citys;
+	var cityArray= new Array();
+	var vm = new Vue({
+		el: '#indexVm',
+		data: {
+			messagenum: "",
+			wsMemberCollectLogList:[],
+		},
+		created: function () {
+			mui.ajax(wxshop.serverUrl+"/usercenter/userCollect", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+						return;
+					}
+					if(data.ret==2){
+						wxshop.getOpenId(data.appid);
+						return;
+					}	
+					vm.messagenum=data.messagenum;
+					vm.wsMemberCollectLogList=data.wsMemberCollectLogList;
+				},
+				error: function() {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+			});
+		},
+	});
+	//删除收藏
+	function deleteCollectLog(collectId){
+		mui.ajax(wxshop.serverUrl+"/collect/cancelCollect", {
+				type: "post",
+				data:{
+					code:wxshop.getUrlParam("code"),
+					collectId:collectId,
+				},
+				dataType: "json",
+				success: function(data) {
+					if(data.ret==0){
+						mui.alert(data.msg);
+						return;
+					}
+					vm.wsMemberCollectLogList=data.wsMemberCollectLogList;
+				},
+				error: function(xhr,type,errorThrown) {
+					mui.alert("后台接口请求失败，请联系管理员！错误"+errorThrown);
+				}
+		});
+	}
+	//查看商品信息
+	function showProd(id){
+		mui.openWindow({url:"productDetails.html?id="+id})
+	}
+</script>
+</body>
+</html>

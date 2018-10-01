@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.order.dao.WsOrderItemDao">
+    
+	<sql id="wsOrderItemColumns">
+		a.id AS "id",
+		a.order_id AS "wsOrder.id",
+		a.product_id AS "wsProduct.id",
+		a.product_title AS "wsProduct.title",
+		a.sku_id AS "skuId",
+		a.sku_spec AS "skuSpec",
+		a.thumb AS "thumb",
+		a.quantity AS "quantity",
+		a.unit_price AS "unitPrice",
+		a.really_unit_price AS "reallyUnitPrice",
+		a.really_price AS "reallyPrice",
+		a.reward_money AS "rewardMoney",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsOrderItemJoins">
+		LEFT JOIN ws_order b ON b.id = a.order_id
+	</sql>
+    
+	<select id="get" resultType="WsOrderItem">
+		SELECT 
+			<include refid="wsOrderItemColumns"/>
+		FROM ws_order_item a
+		<include refid="wsOrderItemJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsOrderItem">
+		SELECT 
+			<include refid="wsOrderItemColumns"/>
+		FROM ws_order_item a
+		<include refid="wsOrderItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="wsOrder != null and wsOrder.id != ''">
+				AND a.order_id = #{wsOrder.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsOrderItem">
+		SELECT 
+			<include refid="wsOrderItemColumns"/>
+		FROM ws_order_item a
+		<include refid="wsOrderItemJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_order_item(
+			id,
+			order_id,
+			product_id,
+			product_title,
+			sku_id,
+			sku_spec,
+			thumb,
+			quantity,
+			unit_price,
+			really_unit_price,
+			really_price,
+			reward_money,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{wsOrder.id},
+			#{wsProduct.id},
+			#{wsProduct.title},
+			#{skuId},
+			#{skuSpec},
+			#{thumb},
+			#{quantity},
+			#{unitPrice},
+			#{reallyUnitPrice},
+			#{reallyPrice},
+			#{rewardMoney},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_order_item SET 	
+			order_id = #{wsOrder.id},
+			product_id = #{wsProduct.id},
+			product_title = #{wsProduct.title},
+			sku_id = #{skuId},
+			sku_spec = #{skuSpec},
+			thumb = #{thumb},
+			quantity = #{quantity},
+			unit_price = #{unitPrice},
+			really_unit_price = #{reallyUnitPrice},
+			really_price = #{reallyPrice},
+			reward_money = #{rewardMoney}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_order_item SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE order_id = #{orderId}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>
