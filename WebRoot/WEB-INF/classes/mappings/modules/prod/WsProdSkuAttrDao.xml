@@ -55,9 +55,7 @@
 	
 	<select id="findAttrbuteIdList" resultType="WsProdSkuAttr">
 		SELECT
-			distinct
-			a.prod_id AS "prodId",
-			a.attrbute_id AS "attrbuteId"
+			<include refid="wsProdSkuAttrColumns"/>
 			FROM ws_prod_sku_attr a
 		<include refid="wsProdSkuAttrJoins"/>
 		<where>

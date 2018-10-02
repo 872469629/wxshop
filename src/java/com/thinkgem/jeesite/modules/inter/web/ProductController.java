@@ -3,8 +3,11 @@ package com.thinkgem.jeesite.modules.inter.web;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,12 +41,16 @@ import com.thinkgem.jeesite.modules.member.service.WsMemberVisitLogService;
 import com.thinkgem.jeesite.modules.member.service.WsMessageRecordService;
 import com.thinkgem.jeesite.modules.prod.entity.WsBrand;
 import com.thinkgem.jeesite.modules.prod.entity.WsConsulation;
+import com.thinkgem.jeesite.modules.prod.entity.WsProdAttribute;
 import com.thinkgem.jeesite.modules.prod.entity.WsProdCategory;
 import com.thinkgem.jeesite.modules.prod.entity.WsProdSku;
 import com.thinkgem.jeesite.modules.prod.entity.WsProdSkuAttr;
 import com.thinkgem.jeesite.modules.prod.entity.WsProduct;
+import com.thinkgem.jeesite.modules.prod.entity.dto.ValueAttrbute;
+import com.thinkgem.jeesite.modules.prod.entity.dto.WsSaleAttribute;
 import com.thinkgem.jeesite.modules.prod.service.WsBrandService;
 import com.thinkgem.jeesite.modules.prod.service.WsConsulationService;
+import com.thinkgem.jeesite.modules.prod.service.WsProdAttributeService;
 import com.thinkgem.jeesite.modules.prod.service.WsProdCategoryService;
 import com.thinkgem.jeesite.modules.prod.service.WsProdSkuAttrService;
 import com.thinkgem.jeesite.modules.prod.service.WsProdSkuService;
@@ -100,6 +107,9 @@ public class ProductController extends BaseController {
 	@Autowired
 	private WsMemberCollectLogService wsMemberCollectLogService;  
 	
+	@Autowired
+	private WsProdAttributeService wsProdAttributeService;
+	
 	/**
 	 * 商品详情接口
 	 */
@@ -138,6 +148,12 @@ public class ProductController extends BaseController {
 			}
 			//查询产品副图（轮播图）
 			wsProduct.setProdImageList(wsProductService.getProdImageList(wsProduct.getProdImage(), wsProduct.getProdImages()));
+
+			//查询产品sku规格方便用户进行选择
+			WsProdSku wsProdSku=new WsProdSku();
+			wsProdSku.setWsProduct(wsProduct);
+			List<WsProdSku> wsProdSkuList=wsProdSkuService.findList(wsProdSku);
+			
 			/**
 			 * 查询产品非销售属性,多选的要进行拼接，方面页面展示
 			 */
@@ -166,10 +182,17 @@ public class ProductController extends BaseController {
 				}
 				WsProdSkuBaseAttrList.add(skuAttr);
 			}
-			//查询产品sku规格方便用户进行选择
-			WsProdSku wsProdSku=new WsProdSku();
-			wsProdSku.setWsProduct(wsProduct);
-			List<WsProdSku> wsProdSkuList=wsProdSkuService.findList(wsProdSku);
+			//获取该商品类目下的所有的属性名
+			WsProdAttribute wsProdAttribute = new WsProdAttribute();
+			wsProdAttribute.setProdCategoryId(wsProdCategoryService.get(wsProduct.getProdCategoryId()));
+			List<WsProdAttribute> wsProdAttributes = wsProdAttributeService.findList(wsProdAttribute);
+			//基本属性集合
+			List<WsProdSkuAttr> baseAttributes = new ArrayList<>();
+			//销售属性集合
+			List<WsSaleAttribute> saleAttributes = new ArrayList<>();
+			//封装基本属性和销售属性
+			getAttributeList(baseAttributes,saleAttributes,wsProdAttributes,WsProdSkuAttrubteIdList,wsProdSkuList);
+
 			/**
 			 * 查询产品的评价
 			 */
@@ -200,6 +223,9 @@ public class ProductController extends BaseController {
 			data.put("member",member);
 			data.put("wsProduct",wsProduct);
 			data.put("WsProdSkuBaseAttrList",WsProdSkuBaseAttrList);
+			data.put("WsProdSkuAttrubteIdList",WsProdSkuAttrubteIdList);
+			data.put("baseAttributes",baseAttributes);//基本属性
+			data.put("saleAttributes",saleAttributes);//销售属性
 			data.put("wsProdSkuList",wsProdSkuList);
 			data.put("wsConsulationList",wsConsulationList);
 			data.put("wsConsulationNum",wsConsulationList.size());
@@ -218,6 +244,69 @@ public class ProductController extends BaseController {
 			logger.error("prod/getProdDetail",e);
 		}
 		return data;
+	}
+
+	/**
+	 * 封装基本属性和销售属性
+	 */
+	private void getAttributeList(List<WsProdSkuAttr> baseAttributes, List<WsSaleAttribute> saleAttributes,
+			List<WsProdAttribute> wsProdAttributes, List<WsProdSkuAttr> WsProdSkuAttrubteIdList,
+			List<WsProdSku> wsProdSkuList) {
+		if (wsProdAttributes != null && wsProdAttributes.size() > 0){
+			//过滤获取类型为1的基本属性
+			List<WsProdAttribute> baseAttrs = wsProdAttributes.stream().filter(p -> "1".equals(p.getAttrType())).collect(Collectors.toList());
+			//获取所有属性里面的基本属性
+			for(WsProdSkuAttr w : WsProdSkuAttrubteIdList){
+				for(WsProdAttribute prodAttribute : baseAttrs){
+					if (w.getAttrbuteId().equals(prodAttribute.getId())) {
+						baseAttributes.add(w);
+					}
+				}
+			}
+			//过滤获取类型为2的销售属性
+			List<WsProdAttribute> saleAttrs = wsProdAttributes.stream().filter(p -> "2".equals(p.getAttrType())).collect(Collectors.toList());
+			//获取所有属性里面销售属性
+			Map<String,List<WsProdSkuAttr>> temp = new LinkedHashMap<>();
+			for(WsProdSkuAttr w : WsProdSkuAttrubteIdList){
+				for(WsProdAttribute prodAttribute : saleAttrs){
+					if (w.getAttrbuteId().equals(prodAttribute.getId())) {//该属性是销售属性
+						if (temp.get(w.getAttrbuteId()) == null) {
+							List<WsProdSkuAttr> t = new ArrayList<>();
+							t.add(w);
+							temp.put(w.getAttrbuteId(), t);
+						}else{
+							List<WsProdSkuAttr> list = temp.get(w.getAttrbuteId());
+							list.add(w);
+						}
+					}
+				}
+			}
+			Set<String> keySet = temp.keySet();
+			if (keySet != null && keySet.size() > 0) {
+				for(String attrId : temp.keySet()){
+					List<WsProdSkuAttr> list = temp.get(attrId);
+					WsSaleAttribute sale = new WsSaleAttribute();
+					sale.setAttrbuteId(attrId);
+					sale.setAttrbuteName(list.get(0).getAttrbuteName());
+					List<ValueAttrbute> valueList = new ArrayList<>();
+					for (int i = 0; i < list.size(); i++) {
+						ValueAttrbute valueAttrbute = new ValueAttrbute();
+						if(i==0){
+							valueAttrbute.setSelected(true);
+						}else{
+							valueAttrbute.setSelected(false);
+						}
+						
+						valueAttrbute.setAttrbuteValue(list.get(i).getAttrbuteValue());
+						valueAttrbute.setAttrbuteValueName(list.get(i).getAttrbuteValueName());
+						valueList.add(valueAttrbute);
+					}
+					sale.setValueAttrbutes(valueList);
+					saleAttributes.add(sale);
+				}
+				//将销售属性的key对应着sku拍一下顺序
+			}
+		}
 	}
 
 	/**
