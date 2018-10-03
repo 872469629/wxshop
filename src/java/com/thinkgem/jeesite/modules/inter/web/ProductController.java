@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jfree.util.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -263,24 +264,28 @@ public class ProductController extends BaseController {
 					}
 				}
 			}
-			//过滤获取类型为2的销售属性
-			List<WsProdAttribute> saleAttrs = wsProdAttributes.stream().filter(p -> "2".equals(p.getAttrType())).collect(Collectors.toList());
 			//获取所有属性里面销售属性
-			Map<String,List<WsProdSkuAttr>> temp = new LinkedHashMap<>();
-			for(WsProdSkuAttr w : WsProdSkuAttrubteIdList){
-				for(WsProdAttribute prodAttribute : saleAttrs){
-					if (w.getAttrbuteId().equals(prodAttribute.getId())) {//该属性是销售属性
-						if (temp.get(w.getAttrbuteId()) == null) {
-							List<WsProdSkuAttr> t = new ArrayList<>();
-							t.add(w);
-							temp.put(w.getAttrbuteId(), t);
-						}else{
-							List<WsProdSkuAttr> list = temp.get(w.getAttrbuteId());
-							list.add(w);
+			LinkedHashMap<String,List<WsProdSkuAttr>> temp = new LinkedHashMap<>();
+			//获取sku所拥有的属性分类
+			Set<String> attributeValues = wsProdSkuList.stream().map(p->p.getAttributeValues()).collect(Collectors.toSet());
+			for(String attr : attributeValues){
+				String[] split = attr.split(",");
+				for (int i = 0; i < split.length; i++) {
+					for(WsProdSkuAttr w : WsProdSkuAttrubteIdList){
+						if (w.getAttrbuteId().equals(split[i])) {// 该属性在sku里存在
+							if (temp.get(w.getAttrbuteId()) == null) {
+								List<WsProdSkuAttr> t = new ArrayList<>();
+								t.add(w);
+								temp.put(w.getAttrbuteId(), t);
+							}else{
+								List<WsProdSkuAttr> list = temp.get(w.getAttrbuteId());
+								list.add(w);
+							}
 						}
 					}
 				}
 			}
+			logger.info("temp:{}",temp);
 			Set<String> keySet = temp.keySet();
 			if (keySet != null && keySet.size() > 0) {
 				for(String attrId : temp.keySet()){
