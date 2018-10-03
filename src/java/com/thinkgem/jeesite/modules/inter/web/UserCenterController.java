@@ -450,14 +450,9 @@ public class UserCenterController extends BaseController {
 				return data;
 			}
 			member.setMobile(phone);
-			int update = wsMemberService.update(member);
-			if (update > 0) {
-				data.put("ret", InterConstant.RET_SUCCESS);
-				data.put("msg", "绑定成功");
-			} else {
-				data.put("ret", InterConstant.RET_FAILED);
-				data.put("msg", "绑定失败");
-			}
+			wsMemberService.save(member);
+			data.put("ret", InterConstant.RET_SUCCESS);
+			data.put("msg", "绑定成功");
 		} catch (WxException e) {
 			data.put("ret", InterConstant.RET_WX);
 			data.put("appid", WsUtils.getAccount().getAccountAppid());
