@@ -71,6 +71,7 @@
 							<th class="text-center">是否赠品</th>
 							<th class="text-center">是否支持退货</th>
 							<th class="text-center">已售数量</th>
+							<th class="text-center">是否是代理商商品</th>
 							<shiro:hasPermission name="prod:wsProduct:edit"><th>操作</th></shiro:hasPermission>
 						</tr>
 					<c:forEach items="${page.list}" var="wsProduct">
@@ -99,6 +100,14 @@
 							</td>
 							<td class="text-center">
 								${wsProduct.selNum}
+							</td>
+							<td class="text-center">
+								<c:if test="${wsProduct.isAgentProduct=='1' }">
+								<span style="color: red;">是</span>
+								</c:if>
+								<c:if test="${wsProduct.isAgentProduct!='1' }">
+								否
+								</c:if>
 							</td>
 							<shiro:hasPermission name="prod:wsProduct:edit"><td>
 			    				<a href="${ctx}/prod/wsProduct/nextForm?id=${wsProduct.id}" class="btn btn-success btn-sm"><span class=""><i class="fa fa-pencil">&nbsp;修改</i></span></a>

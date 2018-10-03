@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.modules.prod.entity;
 
+import java.beans.Transient;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -80,6 +81,9 @@ public class WsProduct extends DataEntity<WsProduct> {
 		/** 日期升序 */
 		dateAsc
 	}
+	
+	public String isAgentProduct;//是否是代理商商品 
+	public String agentProductNum;//成为代理商所需数量
 	
 	public WsProduct() {
 		super();
@@ -407,6 +411,22 @@ public class WsProduct extends DataEntity<WsProduct> {
 
 	public void setMinPrice(BigDecimal minPrice) {
 		this.minPrice = minPrice;
+	}
+
+	public String getIsAgentProduct() {
+		return isAgentProduct;
+	}
+
+	public void setIsAgentProduct(String isAgentProduct) {
+		this.isAgentProduct = isAgentProduct;
+	}
+
+	public String getAgentProductNum() {
+		return agentProductNum;
+	}
+
+	public void setAgentProductNum(String agentProductNum) {
+		this.agentProductNum = agentProductNum;
 	}
 	
 	

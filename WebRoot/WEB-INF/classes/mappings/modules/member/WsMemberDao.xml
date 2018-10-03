@@ -30,7 +30,10 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		a.is_agent AS "isAgent",
+		a.agent_parent AS "agentParent",
+		a.to_agent_num AS "toAgentNum"
 	</sql>
 	
 	<sql id="wsMemberJoins">
@@ -152,7 +155,10 @@
 			update_by,
 			update_date,
 			remarks,
-			del_flag
+			del_flag,
+			is_agent,
+			agent_parent,
+			to_agent_num
 		) VALUES (
 			#{id},
 			#{username},
@@ -181,7 +187,10 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag}
+			#{delFlag},
+			#{isAgent},
+			#{agentParent},
+			#{toAgentNum}
 		)
 	</insert>
 	
@@ -210,7 +219,10 @@
 			recommend_member_id = #{recommendMemberId},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			is_agent = #{isAgent},
+			agent_parent = #{agentParent},
+			to_agent_num = #{toAgentNum}
 		WHERE id = #{id}
 	</update>
 	

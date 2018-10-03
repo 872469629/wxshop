@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.rebate.dao.WsAgentRebateConfigDao">
+    
+	<sql id="wsAgentRebateConfigColumns">
+		a.id AS "id",
+		a.level1proportion AS "level1proportion",
+		a.level2proportion AS "level2proportion",
+		a.level3proportion AS "level3proportion",
+		a.status AS "status",
+		a.formulary1 AS "formulary1",
+		a.formulary2 AS "formulary2",
+		a.formulary3 AS "formulary3",
+		a.level1promotion AS "level1promotion",
+		a.level2promotion AS "level2promotion",
+		a.level3promotion AS "level3promotion",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsAgentRebateConfigJoins">
+	</sql>
+    
+	<select id="get" resultType="WsAgentRebateConfig">
+		SELECT 
+			<include refid="wsAgentRebateConfigColumns"/>
+		FROM ws_agent_rebate_config a
+		<include refid="wsAgentRebateConfigJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsAgentRebateConfig">
+		SELECT 
+			<include refid="wsAgentRebateConfigColumns"/>
+		FROM ws_agent_rebate_config a
+		<include refid="wsAgentRebateConfigJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="status != null and status != ''">
+			and a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsAgentRebateConfig">
+		SELECT 
+			<include refid="wsAgentRebateConfigColumns"/>
+		FROM ws_agent_rebate_config a
+		<include refid="wsAgentRebateConfigJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_agent_rebate_config(
+			id,
+			level1proportion,
+			level2proportion,
+			level3proportion,
+			status,
+			formulary1,
+			formulary2,
+			formulary3,
+			level1promotion,
+			level2promotion,
+			level3promotion,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{level1proportion},
+			#{level2proportion},
+			#{level3proportion},
+			#{status},
+			#{formulary1},
+			#{formulary2},
+			#{formulary3},
+			#{level1promotion},
+			#{level2promotion},
+			#{level3promotion},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_agent_rebate_config SET 	
+			level1proportion = #{level1proportion},
+			level2proportion = #{level2proportion},
+			level3proportion = #{level3proportion},
+			status = #{status},
+			formulary1 = #{formulary1},
+			formulary2 = #{formulary2},
+			formulary3 = #{formulary3},
+			level1promotion = #{level1promotion},
+			level2promotion = #{level2promotion},
+			level3promotion = #{level3promotion},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_agent_rebate_config SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

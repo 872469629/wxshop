@@ -16,6 +16,7 @@ import com.thinkgem.jeesite.common.service.ServiceException;
 import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.utils.excel.UrlUtils;
+import com.thinkgem.jeesite.modules.commission.service.WsCommissionService;
 import com.thinkgem.jeesite.modules.config.entity.WsMrank;
 import com.thinkgem.jeesite.modules.config.service.WsExFaretemplateService;
 import com.thinkgem.jeesite.modules.config.service.WsMrankService;
@@ -79,6 +80,9 @@ public class PayService extends BaseService{
 	
 	@Autowired
 	private WsMrankService wsMrankService;
+	
+	@Autowired
+	private WsCommissionService wsCommissionService;
 
 	@Transactional(readOnly = false)
 	public Map orderPay(WsMember member,List<WsOrderItem> wsOrderItems,String ip,String notify) throws Exception {
@@ -321,6 +325,7 @@ public class PayService extends BaseService{
 				order.setOrderState(WsConstant.ORDER_STATE_WAITE_SEND);
 				order.setPaytime(new Date());
 				wsOrderService.save(order);
+				WsMember wsMember=wsMemberService.get(order.getMemberId());
 				//减少库存
 				WsOrderItem wsOrderItem=new WsOrderItem();
 				wsOrderItem.setWsOrder(new WsOrder(order.getId()));
@@ -330,15 +335,32 @@ public class PayService extends BaseService{
 					sku.setSurplusQuantity(sku.getSurplusQuantity()-item.getQuantity());
 					wsProdSkuService.save(sku);
 					try{
-						//商品数量
+						//商品销售数量增加
 						WsProduct wsProduct = sku.getWsProduct();
 						wsProduct.setSelNum(wsProduct.getSelNum()+item.getQuantity());
 						wsProductService.save(wsProduct);
 					}catch(Exception e){}
+					//代理商购买返利
+					if(wsMember.getIsAgent()!=null && "1".equals(wsMember.getIsAgent())){
+						wsCommissionService.commission(item,wsMember);
+					}else{
+						//如果该用户不是代理商，并且购买的商品是分销商品
+						if (item.getWsProduct() != null && StringUtils.isNotEmpty(item.getWsProduct().getId())) {
+							if ("1".equals(wsProductService.get(item.getWsProduct().getId()).getIsAgentProduct())) {//该商品是分销商品
+								wsMember.setToAgentNum(wsMember.getToAgentNum() + item.getQuantity());
+								if (wsMember.getToAgentNum() >= 2) {
+									wsMember.setIsAgent("1");
+									//分销记录
+									wsCommissionService.toAgentCommission(item,wsMember);
+								}
+								wsMemberService.save(wsMember);
+								
+							}
+						}
+					}
 					
 				}
 				//根据购买金额赠送用户积分
-				WsMember wsMember=wsMemberService.get(order.getMemberId());
 				wsMember.setScore(wsMember.getScore()+Integer.valueOf(totalFee));
 				wsMemberService.save(wsMember);
 				//生成会员奖励记录

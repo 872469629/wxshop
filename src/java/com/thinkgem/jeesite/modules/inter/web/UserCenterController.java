@@ -469,4 +469,33 @@ public class UserCenterController extends BaseController {
 		return data;
 	}
 	
+	/**
+	 * 小成为分享者的下限
+	 */
+	@RequestMapping(value = "toBeFromUser")
+	@ResponseBody
+	@CrossOrigin
+	public Map toBeFromUser(String userId,String fromUserId,HttpServletRequest request, HttpServletResponse response, Model model) {
+		Map data=new HashMap();
+		try{
+			WsMember user = wsMemberService.get(userId);
+			if (user != null && StringUtils.isEmpty(user.getAgentParent())) {
+				WsMember fromUser = wsMemberService.get(fromUserId);
+				if (fromUser != null && "1".equals(fromUser.getIsAgent())) {//分享者必须是代理商才可以成为他的下限
+					user.setAgentParent(fromUserId);
+					wsMemberService.save(user);
+				}
+			}
+			data.put("ret",InterConstant.RET_SUCCESS);
+		}catch(WxException e){
+			data.put("ret",InterConstant.RET_WX);
+			data.put("appid",WsUtils.getAccount().getAccountAppid());
+		}catch(Exception e){
+			data.put("ret",InterConstant.RET_FAILED);
+			data.put("msg",e.getMessage());
+			logger.error("usercenter/toBeFromUser",e);
+		}
+		return data;
+	}
+	
 }

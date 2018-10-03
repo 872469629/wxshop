@@ -46,6 +46,9 @@ public class WsMember extends DataEntity<WsMember> {
 	private List<WsMemberCoupon> wsMemberCouponList = Lists.newArrayList();		// 子表列表
 	private List<WsMemberRechargeLog> wsMemberRechargeLogList = Lists.newArrayList();		// 子表列表
 	private List<WsMemberRewardLog> wsMemberRewardLogList = Lists.newArrayList();		// 子表列表
+	private String isAgent;//是否是代理商
+	private String agentParent;//上一级代理商id
+	private int toAgentNum;//成为代理商购买商品的件数
 	
 	public WsMember() {
 		super();
@@ -283,6 +286,30 @@ public class WsMember extends DataEntity<WsMember> {
 
 	public void setAwardQrCode(String awardQrCode) {
 		this.awardQrCode = awardQrCode;
+	}
+
+	public String getIsAgent() {
+		return isAgent;
+	}
+
+	public void setIsAgent(String isAgent) {
+		this.isAgent = isAgent;
+	}
+
+	public String getAgentParent() {
+		return agentParent;
+	}
+
+	public void setAgentParent(String agentParent) {
+		this.agentParent = agentParent;
+	}
+
+	public int getToAgentNum() {
+		return toAgentNum;
+	}
+
+	public void setToAgentNum(int toAgentNum) {
+		this.toAgentNum = toAgentNum;
 	}
 	
 	

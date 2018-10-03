@@ -4,12 +4,16 @@
 package com.thinkgem.jeesite.common.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -379,6 +383,19 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             i++;
         }
         return stringBuffer.toString();
+    }
+    
+    public static BigDecimal eval(String formulary) {
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("js");
+        try {
+            Object result1 = engine.eval(formulary);
+            System.out.println("结果类型:" + result1.getClass().getName() + ",计算结果:" + result1);
+            return new BigDecimal(result1.toString());
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     
 }

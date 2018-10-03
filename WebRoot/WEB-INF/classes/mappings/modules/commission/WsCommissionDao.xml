@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.commission.dao.WsCommissionDao">
+    
+	<sql id="wsCommissionColumns">
+		a.id AS "id",
+		a.agent1_consume AS "agent1Consume",
+		a.agent1_consume_scale AS "agent1ConsumeScale",
+		a.agent2_consume AS "agent2Consume",
+		a.agent2_consume_scale AS "agent2ConsumeScale",
+		a.agent3_consume AS "agent3Consume",
+		a.agent3_consume_scale AS "agent3ConsumeScale",
+		a.status AS "status",
+		a.agent1_promotion AS "agent1Promotion",
+		a.agent2_promotion AS "agent2Promotion",
+		a.member_id AS "memberId",
+		a.agent3_promotion AS "agent3Promotion",
+		a.member_parent AS "memberParent",
+		a.order_item_id AS "orderItemId",
+		a.order_id AS "orderId",
+		a.member_parent_parent AS "memberParentParent",
+		a.member_parent_parent_parent AS "memberParentParentParent",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="wsCommissionJoins">
+	</sql>
+    
+	<select id="get" resultType="WsCommission">
+		SELECT 
+			<include refid="wsCommissionColumns"/>
+		FROM ws_commission a
+		<include refid="wsCommissionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WsCommission">
+		SELECT 
+			<include refid="wsCommissionColumns"/>
+		FROM ws_commission a
+		<include refid="wsCommissionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WsCommission">
+		SELECT 
+			<include refid="wsCommissionColumns"/>
+		FROM ws_commission a
+		<include refid="wsCommissionJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO ws_commission(
+			id,
+			agent1_consume,
+			agent1_consume_scale,
+			agent2_consume,
+			agent2_consume_scale,
+			agent3_consume,
+			agent3_consume_scale,
+			status,
+			agent1_promotion,
+			agent2_promotion,
+			member_id,
+			agent3_promotion,
+			member_parent,
+			order_item_id,
+			order_id,
+			member_parent_parent,
+			member_parent_parent_parent,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{agent1Consume},
+			#{agent1ConsumeScale},
+			#{agent2Consume},
+			#{agent2ConsumeScale},
+			#{agent3Consume},
+			#{agent3ConsumeScale},
+			#{status},
+			#{agent1Promotion},
+			#{agent2Promotion},
+			#{memberId},
+			#{agent3Promotion},
+			#{memberParent},
+			#{orderItemId},
+			#{orderId},
+			#{memberParentParent},
+			#{memberParentParentParent},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE ws_commission SET 	
+			agent1_consume = #{agent1Consume},
+			agent1_consume_scale = #{agent1ConsumeScale},
+			agent2_consume = #{agent2Consume},
+			agent2_consume_scale = #{agent2ConsumeScale},
+			agent3_consume = #{agent3Consume},
+			agent3_consume_scale = #{agent3ConsumeScale},
+			status = #{status},
+			agent1_promotion = #{agent1Promotion},
+			agent2_promotion = #{agent2Promotion},
+			member_id = #{memberId},
+			agent3_promotion = #{agent3Promotion},
+			member_parent = #{memberParent},
+			order_item_id = #{orderItemId},
+			order_id = #{orderId},
+			member_parent_parent = #{memberParentParent},
+			member_parent_parent_parent = #{memberParentParentParent},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE ws_commission SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

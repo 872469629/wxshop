@@ -163,6 +163,18 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label  class="col-sm-2 control-label">是否成为分销商品：
+					</label>
+					<div class="col-sm-4 controls">
+						<form:radiobuttons path="isAgentProduct" items="${fns:getDictList('yes_no')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+					</div>
+					<label  class="col-sm-2 control-label">成为代理商所需数量：
+					</label>
+					<div class="col-sm-4 controls">
+						<form:input path="agentProductNum" htmlEscape="false" maxlength="11" class="form-control number" />
+					</div>
+				</div>
+				<div class="form-group">
 					<label  class="col-sm-2 control-label">搜索关键字(空格分隔)：
 					</label>
 					<div class="col-sm-10 controls">
