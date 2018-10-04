@@ -337,26 +337,30 @@ public class PayService extends BaseService{
 					try{
 						//商品销售数量增加
 						WsProduct wsProduct = sku.getWsProduct();
+						wsProduct = wsProductService.get(wsProduct.getId());
 						wsProduct.setSelNum(wsProduct.getSelNum()+item.getQuantity());
 						wsProductService.save(wsProduct);
-					}catch(Exception e){}
-					//代理商购买返利
-					if(wsMember.getIsAgent()!=null && "1".equals(wsMember.getIsAgent())){
-						wsCommissionService.commission(item,wsMember);
-					}else{
-						//如果该用户不是代理商，并且购买的商品是分销商品
-						if (item.getWsProduct() != null && StringUtils.isNotEmpty(item.getWsProduct().getId())) {
-							if ("1".equals(wsProductService.get(item.getWsProduct().getId()).getIsAgentProduct())) {//该商品是分销商品
-								wsMember.setToAgentNum(wsMember.getToAgentNum() + item.getQuantity());
-								if (wsMember.getToAgentNum() >= 2) {
-									wsMember.setIsAgent("1");
-									//分销记录
-									wsCommissionService.toAgentCommission(item,wsMember);
+						
+						//代理商购买返利
+						if(wsMember.getIsAgent()!=null && "1".equals(wsMember.getIsAgent())){
+							wsCommissionService.commission(item,wsMember);
+						}else{
+							//如果该用户不是代理商，并且购买的商品是分销商品
+							if (item.getWsProduct() != null && StringUtils.isNotEmpty(item.getWsProduct().getId())) {
+								if ("1".equals(wsProductService.get(item.getWsProduct().getId()).getIsAgentProduct())) {//该商品是分销商品
+									wsMember.setToAgentNum(wsMember.getToAgentNum() + item.getQuantity());
+									if (wsMember.getToAgentNum() >= 2) {
+										wsMember.setIsAgent("1");
+										//分销记录
+										wsCommissionService.toAgentCommission(item,wsMember);
+									}
+									wsMemberService.save(wsMember);
+									
 								}
-								wsMemberService.save(wsMember);
-								
 							}
 						}
+					}catch(Exception e){
+						e.printStackTrace();
 					}
 					
 				}

@@ -243,6 +243,40 @@ public class CartController extends BaseController {
 		}
 		return data;
 	}
+	
+	/**
+	 * 购物车总额
+	 */
+	@RequestMapping(value = "cartAmount")
+	@ResponseBody
+	@CrossOrigin
+	public Map cartAmount(HttpServletRequest request, HttpServletResponse response, Model model) {
+		Map data=new HashMap();
+		try{
+			/**
+			 * 获取用户信息
+			 */
+			WsMember member=WsUtils.getMember(request, response);
+			WsCart wsCart=new WsCart();
+			wsCart.setMemberId(member.getId());
+			List<WsCart> wsCartList=wsCartService.findList(wsCart);
+			BigDecimal cartAmount = BigDecimal.ZERO;
+			//图片路径转换
+			for(WsCart cart:wsCartList){
+				cartAmount = cartAmount.add(cart.getPrice());
+			}
+			data.put("ret",InterConstant.RET_SUCCESS);
+			data.put("cartAmount",cartAmount);
+		}catch(WxException e){
+			data.put("ret",InterConstant.RET_WX);
+			data.put("appid",WsUtils.getAccount().getAccountAppid());
+		}catch(Exception e){
+			data.put("ret",InterConstant.RET_FAILED);
+			data.put("msg",e.getMessage());
+			logger.error("cart/deleteCard",e);
+		}
+		return data;
+	}
 
 
 }
