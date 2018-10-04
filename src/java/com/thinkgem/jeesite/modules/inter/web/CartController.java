@@ -117,12 +117,26 @@ public class CartController extends BaseController {
 			if(wsCartList!=null && wsCartList.size()>0){
 				//如果已存在，则数量+1
 				wsCart=wsCartList.get(0);
+				//校验库存
+				WsProdSku wsProdSku=wsProdSkuService.get(skuId);
+				if ((wsCart.getQuantity() + 1) > wsProdSku.getSurplusQuantity()) {
+					data.put("ret",InterConstant.RET_FAILED);
+					data.put("msg","库存不足");
+					return data;
+				}
+				
 				wsCart.setQuantity(wsCart.getQuantity()+1);
 				wsCart.setPrice(wsCart.getUnitPrice().multiply(new BigDecimal(wsCart.getQuantity())));
 				wsCartService.save(wsCart);
 			}else{
 				//如果未存在，则新增如购物车
 				WsProdSku wsProdSku=wsProdSkuService.get(skuId);
+				//校验库存
+				if (1 > wsProdSku.getSurplusQuantity()) {
+					data.put("ret",InterConstant.RET_FAILED);
+					data.put("msg","库存不足");
+					return data;
+				}
 				WsProduct wsProduct=wsProductService.get(wsProdSku.getWsProduct().getId());
 				wsCart.setProductId(wsProduct.getId());
 				wsCart.setTitle(wsProduct.getTitle());

@@ -149,7 +149,8 @@ public class WsProductService extends CrudService<WsProductDao, WsProduct> {
 	public void save(WsProduct wsProduct) {
 		super.save(wsProduct);
 		//生成销售属性和基本属性
-		if(wsProduct.getIsSelChange().equals(WsConstant.YES)||wsProduct.getIsBaseChange().equals(WsConstant.YES)){
+		if (wsProduct.getIsSelChange() != null && (wsProduct.getIsSelChange().equals(WsConstant.YES)
+				|| wsProduct.getIsBaseChange().equals(WsConstant.YES))) {
 			/**
 			 * 删除重置sku属性
 			 */
