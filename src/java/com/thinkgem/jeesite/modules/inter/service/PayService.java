@@ -16,6 +16,7 @@ import com.thinkgem.jeesite.common.service.ServiceException;
 import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.utils.excel.UrlUtils;
+import com.thinkgem.jeesite.modules.commission.entity.WsCommission;
 import com.thinkgem.jeesite.modules.commission.service.WsCommissionService;
 import com.thinkgem.jeesite.modules.config.entity.WsMrank;
 import com.thinkgem.jeesite.modules.config.service.WsExFaretemplateService;
@@ -128,7 +129,7 @@ public class PayService extends BaseService{
 			wsOrderItem.setQuantity(item.getQuantity());
 			wsOrderItem.setUnitPrice(wsProdSku.getPrice());
 			wsOrderItem.setReallyUnitPrice(wsProdSku.getReallyPrice());
-			wsOrderItem.setReallyPrice(wsProdSku.getReallyPrice());
+			wsOrderItem.setReallyPrice(wsProdSku.getReallyPrice().multiply(new BigDecimal(item.getQuantity())));
 			wsOrderItem.setWsProdSku(wsProdSku);
 			wsOrderItemService.save(wsOrderItem);
 			wsOrderItemList.add(wsOrderItem);
@@ -343,7 +344,9 @@ public class PayService extends BaseService{
 						
 						//代理商购买返利
 						if(wsMember.getIsAgent()!=null && "1".equals(wsMember.getIsAgent())){
-							wsCommissionService.commission(item,wsMember);
+							WsCommission commission = new WsCommission();
+							wsCommissionService.commission(commission, item, wsMember, item.getQuantity());
+							wsCommissionService.save(commission);
 						}else{
 							//如果该用户不是代理商，并且购买的商品是分销商品
 							if (item.getWsProduct() != null && StringUtils.isNotEmpty(item.getWsProduct().getId())) {
@@ -352,7 +355,13 @@ public class PayService extends BaseService{
 									if (wsMember.getToAgentNum() >= 2) {
 										wsMember.setIsAgent("1");
 										//分销记录
-										wsCommissionService.toAgentCommission(item,wsMember);
+										WsCommission commission = new WsCommission();
+										wsCommissionService.toAgentCommission(commission, item, wsMember);
+										//如果大于2箱，就要算消费返利
+										if (wsMember.getToAgentNum() > 2) {
+											wsCommissionService.commission(commission, item, wsMember, wsMember.getToAgentNum() - 2);
+										}
+										wsCommissionService.save(commission);
 									}
 									wsMemberService.save(wsMember);
 									
@@ -360,7 +369,7 @@ public class PayService extends BaseService{
 							}
 						}
 					}catch(Exception e){
-						e.printStackTrace();
+						logger.error("代理商购买返利异常：",e);
 					}
 					
 				}

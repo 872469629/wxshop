@@ -47,7 +47,7 @@ public class WsMember extends DataEntity<WsMember> {
 	private List<WsMemberRechargeLog> wsMemberRechargeLogList = Lists.newArrayList();		// 子表列表
 	private List<WsMemberRewardLog> wsMemberRewardLogList = Lists.newArrayList();		// 子表列表
 	private String isAgent;//是否是代理商
-	private String agentParent;//上一级代理商id
+	private WsMember agentParent;//上一级代理商id
 	private int toAgentNum;//成为代理商购买商品的件数
 	
 	public WsMember() {
@@ -296,11 +296,11 @@ public class WsMember extends DataEntity<WsMember> {
 		this.isAgent = isAgent;
 	}
 
-	public String getAgentParent() {
+	public WsMember getAgentParent() {
 		return agentParent;
 	}
 
-	public void setAgentParent(String agentParent) {
+	public void setAgentParent(WsMember agentParent) {
 		this.agentParent = agentParent;
 	}
 

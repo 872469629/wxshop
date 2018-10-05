@@ -474,10 +474,10 @@ public class UserCenterController extends BaseController {
 		Map data=new HashMap();
 		try{
 			WsMember user = wsMemberService.get(userId);
-			if (user != null && StringUtils.isEmpty(user.getAgentParent())) {
+			if (user != null && user.getAgentParent() == null) {
 				WsMember fromUser = wsMemberService.get(fromUserId);
 				if (fromUser != null && "1".equals(fromUser.getIsAgent())) {//分享者必须是代理商才可以成为他的下限
-					user.setAgentParent(fromUserId);
+					user.setAgentParent(fromUser);
 					wsMemberService.save(user);
 				}
 			}

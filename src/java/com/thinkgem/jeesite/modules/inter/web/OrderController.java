@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.modules.inter.web;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -144,7 +145,7 @@ public class OrderController extends BaseController {
 					wsOrderItem.setQuantity(cart.getQuantity());
 					wsOrderItem.setUnitPrice(wsProdSku.getPrice());
 					wsOrderItem.setReallyUnitPrice(wsProdSku.getReallyPrice());
-					wsOrderItem.setReallyPrice(wsProdSku.getReallyPrice());
+					wsOrderItem.setReallyPrice(wsProdSku.getReallyPrice().multiply(new BigDecimal(cart.getQuantity())));
 					wsOrderItem.setWsProdSku(wsProdSku);
 					wsOrderItemList.add(wsOrderItem);
 				}

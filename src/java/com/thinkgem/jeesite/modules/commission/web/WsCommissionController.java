@@ -1,5 +1,7 @@
 package com.thinkgem.jeesite.modules.commission.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,10 +16,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.commission.entity.WsCommission;
 import com.thinkgem.jeesite.modules.commission.service.WsCommissionService;
+import com.thinkgem.jeesite.modules.member.service.WsMemberService;
+import com.thinkgem.jeesite.modules.order.service.WsOrderService;
 
 /**
  * 分销明细Controller
@@ -30,6 +34,12 @@ public class WsCommissionController extends BaseController {
 
 	@Autowired
 	private WsCommissionService wsCommissionService;
+	
+	@Autowired
+	private WsMemberService wsMemberService;
+	
+	@Autowired
+	private WsOrderService wsOrderService;
 	
 	@ModelAttribute
 	public WsCommission get(@RequestParam(required=false) String id) {
@@ -47,6 +57,7 @@ public class WsCommissionController extends BaseController {
 	@RequestMapping(value = {"list", ""})
 	public String list(WsCommission wsCommission, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<WsCommission> page = wsCommissionService.findPage(new Page<WsCommission>(request, response), wsCommission); 
+		List<WsCommission> list = page.getList();
 		model.addAttribute("page", page);
 		return "modules/commission/wsCommissionList";
 	}
