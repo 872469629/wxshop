@@ -14,8 +14,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.rebate.entity.WsAgentRebateConfig;
 import com.thinkgem.jeesite.modules.rebate.service.WsAgentRebateConfigService;
 
@@ -63,6 +63,9 @@ public class WsAgentRebateConfigController extends BaseController {
 	public String save(WsAgentRebateConfig wsAgentRebateConfig, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, wsAgentRebateConfig)){
 			return form(wsAgentRebateConfig, model);
+		}
+		if ("1".equals(wsAgentRebateConfig.getStatus())) {//将其他配置全部改为未启用
+			wsAgentRebateConfigService.updateNo(wsAgentRebateConfig != null ? wsAgentRebateConfig.getId() : null);
 		}
 		wsAgentRebateConfigService.save(wsAgentRebateConfig);
 		addMessage(redirectAttributes, "保存代理商分销配置成功");

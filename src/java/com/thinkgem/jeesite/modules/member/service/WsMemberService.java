@@ -200,4 +200,20 @@ public class WsMemberService extends CrudService<WsMemberDao, WsMember> {
 	public int update(WsMember member) {
 		return dao.update(member);
 	}
+	
+	/**
+	 * 获取下级团队
+	 */
+	public List<WsMember> getNextGroup(WsMember member){
+		WsMember entity = new WsMember();
+		entity.setAgentParent(member);
+		return dao.findList(entity);
+	}
+	
+	/**
+	 * 根据用户集合获取下级团队
+	 */
+	public List<WsMember> getNextGroupByList(List<WsMember> members){
+		return dao.getNextGroupByList(members);
+	}
 }

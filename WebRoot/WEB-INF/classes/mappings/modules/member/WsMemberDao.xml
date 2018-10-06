@@ -32,13 +32,17 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.is_agent AS "isAgent",
-		a.agent_parent AS "agentParent",
-		a.to_agent_num AS "toAgentNum"
+		a.agent_parent AS "agentParent.id",
+		a.to_agent_num AS "toAgentNum",
+		m1.username as "agentParent.username",
+		m1.nickname as "agentParent.nickname",
+		m1.mobile as "agentParent.mobile"
 	</sql>
 	
 	<sql id="wsMemberJoins">
 	
 	LEFT JOIN ws_mrank b ON b.id = a.member_rank_id
+	LEFT JOIN ws_member m1 ON m1.id = a.agent_parent
 	</sql>
     
 	<select id="get" resultType="WsMember">
@@ -84,6 +88,9 @@
 			</if>
 			<if test="memberRankId != null and memberRankId != ''">
 				AND a.member_rank_id = #{memberRankId}
+			</if>
+			<if test="agentParent != null and agentParent.id != null and agentParent.id != ''">
+				AND a.agent_parent = #{agentParent.id}
 			</if>
 		</where>
 		<choose>
@@ -189,7 +196,7 @@
 			#{remarks},
 			#{delFlag},
 			#{isAgent},
-			#{agentParent},
+			#{agentParent.id},
 			#{toAgentNum}
 		)
 	</insert>
@@ -221,7 +228,7 @@
 			update_date = #{updateDate},
 			remarks = #{remarks},
 			is_agent = #{isAgent},
-			agent_parent = #{agentParent},
+			agent_parent = #{agentParent.id},
 			to_agent_num = #{toAgentNum}
 		WHERE id = #{id}
 	</update>
@@ -235,4 +242,24 @@
 	<update id="lock">
 		SELECT 1 FROM ws_member WHERE id = #{id} FOR UPDATE
 	</update>
+	
+	<select id="getNextGroupByList">
+		SELECT 
+			<include refid="wsMemberColumns"/>
+		FROM ws_member a
+		<include refid="wsMemberJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="employeeIdsArray!=null and employeeIdsArray.length!=0">
+				<foreach collection="members" index="index" item="item" open="(" separator="," close=")">  
+	            	#{item.id}  
+	      	    </foreach>
+			</if>
+		</where>
+		<choose>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
 </mapper>

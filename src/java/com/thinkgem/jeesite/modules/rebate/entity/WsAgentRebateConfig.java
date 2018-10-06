@@ -24,6 +24,7 @@ public class WsAgentRebateConfig extends DataEntity<WsAgentRebateConfig> {
 	private BigDecimal level1promotion;		// 一级推广返利
 	private BigDecimal level2promotion;		// 二级推广返利
 	private BigDecimal level3promotion;		// 三级推广返利
+	private String type;		// 类型（1.比例，2.固定金额）
 	
 	public WsAgentRebateConfig() {
 		super();
@@ -116,6 +117,14 @@ public class WsAgentRebateConfig extends DataEntity<WsAgentRebateConfig> {
 
 	public void setLevel3promotion(BigDecimal level3promotion) {
 		this.level3promotion = level3promotion;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 }

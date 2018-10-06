@@ -39,73 +39,86 @@
 				<sys:message content="${message}"/>	
 				<div class="box-body">	
 				<div class="form-group">
-					<label  class="col-sm-2 control-label">level1proportion：
+					<label  class="col-sm-2 control-label">类型：
+					</label>
+					<div class="col-sm-4 controls">
+						<form:select path="type" class="form-control " id="typeButton">
+						<c:if test="${not empty wsAgentRebateConfig.id }">
+							<c:if test="${wsAgentRebateConfig.type=='1' }">
+								<form:option value="1" label="按比例" />
+								<form:option value="2" label="按固定金额"/>
+							</c:if>
+							<c:if test="${wsAgentRebateConfig.type=='2' }">
+								<form:option value="2" label="按固定金额" />
+								<form:option value="1" label="按比例" />
+							</c:if>
+						</c:if>
+						<c:if test="${empty wsAgentRebateConfig.id }">
+							<form:option value="1" label="按比例"/>
+							<form:option value="2" label="按固定金额"/>
+						</c:if>
+						</form:select>
+					</div>
+				</div>
+				<div class="form-group">
+					<label  class="col-sm-2 control-label">一级消费返利：
 					</label>
 					<div class="col-sm-4 controls">
 						<form:input path="level1proportion" htmlEscape="false" class="form-control "/>
 					</div>
+					<div class="col-sm-1 controls">
+						<span class="typeSpan"></span>
+					</div>
 				</div>
 				<div class="form-group">
-					<label  class="col-sm-2 control-label">level2proportion：
+					<label  class="col-sm-2 control-label">二级消费返利：
 					</label>
 					<div class="col-sm-4 controls">
 						<form:input path="level2proportion" htmlEscape="false" class="form-control "/>
 					</div>
+					<div class="col-sm-1 controls">
+						<span class="typeSpan"></span>
+					</div>
 				</div>
 				<div class="form-group">
-					<label  class="col-sm-2 control-label">level3proportion：
+					<label  class="col-sm-2 control-label">三级消费返利：
 					</label>
 					<div class="col-sm-4 controls">
 						<form:input path="level3proportion" htmlEscape="false" class="form-control "/>
 					</div>
-				</div>
-				<div class="form-group">
-					<label  class="col-sm-2 control-label">status：
-					</label>
-					<div class="col-sm-4 controls">
-						<form:input path="status" htmlEscape="false" maxlength="11" class="form-control "/>
+					<div class="col-sm-1 controls">
+						<span class="typeSpan"></span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label  class="col-sm-2 control-label">formulary1：
+					<label  class="col-sm-2 control-label">状态：
 					</label>
 					<div class="col-sm-4 controls">
-						<form:input path="formulary1" htmlEscape="false" maxlength="255" class="form-control "/>
+						<form:select path="status" class="form-control ">
+							<form:option value="1" label="是"/>
+							<form:option value="0" label="否"/>
+						</form:select>
 					</div>
 				</div>
 				<div class="form-group">
-					<label  class="col-sm-2 control-label">formulary2：
+					<label  class="col-sm-2 control-label">一级推广返利：
 					</label>
 					<div class="col-sm-4 controls">
-						<form:input path="formulary2" htmlEscape="false" maxlength="255" class="form-control "/>
+						<form:input path="level1promotion" htmlEscape="false" class="form-control "/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label  class="col-sm-2 control-label">formulary3：
+					<label  class="col-sm-2 control-label">二级推广返利：
 					</label>
 					<div class="col-sm-4 controls">
-						<form:input path="formulary3" htmlEscape="false" maxlength="255" class="form-control "/>
+						<form:input path="level2promotion" htmlEscape="false" class="form-control "/>
 					</div>
 				</div>
 				<div class="form-group">
-					<label  class="col-sm-2 control-label">level1：
+					<label  class="col-sm-2 control-label">三级推广返利：
 					</label>
 					<div class="col-sm-4 controls">
-						<form:input path="level1" htmlEscape="false" class="form-control "/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label  class="col-sm-2 control-label">level2：
-					</label>
-					<div class="col-sm-4 controls">
-						<form:input path="level2" htmlEscape="false" class="form-control "/>
-					</div>
-				</div>
-				<div class="form-group">
-					<label  class="col-sm-2 control-label">level3：
-					</label>
-					<div class="col-sm-4 controls">
-						<form:input path="level3" htmlEscape="false" class="form-control "/>
+						<form:input path="level3promotion" htmlEscape="false" class="form-control "/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -126,5 +139,22 @@
 	</div>
      </div>
    </section>
+   <script type="text/javascript">
+   	$(function(){
+   		if($("#typeButton").val()=='1'){
+   			$(".typeSpan").text("%")
+   		}else{
+			$(".typeSpan").text("")
+		}
+   		
+   		$("#typeButton").change(function(){
+   			if($(this).val()=='1'){
+   				$(".typeSpan").text("%")
+   			}else{
+   				$(".typeSpan").text("")
+   			}
+   		})
+   	})
+   </script>
 </body>
 </html>

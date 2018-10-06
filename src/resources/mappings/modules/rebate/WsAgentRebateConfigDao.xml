@@ -19,7 +19,8 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		a.type AS "type"
 	</sql>
 	
 	<sql id="wsAgentRebateConfigJoins">
@@ -90,7 +91,8 @@
 			update_by,
 			update_date,
 			remarks,
-			del_flag
+			del_flag,
+			type
 		) VALUES (
 			#{id},
 			#{level1proportion},
@@ -108,7 +110,8 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag}
+			#{delFlag},
+			#{type}
 		)
 	</insert>
 	
@@ -126,7 +129,8 @@
 			level3promotion = #{level3promotion},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			type = #{type}
 		WHERE id = #{id}
 	</update>
 	

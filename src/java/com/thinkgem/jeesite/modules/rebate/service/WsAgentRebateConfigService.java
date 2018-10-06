@@ -52,4 +52,17 @@ public class WsAgentRebateConfigService extends CrudService<WsAgentRebateConfigD
 		return null;
 	}
 
+	@Transactional(readOnly = false)
+	public void updateNo(String id) {
+		WsAgentRebateConfig entity = new WsAgentRebateConfig();
+		entity.setStatus("1");
+		List<WsAgentRebateConfig> findList = super.findList(entity);
+		if (findList != null && findList.size() > 0) {
+			for(WsAgentRebateConfig c : findList){
+				c.setStatus("0");
+				super.save(c);
+			}
+		}
+	}
+
 }

@@ -13,22 +13,39 @@
 		a.status AS "status",
 		a.agent1_promotion AS "agent1Promotion",
 		a.agent2_promotion AS "agent2Promotion",
-		a.member_id AS "memberId",
+		a.member_id AS "memberId.id",
 		a.agent3_promotion AS "agent3Promotion",
-		a.member_parent AS "memberParent",
-		a.order_item_id AS "orderItemId",
-		a.order_id AS "orderId",
-		a.member_parent_parent AS "memberParentParent",
-		a.member_parent_parent_parent AS "memberParentParentParent",
+		a.member_parent AS "memberParent.id",
+		a.order_item_id AS "orderItemId.id",
+		a.member_parent_parent AS "memberParentParent.id",
+		a.member_parent_parent_parent AS "memberParentParentParent.id",
+		a.order_id AS "orderId.id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
+		a.mp_balance_before AS "mpBalanceBefore",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.mpp_balance_before AS "mppBalanceBefore",
+		a.del_flag AS "delFlag",
+		a.mppp_balance_before AS "mpppBalanceBefore",
+		a.mp_balance_after AS "mpBalanceAfter",
+		a.mpp_balance_after AS "mppBalanceAfter",
+		a.mppp_balance_after AS "mpppBalanceAfter",
+		o.order_sn AS "orderId.orderSn",
+		o.paytime AS "orderId.paytime",
+		m2.nickname AS "memberParent.nickname",
+		m3.nickname AS "memberParentParent.nickname",
+		m4.nickname AS "memberParentParentParent.nickname"
 	</sql>
 	
 	<sql id="wsCommissionJoins">
+		LEFT JOIN ws_order_item i ON i.id = a.order_item_id
+		LEFT JOIN ws_order o ON o.id = a.order_id
+		LEFT JOIN ws_member m1 ON m1.id = a.member_id
+		LEFT JOIN ws_member m2 ON m2.id = a.member_parent
+		LEFT JOIN ws_member m3 ON m3.id = a.member_parent_parent
+		LEFT JOIN ws_member m4 ON m4.id = a.member_parent_parent_parent
 	</sql>
     
 	<select id="get" resultType="WsCommission">
@@ -46,6 +63,70 @@
 		<include refid="wsCommissionJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="orderId != null and orderId.id != null and orderId.id != ''">
+				AND a.order_id = #{orderId.id}
+			</if>
+			<if test="orderId != null and orderId.orderSn != null and orderId.orderSn != ''">
+				AND o.order_sn like 
+				<if test="dbName == 'oracle'">'%'||#{orderId.orderSn}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{orderId.orderSn}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{orderId.orderSn},'%')</if>
+			</if>
+			<if test="memberParent != null and memberParent.nickname != null and memberParent.nickname != ''">
+				AND (m2.nickname like 
+					<if test="dbName == 'oracle'">'%'||#{memberParent.nickname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{memberParent.nickname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{memberParent.nickname},'%')</if>
+				or m3.nickname like 
+				<if test="dbName == 'oracle'">'%'||#{memberParent.nickname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{memberParent.nickname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{memberParent.nickname},'%')</if>
+				or m4.nickname like 
+					<if test="dbName == 'oracle'">'%'||#{memberParent.nickname}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{memberParent.nickname}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{memberParent.nickname},'%')</if>
+					)
+			</if>
+			
+			<if test="agent1PromotionStart != null and agent1PromotionStart != ''">
+				AND a.agent1_promotion &gt;= #{agent1PromotionStart}
+			</if>
+			<if test="agent1PromotionEnd != null and agent1PromotionEnd != ''">
+				AND a.agent1_promotion &lt;= #{agent1PromotionEnd}
+			</if>
+			<if test="agent1ConsumeStart != null and agent1ConsumeStart != ''">
+				AND a.agent1_consume  &gt;= #{agent1ConsumeStart}
+			</if>
+			<if test="agent1ConsumeEnd != null and agent1ConsumeEnd != ''">
+				AND a.agent1_consume  &lt;= #{agent1ConsumeEnd}
+			</if>
+			
+			<if test="agent2PromotionStart != null and agent2PromotionStart != ''">
+				AND a.agent2_promotion &gt;= #{agent2PromotionStart}
+			</if>
+			<if test="agent2PromotionEnd != null and agent2PromotionEnd != ''">
+				AND a.agent2_promotion &lt;= #{agent2PromotionEnd}
+			</if>
+			<if test="agent2ConsumeStart != null and agent2ConsumeStart != ''">
+				AND a.agent2_consume  &gt;= #{agent2ConsumeStart}
+			</if>
+			<if test="agent2ConsumeEnd != null and agent2ConsumeEnd != ''">
+				AND a.agent2_consume  &lt;= #{agent2ConsumeEnd}
+			</if>
+			
+			<if test="agent3PromotionStart != null and agent3PromotionStart != ''">
+				AND a.agent3_promotion &gt;= #{agent3PromotionStart}
+			</if>
+			<if test="agent3PromotionEnd != null and agent3PromotionEnd != ''">
+				AND a.agent3_promotion &lt;= #{agent3PromotionEnd}
+			</if>
+			<if test="agent3ConsumeStart != null and agent3ConsumeStart != ''">
+				AND a.agent3_consume  &gt;= #{agent3ConsumeStart}
+			</if>
+			<if test="agent3ConsumeEnd != null and agent3ConsumeEnd != ''">
+				AND a.agent3_consume  &lt;= #{agent3ConsumeEnd}
+			</if>
+			
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -91,15 +172,21 @@
 			agent3_promotion,
 			member_parent,
 			order_item_id,
-			order_id,
 			member_parent_parent,
 			member_parent_parent_parent,
+			order_id,
 			create_by,
 			create_date,
 			update_by,
 			update_date,
+			mp_balance_before,
 			remarks,
-			del_flag
+			mpp_balance_before,
+			del_flag,
+			mppp_balance_before,
+			mp_balance_after,
+			mpp_balance_after,
+			mppp_balance_after
 		) VALUES (
 			#{id},
 			#{agent1Consume},
@@ -111,19 +198,25 @@
 			#{status},
 			#{agent1Promotion},
 			#{agent2Promotion},
-			#{memberId},
+			#{memberId.id},
 			#{agent3Promotion},
-			#{memberParent},
-			#{orderItemId},
-			#{orderId},
-			#{memberParentParent},
-			#{memberParentParentParent},
+			#{memberParent.id},
+			#{orderItemId.id},
+			#{memberParentParent.id},
+			#{memberParentParentParent.id},
+			#{orderId.id},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
 			#{updateDate},
+			#{mpBalanceBefore},
 			#{remarks},
-			#{delFlag}
+			#{mppBalanceBefore},
+			#{delFlag},
+			#{mpppBalanceBefore},
+			#{mpBalanceAfter},
+			#{mppBalanceAfter},
+			#{mpppBalanceAfter}
 		)
 	</insert>
 	
@@ -138,16 +231,22 @@
 			status = #{status},
 			agent1_promotion = #{agent1Promotion},
 			agent2_promotion = #{agent2Promotion},
-			member_id = #{memberId},
+			member_id = #{memberId.id},
 			agent3_promotion = #{agent3Promotion},
-			member_parent = #{memberParent},
-			order_item_id = #{orderItemId},
-			order_id = #{orderId},
-			member_parent_parent = #{memberParentParent},
-			member_parent_parent_parent = #{memberParentParentParent},
+			member_parent = #{memberParent.id},
+			order_item_id = #{orderItemId.id},
+			member_parent_parent = #{memberParentParent.id},
+			member_parent_parent_parent = #{memberParentParentParent.id},
+			order_id = #{orderId.id},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			remarks = #{remarks}
+			mp_balance_before = #{mpBalanceBefore},
+			remarks = #{remarks},
+			mpp_balance_before = #{mppBalanceBefore},
+			mppp_balance_before = #{mpppBalanceBefore},
+			mp_balance_after = #{mpBalanceAfter},
+			mpp_balance_after = #{mppBalanceAfter},
+			mppp_balance_after = #{mpppBalanceAfter}
 		WHERE id = #{id}
 	</update>
 	
