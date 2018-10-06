@@ -34,7 +34,9 @@
 		a.is_agent AS "isAgent",
 		a.agent_parent AS "agentParent.id",
 		a.to_agent_num AS "toAgentNum",
-		m1.username as "agentParent.username"
+		m1.username as "agentParent.username",
+		m1.nickname as "agentParent.nickname",
+		m1.mobile as "agentParent.mobile"
 	</sql>
 	
 	<sql id="wsMemberJoins">
@@ -86,6 +88,9 @@
 			</if>
 			<if test="memberRankId != null and memberRankId != ''">
 				AND a.member_rank_id = #{memberRankId}
+			</if>
+			<if test="agentParent != null and agentParent.id != null and agentParent.id != ''">
+				AND a.agent_parent = #{agentParent.id}
 			</if>
 		</where>
 		<choose>
@@ -237,4 +242,24 @@
 	<update id="lock">
 		SELECT 1 FROM ws_member WHERE id = #{id} FOR UPDATE
 	</update>
+	
+	<select id="getNextGroupByList">
+		SELECT 
+			<include refid="wsMemberColumns"/>
+		FROM ws_member a
+		<include refid="wsMemberJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="employeeIdsArray!=null and employeeIdsArray.length!=0">
+				<foreach collection="members" index="index" item="item" open="(" separator="," close=")">  
+	            	#{item.id}  
+	      	    </foreach>
+			</if>
+		</where>
+		<choose>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
 </mapper>
