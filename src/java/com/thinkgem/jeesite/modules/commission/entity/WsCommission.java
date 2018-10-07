@@ -40,23 +40,21 @@ public class WsCommission extends DataEntity<WsCommission> {
 	private BigDecimal mppBalanceAfter;		// 上上级用户变化之后的余额
 	private BigDecimal mpppBalanceAfter;		// 上上上级用户变化之后的余额
 	
-	private BigDecimal agent1PromotionStart;
-	private BigDecimal agent1PromotionEnd;
-	private BigDecimal agent1ConsumeStart;
-	private BigDecimal agent1ConsumeEnd;
+	private BigDecimal agent1PromotionStart;//查询条件
+	private BigDecimal agent1PromotionEnd;//查询条件
+	private BigDecimal agent1ConsumeStart;//查询条件
+	private BigDecimal agent1ConsumeEnd;//查询条件
 	
-	private BigDecimal agent2PromotionStart;
-	private BigDecimal agent2PromotionEnd;
-	private BigDecimal agent2ConsumeStart;
-	private BigDecimal agent2ConsumeEnd;
+	private BigDecimal agent2PromotionStart;//查询条件
+	private BigDecimal agent2PromotionEnd;//查询条件
+	private BigDecimal agent2ConsumeStart;//查询条件
+	private BigDecimal agent2ConsumeEnd;//查询条件
 	
-	private BigDecimal agent3PromotionStart;
-	private BigDecimal agent3PromotionEnd;
-	private BigDecimal agent3ConsumeStart;
-	private BigDecimal agent3ConsumeEnd;
+	private BigDecimal agent3PromotionStart;//查询条件
+	private BigDecimal agent3PromotionEnd;//查询条件
+	private BigDecimal agent3ConsumeStart;//查询条件
+	private BigDecimal agent3ConsumeEnd;//查询条件
 	
-	
-	private WsOrder wsOrder;
 	
 	public WsCommission() {
 		super();
@@ -201,14 +199,6 @@ public class WsCommission extends DataEntity<WsCommission> {
 		this.orderId = orderId;
 	}
 
-
-	public WsOrder getWsOrder() {
-		return wsOrder;
-	}
-
-	public void setWsOrder(WsOrder wsOrder) {
-		this.wsOrder = wsOrder;
-	}
 
 	public BigDecimal getMpBalanceBefore() {
 		return mpBalanceBefore;

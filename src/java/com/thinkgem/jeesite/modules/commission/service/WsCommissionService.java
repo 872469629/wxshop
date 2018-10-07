@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sun.tools.internal.ws.resources.WscompileMessages;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.commission.dao.WsCommissionDao;
 import com.thinkgem.jeesite.modules.commission.entity.WsCommission;
 import com.thinkgem.jeesite.modules.member.entity.WsMember;
 import com.thinkgem.jeesite.modules.member.service.WsMemberService;
+import com.thinkgem.jeesite.modules.order.entity.WsOrder;
 import com.thinkgem.jeesite.modules.order.entity.WsOrderItem;
 import com.thinkgem.jeesite.modules.rebate.entity.WsAgentRebateConfig;
 import com.thinkgem.jeesite.modules.rebate.service.WsAgentRebateConfigService;
@@ -190,6 +192,30 @@ public class WsCommissionService extends CrudService<WsCommissionDao, WsCommissi
 				commission.setUpdateDate(new Date());
 			}
 		}
+	}
+
+	/**
+	 * 根据用户id集合查找所有订单总价格
+	 */
+	public BigDecimal findPriceByMembers(List<WsMember> members){
+		List<WsCommission> findPriceByMembers = dao.findPriceByMembers(members);
+		if (findPriceByMembers != null && findPriceByMembers.size() > 0) {
+			BigDecimal big = BigDecimal.ZERO;
+			for(WsCommission c : findPriceByMembers){
+				if (c.getOrderId() != null) {
+					big = big.add(c.getOrderId().getReallyPrice());
+				}
+			}
+			return big;
+		}
+		return null;
+	}
+	
+	/**
+	 * 根据购买者id集合查找所有分销记录
+	 */
+	public List<WsCommission> findCommissionByMembers(List<WsMember> members){
+		return dao.findCommissionByMembers(members);
 	}
 	
 }

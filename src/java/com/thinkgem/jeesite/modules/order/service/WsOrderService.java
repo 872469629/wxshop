@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.modules.order.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.order.entity.WsOrder;
+import com.thinkgem.jeesite.modules.member.entity.WsMember;
 import com.thinkgem.jeesite.modules.member.entity.WsMemberCoupon;
 import com.thinkgem.jeesite.modules.member.service.WsMemberCouponService;
 import com.thinkgem.jeesite.modules.order.dao.WsOrderDao;

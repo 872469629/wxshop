@@ -36,7 +36,10 @@
 		a.to_agent_num AS "toAgentNum",
 		m1.username as "agentParent.username",
 		m1.nickname as "agentParent.nickname",
-		m1.mobile as "agentParent.mobile"
+		m1.mobile as "agentParent.mobile",
+		a.join_agent_time AS "joinAgentTime",
+		a.become_agent_time AS "becomeAgentTime",
+		a.frozen_amount AS "frozenAmount"
 	</sql>
 	
 	<sql id="wsMemberJoins">
@@ -165,7 +168,10 @@
 			del_flag,
 			is_agent,
 			agent_parent,
-			to_agent_num
+			to_agent_num,
+			join_agent_time,
+			become_agent_time,
+			frozen_amount
 		) VALUES (
 			#{id},
 			#{username},
@@ -197,7 +203,10 @@
 			#{delFlag},
 			#{isAgent},
 			#{agentParent.id},
-			#{toAgentNum}
+			#{toAgentNum},
+			#{joinAgentTime},
+			#{becomeAgentTime},
+			#{frozenAmount}
 		)
 	</insert>
 	
@@ -229,7 +238,10 @@
 			remarks = #{remarks},
 			is_agent = #{isAgent},
 			agent_parent = #{agentParent.id},
-			to_agent_num = #{toAgentNum}
+			to_agent_num = #{toAgentNum},
+			join_agent_time = #{joinAgentTime},
+			become_agent_time = #{becomeAgentTime},
+			frozen_amount = #{frozenAmount}
 		WHERE id = #{id}
 	</update>
 	
@@ -243,18 +255,16 @@
 		SELECT 1 FROM ws_member WHERE id = #{id} FOR UPDATE
 	</update>
 	
-	<select id="getNextGroupByList">
+	<select id="findNextGroupByList" resultType="WsMember">
 		SELECT 
 			<include refid="wsMemberColumns"/>
 		FROM ws_member a
 		<include refid="wsMemberJoins"/>
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="employeeIdsArray!=null and employeeIdsArray.length!=0">
-				<foreach collection="members" index="index" item="item" open="(" separator="," close=")">  
-	            	#{item.id}  
-	      	    </foreach>
-			</if>
+			AND a.agent_parent in
+			<foreach collection="members" index="index" item="item" open="(" separator="," close=")">  
+            	#{item.id}  
+      	    </foreach>
 		</where>
 		<choose>
 			<otherwise>

@@ -25,5 +25,5 @@ public interface WsMemberDao extends CrudDao<WsMember> {
 	/**
 	 * 根据用户集合获取下级团队
 	 */
-	public List<WsMember> getNextGroupByList(@Param("members") List<WsMember> members);
+	public List<WsMember> findNextGroupByList(@Param("members") List<WsMember> members);
 }

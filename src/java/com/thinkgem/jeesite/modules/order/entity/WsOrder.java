@@ -49,6 +49,14 @@ public class WsOrder extends DataEntity<WsOrder> {
 	private String returnState;
 	private List<WsOrderItem> wsOrderItemList = Lists.newArrayList();		// 子表列表
 	
+	private Integer totalQuantity;//子订单商品总数量
+	private BigDecimal totalAgent1Consume;//子订单一级代理商消费金额总和
+	private BigDecimal totalAgent2Consume;//子订单二级代理商消费金额总和
+	private BigDecimal totalAgent3Consume;//子订单三级代理商消费金额总和
+	private BigDecimal totalAgent1Promotion;//子订单一级代理商推广金额总和
+	private BigDecimal totalAgent2Promotion;//子订单二级代理商推广金额总和
+	private BigDecimal totalAgent3Promotion;//子订单三级代理商推广金额总和
+	
 	public WsOrder() {
 		super();
 	}
@@ -281,6 +289,62 @@ public class WsOrder extends DataEntity<WsOrder> {
 	public void setRuid(WsMember ruid) {
 		this.ruid = ruid;
 	}
-	
-	
+
+	public Integer getTotalQuantity() {
+		return totalQuantity;
+	}
+
+	public void setTotalQuantity(Integer totalQuantity) {
+		this.totalQuantity = totalQuantity;
+	}
+
+	public BigDecimal getTotalAgent1Consume() {
+		return totalAgent1Consume;
+	}
+
+	public void setTotalAgent1Consume(BigDecimal totalAgent1Consume) {
+		this.totalAgent1Consume = totalAgent1Consume;
+	}
+
+	public BigDecimal getTotalAgent2Consume() {
+		return totalAgent2Consume;
+	}
+
+	public void setTotalAgent2Consume(BigDecimal totalAgent2Consume) {
+		this.totalAgent2Consume = totalAgent2Consume;
+	}
+
+	public BigDecimal getTotalAgent3Consume() {
+		return totalAgent3Consume;
+	}
+
+	public void setTotalAgent3Consume(BigDecimal totalAgent3Consume) {
+		this.totalAgent3Consume = totalAgent3Consume;
+	}
+
+	public BigDecimal getTotalAgent1Promotion() {
+		return totalAgent1Promotion;
+	}
+
+	public void setTotalAgent1Promotion(BigDecimal totalAgent1Promotion) {
+		this.totalAgent1Promotion = totalAgent1Promotion;
+	}
+
+	public BigDecimal getTotalAgent2Promotion() {
+		return totalAgent2Promotion;
+	}
+
+	public void setTotalAgent2Promotion(BigDecimal totalAgent2Promotion) {
+		this.totalAgent2Promotion = totalAgent2Promotion;
+	}
+
+	public BigDecimal getTotalAgent3Promotion() {
+		return totalAgent3Promotion;
+	}
+
+	public void setTotalAgent3Promotion(BigDecimal totalAgent3Promotion) {
+		this.totalAgent3Promotion = totalAgent3Promotion;
+	}
+
+
 }

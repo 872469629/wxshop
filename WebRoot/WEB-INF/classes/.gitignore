@@ -1,15 +1,2 @@
 /com/
-/mappings/
-/mybatis-config.xml
-/mybatis-refresh.properties
 /org/
-/quartz.properties
-/spring-context-activiti.xml
-/spring-context-cxf.xml
-/spring-context-jedis.xml
-/spring-context-shiro.xml
-/spring-context.xml
-/spring-mvc.xml
-/stencilset.json
-/templates/
-/weixin-reqcongfig.xml

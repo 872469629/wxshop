@@ -204,7 +204,7 @@ public class WsMemberService extends CrudService<WsMemberDao, WsMember> {
 	/**
 	 * 获取下级团队
 	 */
-	public List<WsMember> getNextGroup(WsMember member){
+	public List<WsMember> findNextGroup(WsMember member){
 		WsMember entity = new WsMember();
 		entity.setAgentParent(member);
 		return dao.findList(entity);
@@ -213,7 +213,7 @@ public class WsMemberService extends CrudService<WsMemberDao, WsMember> {
 	/**
 	 * 根据用户集合获取下级团队
 	 */
-	public List<WsMember> getNextGroupByList(List<WsMember> members){
-		return dao.getNextGroupByList(members);
+	public List<WsMember> findNextGroupByList(List<WsMember> members){
+		return dao.findNextGroupByList(members);
 	}
 }

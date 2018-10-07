@@ -34,6 +34,9 @@
 		a.mppp_balance_after AS "mpppBalanceAfter",
 		o.order_sn AS "orderId.orderSn",
 		o.paytime AS "orderId.paytime",
+		o.really_price AS "orderId.reallyPrice",
+		m1.nickname AS "memberId.nickname",
+		m1.headimgurl AS "memberId.headimgurl",
 		m2.nickname AS "memberParent.nickname",
 		m3.nickname AS "memberParentParent.nickname",
 		m4.nickname AS "memberParentParentParent.nickname"
@@ -255,5 +258,40 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+	
+	<select id="findPriceByMembers" resultType="WsCommission">
+		SELECT 
+			<include refid="wsCommissionColumns"/>
+		FROM ws_commission a
+		<include refid="wsCommissionJoins"/>
+		<where>
+			AND a.member_id in
+			<foreach collection="members" index="index" item="item" open="(" separator="," close=")">  
+            	#{item.id}  
+      	    </foreach>
+		</where>
+		group by a.order_id
+	</select>
+	
+	<select id="findCommissionByMembers" resultType="WsCommission">
+		SELECT 
+			<include refid="wsCommissionColumns"/>,
+			sum(i.quantity) as "orderId.totalQuantity",
+			sum(a.agent1_consume) as "orderId.totalAgent1Consume",
+			sum(a.agent2_consume) as "orderId.totalAgent2Consume",
+			sum(a.agent3_consume) as "orderId.totalAgent3Consume",
+			sum(a.agent1_promotion) as "orderId.totalAgent1Promotion",
+			sum(a.agent2_promotion) as "orderId.totalAgent2Promotion",
+			sum(a.agent3_promotion) as "orderId.totalAgent3Promotion"
+		FROM ws_commission a
+		<include refid="wsCommissionJoins"/>
+		<where>
+			AND a.member_id in
+			<foreach collection="members" index="index" item="item" open="(" separator="," close=")">  
+            	#{item.id}  
+      	    </foreach>
+		</where>
+		group by a.order_id
+	</select>
 	
 </mapper>

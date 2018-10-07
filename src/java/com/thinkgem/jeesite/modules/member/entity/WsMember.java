@@ -49,6 +49,9 @@ public class WsMember extends DataEntity<WsMember> {
 	private String isAgent;//是否是代理商
 	private WsMember agentParent;//上一级代理商id
 	private int toAgentNum;//成为代理商购买商品的件数
+	private Date joinAgentTime;		// 成为下限的时间
+	private Date becomeAgentTime;		// 成为代理商的时间
+	private BigDecimal frozenAmount;		// 冻结金额
 	
 	public WsMember() {
 		super();
@@ -310,6 +313,30 @@ public class WsMember extends DataEntity<WsMember> {
 
 	public void setToAgentNum(int toAgentNum) {
 		this.toAgentNum = toAgentNum;
+	}
+
+	public Date getJoinAgentTime() {
+		return joinAgentTime;
+	}
+
+	public void setJoinAgentTime(Date joinAgentTime) {
+		this.joinAgentTime = joinAgentTime;
+	}
+
+	public Date getBecomeAgentTime() {
+		return becomeAgentTime;
+	}
+
+	public void setBecomeAgentTime(Date becomeAgentTime) {
+		this.becomeAgentTime = becomeAgentTime;
+	}
+
+	public BigDecimal getFrozenAmount() {
+		return frozenAmount;
+	}
+
+	public void setFrozenAmount(BigDecimal frozenAmount) {
+		this.frozenAmount = frozenAmount;
 	}
 	
 	
