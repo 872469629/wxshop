@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.WxException;
 import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
@@ -142,7 +143,9 @@ public class CommissionController extends BaseController {
 			if ("1".equals(level)) {
 				List<WsMember> nextGroup = wsMemberService.findNextGroup(user);
 				//查找一级消费
-				List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(nextGroup);
+				WsCommission wsCommission = new WsCommission();
+				wsCommission.setMembers(nextGroup);
+				List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(wsCommission);
 				BigDecimal big = BigDecimal.ZERO;
 				if (commissions != null && commissions.size() > 0) {
 					for(WsCommission c : commissions){
@@ -162,7 +165,9 @@ public class CommissionController extends BaseController {
 				if (nextGroup != null && nextGroup.size() > 0) {
 					nextGroup = wsMemberService.findNextGroupByList(nextGroup);
 					//查找二级消费
-					List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(nextGroup);
+					WsCommission wsCommission = new WsCommission();
+					wsCommission.setMembers(nextGroup);
+					List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(wsCommission);
 					BigDecimal big = BigDecimal.ZERO;
 					if (commissions != null && commissions.size() > 0) {
 						for(WsCommission c : commissions){
@@ -185,7 +190,9 @@ public class CommissionController extends BaseController {
 					if (nextGroup != null && nextGroup.size() > 0) {
 						nextGroup = wsMemberService.findNextGroupByList(nextGroup);
 						//查找三级消费
-						List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(nextGroup);
+						WsCommission wsCommission = new WsCommission();
+						wsCommission.setMembers(nextGroup);
+						List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(wsCommission);
 						BigDecimal big = BigDecimal.ZERO;
 						if (commissions != null && commissions.size() > 0) {
 							for(WsCommission c : commissions){
@@ -236,6 +243,85 @@ public class CommissionController extends BaseController {
 					map.put("agentConsume", c.getOrderId() != null ? c.getOrderId().getTotalAgent3Consume() : "0.00");
 					map.put("agentPromotion",c.getOrderId() != null ? c.getOrderId().getTotalAgent3Promotion() : "0.00");
 				}
+				list.add(map);
+			}
+		}
+		return list;
+	}
+	
+
+	/**
+	 * 分销订单
+	 * @param status -1.全部，-2.已付款，1.待发货，5.已完成
+	 */
+	@RequestMapping(value = "commissionOrders")
+	@ResponseBody
+	@CrossOrigin
+	public Map commissionOrders(String userId, String status, HttpServletRequest request, HttpServletResponse response,
+			Model model) {
+		Map data=new HashMap();
+		try{
+			List<String> statusList = null;
+			if (status != null && !"-1".equals(status)) {
+				if("-2".equals(status)){//
+					statusList = new ArrayList<>();
+					statusList.add("1");					
+					statusList.add("2");					
+					statusList.add("3");					
+					statusList.add("5");					
+					statusList.add("6");					
+				}else{
+					statusList = new ArrayList<>();
+					statusList.add(status);
+				}
+			}
+			WsMember user = wsMemberService.get(userId);
+			List<WsMember> oneGroup = null;
+			List<WsMember> twoGroup = null;
+			List<WsMember> threeGroup = null;
+			oneGroup = wsMemberService.findNextGroup(user);
+			if (oneGroup != null && oneGroup.size() > 0) {
+				twoGroup = wsMemberService.findNextGroupByList(oneGroup);
+				if (twoGroup != null && twoGroup.size() > 0) {
+					threeGroup = wsMemberService.findNextGroupByList(twoGroup);
+				}
+			}
+			List<WsMember> allGroup = new ArrayList<>();
+			if (oneGroup != null) allGroup.addAll(oneGroup);
+			if (twoGroup != null) allGroup.addAll(twoGroup);
+			if (threeGroup != null) allGroup.addAll(threeGroup);
+			WsCommission wsCommission = new WsCommission();
+			Page page = new Page();
+			wsCommission.setPage(page);
+			wsCommission.setMembers(allGroup);
+			if (statusList != null) wsCommission.setStatusList(statusList);
+			List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(wsCommission);
+			List<Map<String, Object>> list = this.buildCommissionOrder(commissions);
+			//查找分销订单
+			data.put("ret",InterConstant.RET_SUCCESS);
+			data.put("list",list);
+		}catch(WxException e){
+			data.put("ret",InterConstant.RET_WX);
+			data.put("appid",WsUtils.getAccount().getAccountAppid());
+		}catch(Exception e){
+			data.put("ret",InterConstant.RET_FAILED);
+			data.put("msg",e.getMessage());
+			logger.error("usercenter/toBeFromUser",e);
+		}
+		return data;
+	}
+	
+
+	public List<Map<String,Object>> buildCommissionOrder(List<WsCommission> commissions){
+		List<Map<String,Object>> list = new ArrayList<>();
+		if (commissions != null && commissions.size() > 0) {
+			for(WsCommission c : commissions){
+				Map<String,Object> map = new HashMap<>();
+				map.put("headimgurl", c.getMemberId() != null ? c.getMemberId().getHeadimgurl() : "");
+				map.put("nickname", c.getMemberId() != null ? c.getMemberId().getNickname() : "");
+				map.put("totalQuantity", c.getOrderId() != null ? c.getOrderId().getTotalQuantity() : "");
+				map.put("reallyPrice", c.getOrderId() != null ? c.getOrderId().getReallyPrice() : "");
+				map.put("date", DateUtils.formatDate(c.getUpdateDate(), "yyyy-MM-dd"));
 				list.add(map);
 			}
 		}

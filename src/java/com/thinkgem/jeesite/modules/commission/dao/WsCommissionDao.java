@@ -26,6 +26,6 @@ public interface WsCommissionDao extends CrudDao<WsCommission> {
 	/**
 	 * 根据购买者id集合查找所有分销记录
 	 */
-	List<WsCommission> findCommissionByMembers(@Param("members") List<WsMember> members);
+	List<WsCommission> findCommissionByMembers(@Param("wsCommission") WsCommission wsCommission);
 	
 }

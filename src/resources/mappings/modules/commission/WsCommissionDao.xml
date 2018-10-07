@@ -287,9 +287,15 @@
 		<include refid="wsCommissionJoins"/>
 		<where>
 			AND a.member_id in
-			<foreach collection="members" index="index" item="item" open="(" separator="," close=")">  
+			<foreach collection="wsCommission.members" index="index" item="item" open="(" separator="," close=")">  
             	#{item.id}  
       	    </foreach>
+      	    <if test="wsCommission.statusList != null">
+      	    AND o.order_state in
+			<foreach collection="wsCommission.statusList" index="index" item="item" open="(" separator="," close=")">  
+            	#{item}  
+      	    </foreach>
+      	    </if>
 		</where>
 		group by a.order_id
 	</select>

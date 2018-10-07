@@ -1,6 +1,7 @@
 package com.thinkgem.jeesite.modules.commission.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -54,6 +55,10 @@ public class WsCommission extends DataEntity<WsCommission> {
 	private BigDecimal agent3PromotionEnd;//查询条件
 	private BigDecimal agent3ConsumeStart;//查询条件
 	private BigDecimal agent3ConsumeEnd;//查询条件
+	
+	
+	private List<WsMember> members;//查询条件
+	private List<String> statusList;//查询条件
 	
 	
 	public WsCommission() {
@@ -342,6 +347,22 @@ public class WsCommission extends DataEntity<WsCommission> {
 
 	public void setAgent3PromotionEnd(BigDecimal agent3PromotionEnd) {
 		this.agent3PromotionEnd = agent3PromotionEnd;
+	}
+
+	public List<WsMember> getMembers() {
+		return members;
+	}
+
+	public void setMembers(List<WsMember> members) {
+		this.members = members;
+	}
+
+	public List<String> getStatusList() {
+		return statusList;
+	}
+
+	public void setStatusList(List<String> statusList) {
+		this.statusList = statusList;
 	}
 	
 	

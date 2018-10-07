@@ -214,8 +214,8 @@ public class WsCommissionService extends CrudService<WsCommissionDao, WsCommissi
 	/**
 	 * 根据购买者id集合查找所有分销记录
 	 */
-	public List<WsCommission> findCommissionByMembers(List<WsMember> members){
-		return dao.findCommissionByMembers(members);
+	public List<WsCommission> findCommissionByMembers(WsCommission wsCommission){
+		return dao.findCommissionByMembers(wsCommission);
 	}
 	
 }

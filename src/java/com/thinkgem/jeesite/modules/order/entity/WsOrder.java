@@ -22,7 +22,7 @@ public class WsOrder extends DataEntity<WsOrder> {
 	
 	private static final long serialVersionUID = 1L;
 	private String orderSn;		// 订单号
-	private String orderState;		// 订单状态
+	private String orderState;		// 订单状态 0待付款1待发货2待收货3待评价5已完成6退款7过期已取消
 	private String jsPayState;		//前端支付标识，非最终结算依据
 	private String buysWords;		// 买家留言
 	private WsMember memberId;		// 用户
