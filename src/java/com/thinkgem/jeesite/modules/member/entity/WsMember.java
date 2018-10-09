@@ -52,6 +52,8 @@ public class WsMember extends DataEntity<WsMember> {
 	private Date joinAgentTime;		// 成为下限的时间
 	private Date becomeAgentTime;		// 成为代理商的时间
 	private BigDecimal frozenAmount;		// 冻结金额
+	private BigDecimal totalPromotion;//总推广金额
+	private BigDecimal totalConsume;//总消费金额
 	
 	public WsMember() {
 		super();
@@ -337,6 +339,22 @@ public class WsMember extends DataEntity<WsMember> {
 
 	public void setFrozenAmount(BigDecimal frozenAmount) {
 		this.frozenAmount = frozenAmount;
+	}
+
+	public BigDecimal getTotalPromotion() {
+		return totalPromotion;
+	}
+
+	public void setTotalPromotion(BigDecimal totalPromotion) {
+		this.totalPromotion = totalPromotion;
+	}
+
+	public BigDecimal getTotalConsume() {
+		return totalConsume;
+	}
+
+	public void setTotalConsume(BigDecimal totalConsume) {
+		this.totalConsume = totalConsume;
 	}
 	
 	

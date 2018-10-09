@@ -291,13 +291,24 @@
             	#{item.id}  
       	    </foreach>
       	    <if test="wsCommission.statusList != null">
-      	    AND o.order_state in
-			<foreach collection="wsCommission.statusList" index="index" item="item" open="(" separator="," close=")">  
-            	#{item}  
-      	    </foreach>
+	      	    AND o.order_state in
+				<foreach collection="wsCommission.statusList" index="index" item="item" open="(" separator="," close=")">  
+	            	#{item}  
+	      	    </foreach>
+      	    </if>
+      	    <if test="type != null and type == 1">
+      	    	and agent1_promotion is not null
+      	    </if>
+      	    <if test="type != null and type == 2">
+      	    	and agent1_consume is not null
       	    </if>
 		</where>
 		group by a.order_id
+		<choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+		</choose>
 	</select>
 	
 </mapper>

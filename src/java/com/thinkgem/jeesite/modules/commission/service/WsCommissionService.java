@@ -67,74 +67,83 @@ public class WsCommissionService extends CrudService<WsCommissionDao, WsCommissi
 	 */
 	public void commission(WsCommission commission, WsOrderItem item, WsMember wsMember,Integer quantity) {
 		WsAgentRebateConfig config = wsAgentRebateConfigService.findByStatus();//分销配置
+		if (config == null) {
+			throw new RuntimeException("代理商配置出错");
+		}
 		if (commission == null) {
 			commission = new WsCommission();
 		}
+		WsMember parent = null;
+		WsMember parentParent = null;
+		WsMember parentParentParent = null;
 		//如果是固定返利，那么还要*数量
 		if (config != null && config.getFormulary1() != null && config.getFormulary1().indexOf("X") == -1) {
 			config.setLevel1proportion(config.getLevel1proportion().multiply(new BigDecimal(quantity)));
 			config.setLevel2proportion(config.getLevel2proportion().multiply(new BigDecimal(quantity)));
 			config.setLevel3proportion(config.getLevel3proportion().multiply(new BigDecimal(quantity)));
 		}
-		commission.setMemberId(wsMember);
-		commission.setOrderId(item.getWsOrder());
-		commission.setOrderItemId(item);
 		if (wsMember.getAgentParent() != null) {
-			WsMember parent = wsMemberService.get(wsMember.getAgentParent().getId());//上级
+			parent = wsMemberService.get(wsMember.getAgentParent().getId());// 上级
 			if (parent != null) {
-				commission.setMemberParent(parent);
 				if (parent.getAgentParent() != null) {
-					WsMember parentParent = wsMemberService.get(parent.getAgentParent().getId());//上上级
+					parentParent = wsMemberService.get(parent.getAgentParent().getId());// 上上级
 					if (parentParent != null) {
-						commission.setMemberParentParent(parentParent);
 						if (parentParent.getAgentParent() != null) {
-							WsMember parentParentParent = wsMemberService.get(parentParent.getAgentParent().getId());// 上上上级
-							if (parentParentParent != null) {
-								commission.setMemberParentParentParent(parentParentParent);
-								if (config != null) {
-									commission.setMpppBalanceBefore(parentParentParent.getBalance());
-									String formulary3 = config.getFormulary3();
-									formulary3 = formulary3.replaceAll("X", String.valueOf(item.getReallyPrice())).replaceAll("Y", String.valueOf(config.getLevel3proportion()));
-									//返利
-									BigDecimal decimal3 = com.thinkgem.jeesite.common.utils.StringUtils.eval(formulary3);
-									commission.setAgent3Consume(decimal3);
-									commission.setAgent3ConsumeScale(config.getLevel3proportion());
-									parentParentParent.setBalance(parentParentParent.getBalance().add(config.getLevel3proportion()));
-									wsMemberService.save(parentParentParent);
-									commission.setMpppBalanceAfter(parentParentParent.getBalance());
-								}
-							}
-						}
-						if (config != null) {
-							commission.setMppBalanceBefore(parentParent.getBalance());
-							String formulary2 = config.getFormulary2();
-							formulary2 = formulary2.replaceAll("X", String.valueOf(item.getReallyPrice())).replaceAll("Y", String.valueOf(config.getLevel2proportion()));
-							//返利
-							BigDecimal decimal2 = com.thinkgem.jeesite.common.utils.StringUtils.eval(formulary2);
-							commission.setAgent2Consume(decimal2);
-							commission.setAgent2ConsumeScale(config.getLevel2proportion());
-							parentParent.setBalance(parentParent.getBalance().add(decimal2));
-							wsMemberService.save(parentParent);
-							commission.setMppBalanceAfter(parentParent.getBalance());
+							parentParentParent = wsMemberService.get(parentParent.getAgentParent().getId());// 上上上级
 						}
 					}
 				}
-				if (config != null) {
-					commission.setMpBalanceBefore(parent.getBalance());
-					String formulary1 = config.getFormulary1();
-					formulary1 = formulary1.replaceAll("X", String.valueOf(item.getReallyPrice())).replaceAll("Y", String.valueOf(config.getLevel1proportion()));
-					//返利
-					BigDecimal decimal1 = com.thinkgem.jeesite.common.utils.StringUtils.eval(formulary1);
-					commission.setAgent1Consume(decimal1);
-					commission.setAgent1ConsumeScale(config.getLevel1proportion());
-					parent.setBalance(parent.getBalance().add(decimal1));
-					wsMemberService.save(parent);
-					commission.setMpBalanceAfter(parent.getBalance());
-				}
-				//只有上级有代理商的时候，才需要保存分销明细表
-				commission.setStatus("1");
 			}
 		}
+		if (parent != null) {// 上级
+			commission.setMemberParent(parent);
+			commission.setMpBalanceBefore(parent.getBalance());
+			String formulary1 = config.getFormulary1();
+			formulary1 = formulary1.replaceAll("X", String.valueOf(item.getReallyPrice())).replaceAll("Y", String.valueOf(config.getLevel1proportion()));
+			//返利
+			BigDecimal decimal1 = com.thinkgem.jeesite.common.utils.StringUtils.eval(formulary1);
+			commission.setAgent1Consume(decimal1);
+			commission.setAgent1ConsumeScale(config.getLevel1proportion());
+			parent.setBalance(parent.getBalance().add(decimal1));
+			parent.setTotalConsume(parent.getTotalConsume() != null ? parent.getTotalConsume().add(decimal1) : decimal1);// 累加消费
+			wsMemberService.save(parent);
+			commission.setMpBalanceAfter(parent.getBalance());
+			//只有上级有代理商的时候，才需要保存分销明细表
+			commission.setStatus("1");
+		}
+		if (parentParent != null) {// 上上级
+			commission.setMemberParentParent(parentParent);
+			commission.setMppBalanceBefore(parentParent.getBalance());
+			String formulary2 = config.getFormulary2();
+			formulary2 = formulary2.replaceAll("X", String.valueOf(item.getReallyPrice())).replaceAll("Y", String.valueOf(config.getLevel2proportion()));
+			//返利
+			BigDecimal decimal2 = com.thinkgem.jeesite.common.utils.StringUtils.eval(formulary2);
+			commission.setAgent2Consume(decimal2);
+			commission.setAgent2ConsumeScale(config.getLevel2proportion());
+			parentParent.setBalance(parentParent.getBalance().add(decimal2));
+			parentParent.setTotalConsume(parentParent.getTotalConsume() != null ? parentParent.getTotalConsume().add(decimal2) : decimal2);// 累加消费
+			wsMemberService.save(parentParent);
+			commission.setMppBalanceAfter(parentParent.getBalance());
+		}
+		if (parentParentParent != null) {// 上上上级
+			commission.setMemberParentParentParent(parentParentParent);
+			commission.setMpppBalanceBefore(parentParentParent.getBalance());
+			String formulary3 = config.getFormulary3();
+			formulary3 = formulary3.replaceAll("X", String.valueOf(item.getReallyPrice())).replaceAll("Y", String.valueOf(config.getLevel3proportion()));
+			//返利
+			BigDecimal decimal3 = com.thinkgem.jeesite.common.utils.StringUtils.eval(formulary3);
+			commission.setAgent3Consume(decimal3);
+			commission.setAgent3ConsumeScale(config.getLevel3proportion());
+			parentParentParent.setBalance(parentParentParent.getBalance().add(config.getLevel3proportion()));
+			parentParentParent.setTotalConsume(parentParentParent.getTotalConsume() != null ? parentParentParent.getTotalConsume().add(decimal3) : decimal3);// 累加消费
+			wsMemberService.save(parentParentParent);
+			commission.setMpppBalanceAfter(parentParentParent.getBalance());
+		}
+		commission.setMemberId(wsMember);
+		commission.setOrderId(item.getWsOrder());
+		commission.setOrderItemId(item);
+		commission.setCreateDate(new Date());
+		commission.setUpdateDate(new Date());
 	}
 
 	/**
@@ -142,80 +151,74 @@ public class WsCommissionService extends CrudService<WsCommissionDao, WsCommissi
 	 */
 	public void toAgentCommission(WsCommission commission, WsOrderItem item, WsMember wsMember) {
 		WsAgentRebateConfig config = wsAgentRebateConfigService.findByStatus();//分销配置
+		if (config == null) {
+			throw new RuntimeException("代理商配置出错");
+		}
 		if (commission == null) {
 			commission = new WsCommission();
+		}
+		WsMember parent = null;
+		WsMember parentParent = null;
+		WsMember parentParentParent = null;
+		if (wsMember.getAgentParent() != null) {
+			parent = wsMemberService.get(wsMember.getAgentParent().getId());//上级
+			if (parent != null) {
+				if (parent.getAgentParent() != null) {
+					parentParent = wsMemberService.get(parent.getAgentParent().getId());// 上上级
+					if (parentParent != null) {
+						if (parentParent.getAgentParent() != null) {
+							parentParentParent = wsMemberService.get(parentParent.getAgentParent().getId());// 上上上级
+						}
+					}
+				}
+			}
+		}
+		if (parent != null) {//上级
+			commission.setMemberParent(parent);
+			commission.setMpBalanceBefore(parent.getBalance());
+			parent.setBalance(parent.getBalance() != null ? parent.getBalance().add(config.getLevel1promotion())
+					: config.getLevel1promotion());
+			parent.setTotalPromotion(parent.getTotalPromotion() != null
+					? parent.getTotalPromotion().add(config.getLevel1promotion()) : config.getLevel1promotion());//累加推广
+			wsMemberService.save(parent);
+			commission.setAgent1Promotion(config.getLevel1promotion());
+			commission.setMpBalanceAfter(parent.getBalance());
+			//只有上级有代理商的时候，才需要保存分销明细表，没有上级代理的时候，是没有分佣产生的
+			commission.setStatus("1");
+		}
+		if (parentParent != null) {// 上上级
+			commission.setMemberParentParent(parentParent);
+			commission.setMppBalanceBefore(parentParent.getBalance());
+			parentParent.setBalance(parentParent.getBalance().add(config.getLevel2promotion()));
+			parentParent.setTotalPromotion(parentParent.getTotalPromotion() != null
+					? parentParent.getTotalPromotion().add(config.getLevel2promotion()) : config.getLevel2promotion());//累加推广
+			wsMemberService.save(parentParent);
+			commission.setAgent2Promotion(config.getLevel2promotion());
+			commission.setMppBalanceAfter(parentParent.getBalance());
+		}
+		if (parentParentParent != null) {// 上上上级
+			commission.setMemberParentParentParent(parentParentParent);
+			commission.setMpppBalanceBefore(parentParentParent.getBalance());
+			parentParentParent.setBalance(parentParentParent.getBalance().add(config.getLevel3promotion()));
+			parentParentParent.setTotalPromotion(parentParentParent.getTotalPromotion() != null
+					? parentParentParent.getTotalPromotion().add(config.getLevel3promotion()) : config.getLevel3promotion());//累加推广
+			wsMemberService.save(parentParentParent);
+			commission.setAgent3Promotion(config.getLevel3promotion());
+			commission.setMpppBalanceAfter(parentParentParent.getBalance());
 		}
 		commission.setMemberId(wsMember);
 		commission.setOrderId(item.getWsOrder());
 		commission.setOrderItemId(item);
-		if (wsMember.getAgentParent() != null) {
-			WsMember parent = wsMemberService.get(wsMember.getAgentParent().getId());//上级
-			if (parent != null) {
-				commission.setMemberParent(parent);
-				if (parent.getAgentParent() != null) {
-					WsMember parentParent = wsMemberService.get(parent.getAgentParent().getId());//上上级
-					if (parentParent != null) {
-						commission.setMemberParentParent(parentParent);
-						if (parentParent.getAgentParent() != null) {
-							WsMember parentParentParent = wsMemberService.get(parentParent.getAgentParent().getId());//上上上级
-							if (parentParentParent != null) {
-								commission.setMemberParentParentParent(parentParentParent);
-								if (config != null) {
-									commission.setMpppBalanceBefore(parentParentParent.getBalance());
-									parentParentParent.setBalance(parentParentParent.getBalance().add(config.getLevel3promotion()));
-									wsMemberService.save(parentParentParent);
-									commission.setAgent3Promotion(config.getLevel3promotion());
-									commission.setMpppBalanceAfter(parentParentParent.getBalance());
-								}
-							}
-						}
-						if (config != null) {
-							commission.setMppBalanceBefore(parentParent.getBalance());
-							parentParent.setBalance(parentParent.getBalance().add(config.getLevel2promotion()));
-							wsMemberService.save(parentParent);
-							commission.setAgent2Promotion(config.getLevel2promotion());
-							commission.setMppBalanceAfter(parentParent.getBalance());
-						}
-					}
-				}
-				if (config != null) {
-					commission.setMpBalanceBefore(parent.getBalance());
-					parent.setBalance(parent.getBalance() != null ? parent.getBalance().add(config.getLevel1promotion())
-							: config.getLevel1promotion());
-					wsMemberService.save(parent);
-					commission.setAgent1Promotion(config.getLevel1promotion());
-					commission.setMpBalanceAfter(parent.getBalance());
-				}
-				//只有上级有代理商的时候，才需要保存分销明细表
-				commission.setStatus("1");
-				commission.setCreateDate(new Date());
-				commission.setUpdateDate(new Date());
-			}
-		}
+		commission.setCreateDate(new Date());
+		commission.setUpdateDate(new Date());
 	}
 
-	/**
-	 * 根据用户id集合查找所有订单总价格
-	 */
-	public BigDecimal findPriceByMembers(List<WsMember> members){
-		List<WsCommission> findPriceByMembers = dao.findPriceByMembers(members);
-		if (findPriceByMembers != null && findPriceByMembers.size() > 0) {
-			BigDecimal big = BigDecimal.ZERO;
-			for(WsCommission c : findPriceByMembers){
-				if (c.getOrderId() != null) {
-					big = big.add(c.getOrderId().getReallyPrice());
-				}
-			}
-			return big;
-		}
-		return null;
-	}
 	
 	/**
 	 * 根据购买者id集合查找所有分销记录
 	 */
-	public List<WsCommission> findCommissionByMembers(WsCommission wsCommission){
-		return dao.findCommissionByMembers(wsCommission);
+	public List<WsCommission> findCommissionByMembers(WsCommission wsCommission,String orderBy,String type){
+		return dao.findCommissionByMembers(wsCommission,orderBy,type);
 	}
 	
 }

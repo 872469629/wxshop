@@ -39,7 +39,9 @@
 		m1.mobile as "agentParent.mobile",
 		a.join_agent_time AS "joinAgentTime",
 		a.become_agent_time AS "becomeAgentTime",
-		a.frozen_amount AS "frozenAmount"
+		a.frozen_amount AS "frozenAmount",
+		a.total_promotion AS "totalPromotion",
+		a.total_consume AS "totalConsume"
 	</sql>
 	
 	<sql id="wsMemberJoins">
@@ -171,7 +173,9 @@
 			to_agent_num,
 			join_agent_time,
 			become_agent_time,
-			frozen_amount
+			frozen_amount,
+			total_promotion,
+			total_consume
 		) VALUES (
 			#{id},
 			#{username},
@@ -206,7 +210,9 @@
 			#{toAgentNum},
 			#{joinAgentTime},
 			#{becomeAgentTime},
-			#{frozenAmount}
+			#{frozenAmount},
+			totalPromotion,
+			totalConsume
 		)
 	</insert>
 	
@@ -241,7 +247,9 @@
 			to_agent_num = #{toAgentNum},
 			join_agent_time = #{joinAgentTime},
 			become_agent_time = #{becomeAgentTime},
-			frozen_amount = #{frozenAmount}
+			frozen_amount = #{frozenAmount},
+			total_promotion = #{totalPromotion},
+			total_consume = #{totalConsume}
 		WHERE id = #{id}
 	</update>
 	

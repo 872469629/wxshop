@@ -354,6 +354,7 @@ public class PayService extends BaseService{
 									wsMember.setToAgentNum(wsMember.getToAgentNum() + item.getQuantity());
 									if (wsMember.getToAgentNum() >= 2) {
 										wsMember.setIsAgent("1");
+										wsMember.setBecomeAgentTime(new Date());
 										//分销记录
 										WsCommission commission = new WsCommission();
 										wsCommissionService.toAgentCommission(commission, item, wsMember);
