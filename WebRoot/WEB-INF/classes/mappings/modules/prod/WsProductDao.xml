@@ -40,8 +40,7 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		a.is_agent_product AS "isAgentProduct",
-		a.agent_product_num AS "agentProductNum"
+		a.is_agent_product AS "isAgentProduct"
 	</sql>
 	
 	<sql id="wsProductJoins">
@@ -151,8 +150,7 @@
 			update_date,
 			remarks,
 			del_flag,
-			is_agent_product,
-			agent_product_num
+			is_agent_product
 		) VALUES (
 			#{id},
 			#{prodCategoryId},
@@ -191,8 +189,7 @@
 			#{updateDate},
 			#{remarks},
 			#{delFlag},
-			#{isAgentProduct},
-			#{agentProductNum}
+			#{isAgentProduct}
 		)
 	</insert>
 	
@@ -231,8 +228,7 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks},
-			is_agent_product = #{isAgentProduct},
-			agent_product_num = #{agentProductNum}
+			is_agent_product = #{isAgentProduct}
 		WHERE id = #{id}
 	</update>
 	

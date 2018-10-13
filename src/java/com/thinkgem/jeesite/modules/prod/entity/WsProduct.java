@@ -83,7 +83,6 @@ public class WsProduct extends DataEntity<WsProduct> {
 	}
 	
 	public String isAgentProduct;//是否是代理商商品 
-	public String agentProductNum;//成为代理商所需数量
 	
 	public WsProduct() {
 		super();
@@ -419,14 +418,6 @@ public class WsProduct extends DataEntity<WsProduct> {
 
 	public void setIsAgentProduct(String isAgentProduct) {
 		this.isAgentProduct = isAgentProduct;
-	}
-
-	public String getAgentProductNum() {
-		return agentProductNum;
-	}
-
-	public void setAgentProductNum(String agentProductNum) {
-		this.agentProductNum = agentProductNum;
 	}
 	
 	

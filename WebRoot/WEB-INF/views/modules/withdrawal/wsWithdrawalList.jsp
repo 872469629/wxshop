@@ -48,11 +48,12 @@
 				<table id="contentTable" class="table table-bordered table-striped table-hover dataTable no-footer">
 						<tr>
 							<th class="text-center">提取金额</th>
-							<th class="text-center">当前金额</th>
+<!-- 							<th class="text-center">当前金额</th> -->
 							<th class="text-center">处理时间</th>
 							<th class="text-center">状态</th>
 							<th class="text-center">用户</th>
 							<th class="text-center">创建时间</th>
+							<th class="text-center">备注</th>
 							<shiro:hasPermission name="withdrawal:wsWithdrawal:edit"><th>操作</th></shiro:hasPermission>
 						</tr>
 					<c:forEach items="${page.list}" var="wsWithdrawal">
@@ -60,9 +61,9 @@
 							<td class="text-center">
 								${wsWithdrawal.amount}
 							</td>
-							<td class="text-center">
-								${wsWithdrawal.availableAmt}
-							</td>
+<!-- 							<td class="text-center"> -->
+<%-- 								${wsWithdrawal.availableAmt} --%>
+<!-- 							</td> -->
 							<td class="text-center">
 								<fmt:formatDate value="${wsWithdrawal.processDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 							</td>
@@ -77,6 +78,9 @@
 							</td>
 							<td class="text-center">
 								<fmt:formatDate value="${wsWithdrawal.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+							</td>
+							<td class="text-center">
+								${wsWithdrawal.remarks}
 							</td>
 							<shiro:hasPermission name="withdrawal:wsWithdrawal:edit"><td>
 								<c:if test="${wsWithdrawal.status=='0' }">

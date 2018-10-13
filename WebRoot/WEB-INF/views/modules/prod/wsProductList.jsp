@@ -103,10 +103,7 @@
 							</td>
 							<td class="text-center">
 								<c:if test="${wsProduct.isAgentProduct=='1' }">
-								<span style="color: red;">是</span>
-								</c:if>
-								<c:if test="${wsProduct.isAgentProduct!='1' }">
-								否
+								<span style="color: red;">成为分销商</span>
 								</c:if>
 							</td>
 							<shiro:hasPermission name="prod:wsProduct:edit"><td>

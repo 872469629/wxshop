@@ -100,7 +100,6 @@
 				<form:hidden path="isBaseChange" htmlEscape="false" class="form-control "/>
 				<form:hidden path="isSelChange" htmlEscape="false" class="form-control "/>
 				<form:hidden path="isAgentProduct" htmlEscape="false" class="form-control "/>
-				<form:hidden path="agentProductNum" htmlEscape="false" class="form-control "/>
 				<sys:message content="${message}"/>	
 				<div class="box-body">	
 				<div class="row">
