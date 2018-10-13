@@ -151,6 +151,7 @@
 							<th class="text-center">用户</th>
 							<th class="text-center">变化金额</th>
 							<th class="text-center">金额类型</th>
+							<th class="text-center">是否结算</th>
 						</tr>
 					<c:forEach items="${page.list}" var="wsCommission">
 						<tr>
@@ -242,6 +243,14 @@
 								,
 								三级消费返利：<c:if test="${not empty wsCommission.agent3Consume }">${wsCommission.agent3Consume }</c:if>
 								<c:if test="${empty wsCommission.agent3Consume }">-</c:if>
+							</td>
+							<td class="text-center">
+								<c:if test="${wsCommission.status=='0' }">
+									<div style="color:red;"><i class="fa fa-remove"></i></div>
+								</c:if>
+								<c:if test="${wsCommission.status=='1' }">
+									<div style="color:green;"><i class="fa fa-check"></i></div>
+								</c:if>
 							</td>
 						</tr>
 					</c:forEach>

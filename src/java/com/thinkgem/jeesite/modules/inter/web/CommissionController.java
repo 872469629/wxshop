@@ -30,6 +30,7 @@ import com.thinkgem.jeesite.modules.member.service.WsMemberService;
 import com.thinkgem.jeesite.modules.order.entity.WsOrderItem;
 import com.thinkgem.jeesite.modules.order.service.WsOrderItemService;
 import com.thinkgem.jeesite.modules.order.service.WsOrderService;
+import com.thinkgem.jeesite.modules.ws.utils.WsConstant;
 import com.thinkgem.jeesite.modules.ws.utils.WsUtils;
 
 /**
@@ -202,6 +203,7 @@ public class CommissionController extends BaseController {
 					//查找一级消费
 					WsCommission wsCommission = new WsCommission();
 					wsCommission.setMembers(nextGroup);
+					wsCommission.setStatus(WsConstant.YES);
 					List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(wsCommission, " o.create_date desc",type);
 					BigDecimal big = BigDecimal.ZERO;
 					if (commissions != null && commissions.size() > 0) {
@@ -215,6 +217,7 @@ public class CommissionController extends BaseController {
 					//查找二级消费
 					WsCommission wsCommission = new WsCommission();
 					wsCommission.setMembers(nextGroup);
+					wsCommission.setStatus(WsConstant.YES);
 					List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(wsCommission, " o.create_date desc",type);
 					BigDecimal big = BigDecimal.ZERO;
 					if (commissions != null && commissions.size() > 0) {
@@ -231,6 +234,7 @@ public class CommissionController extends BaseController {
 						//查找三级消费
 						WsCommission wsCommission = new WsCommission();
 						wsCommission.setMembers(nextGroup);
+						wsCommission.setStatus(WsConstant.YES);
 						List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(wsCommission, " o.create_date desc",type);
 						BigDecimal big = BigDecimal.ZERO;
 						if (commissions != null && commissions.size() > 0) {

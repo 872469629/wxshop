@@ -259,20 +259,6 @@
 		WHERE id = #{id}
 	</update>
 	
-	<select id="findPriceByMembers" resultType="WsCommission">
-		SELECT 
-			<include refid="wsCommissionColumns"/>
-		FROM ws_commission a
-		<include refid="wsCommissionJoins"/>
-		<where>
-			AND a.member_id in
-			<foreach collection="members" index="index" item="item" open="(" separator="," close=")">  
-            	#{item.id}  
-      	    </foreach>
-		</where>
-		group by a.order_id
-	</select>
-	
 	<select id="findCommissionByMembers" resultType="WsCommission">
 		SELECT 
 			<include refid="wsCommissionColumns"/>,
@@ -301,6 +287,9 @@
       	    </if>
       	    <if test="type != null and type == 2">
       	    	and agent1_consume is not null
+      	    </if>
+      	    <if test="wsCommission.status != null and wsCommission.status != ''">
+      	    	and a.status = #{wsCommission.status}
       	    </if>
 		</where>
 		group by a.order_id

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.commission.service.WsCommissionService;
 import com.thinkgem.jeesite.modules.member.entity.WsMember;
 import com.thinkgem.jeesite.modules.member.entity.WsMemberRewardLog;
 import com.thinkgem.jeesite.modules.member.service.WsMemberRewardLogService;
@@ -51,6 +52,9 @@ public class WsConsulationService extends CrudService<WsConsulationDao, WsConsul
 	
 	@Autowired
 	private WsMemberRewardLogService wsMemberRewardLogService;
+	
+	@Autowired
+	private WsCommissionService wsCommissionService;
 
 	public WsConsulation get(String id) {
 		return super.get(id);
@@ -85,6 +89,8 @@ public class WsConsulationService extends CrudService<WsConsulationDao, WsConsul
 		WsOrder wsOrder=wsOrderService.get(orderId);
 		wsOrder.setOrderState(WsConstant.ORDER_STATE_WAITE_FINSH);
 		wsOrderService.save(wsOrder);
+		//完成时分佣记录结算
+		wsCommissionService.updateCommission(wsOrder);
 		//商品分销奖励 订单金额*分销比例
 		if(wsOrder.getRuid()!=null && StringUtils.isNotEmpty(wsOrder.getRuid().getId())) {
 			String scale=sysParamService.getByParamCode(WsConstant.AWARD_SCALE).getParamValue();

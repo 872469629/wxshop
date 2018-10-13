@@ -2,8 +2,12 @@ package com.thinkgem.jeesite.modules.sys.task;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.common.utils.SpringContextHolder;
+import com.thinkgem.jeesite.modules.commission.service.WsCommissionService;
 import com.thinkgem.jeesite.modules.order.entity.WsOrder;
 import com.thinkgem.jeesite.modules.order.entity.WsOrderItem;
 import com.thinkgem.jeesite.modules.order.service.WsOrderItemService;
@@ -19,11 +23,15 @@ import com.thinkgem.jeesite.modules.ws.utils.WsConstant;
  */
 public class WsJobOrderState {
 	
+	protected Logger logger = LoggerFactory.getLogger(getClass());
+	
 	private static WsOrderService wsOrderService = SpringContextHolder.getBean("wsOrderService");
 	
 	private static WsOrderItemService wsOrderItemService = SpringContextHolder.getBean("wsOrderItemService");
 	
 	private static WsConsulationService wsConsulationService = SpringContextHolder.getBean("wsConsulationService");
+	
+	private static WsCommissionService wsCommissionService = SpringContextHolder.getBean("wsCommissionService");
 
 	
 	/**
@@ -49,12 +57,15 @@ public class WsJobOrderState {
 		WsOrder wsOrder=new WsOrder();
 		wsOrder.setOrderState(WsConstant.ORDER_STATE_WAITE_EVALUATION);
 		//日期与七天前的日期进行比较
-		wsOrder.setSendTime(DateUtils.getBetweenDate(-7));
+		wsOrder.setReceviceTime(DateUtils.getBetweenDate(-7));
 		List<WsOrder> wsOrderList=wsOrderService.findOverTimeList(wsOrder);
 		for (WsOrder order:wsOrderList) {
 			//将状态修改为待评价
 			order.setOrderState(WsConstant.ORDER_STATE_WAITE_FINSH);
 			wsOrderService.save(order);
+			logger.info("收货七天后由定时任务自动评价的订单：" + order.getId());
+			//完成时分佣记录结算
+			wsCommissionService.updateCommission(order);
 			/**
 			 * 循环订单的每个产品，增加一个默认好评五星的评价记录
 			 */

@@ -28,6 +28,7 @@ public class WsOrderItem extends DataEntity<WsOrderItem> {
 	private BigDecimal reallyPrice;		// 实际支付总金额
 	private BigDecimal rewardMoney;		// 分销金额
 	private WsProdSku wsProdSku;		// 产品sku
+	public String isAgentProduct;//是否是代理商商品
 	
 	public WsOrderItem() {
 		super();
@@ -137,6 +138,14 @@ public class WsOrderItem extends DataEntity<WsOrderItem> {
 
 	public void setMemberId(String memberId) {
 		this.memberId = memberId;
+	}
+
+	public String getIsAgentProduct() {
+		return isAgentProduct;
+	}
+
+	public void setIsAgentProduct(String isAgentProduct) {
+		this.isAgentProduct = isAgentProduct;
 	}
 
 

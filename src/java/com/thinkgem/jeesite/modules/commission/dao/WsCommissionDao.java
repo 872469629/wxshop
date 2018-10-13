@@ -19,11 +19,6 @@ import com.thinkgem.jeesite.modules.order.entity.WsOrder;
 public interface WsCommissionDao extends CrudDao<WsCommission> {
 
 	/**
-	 * 根据用户id集合查找所有订单总价格
-	 */
-	List<WsCommission> findPriceByMembers(@Param("members") List<WsMember> members);
-
-	/**
 	 * 根据购买者id集合查找所有分销记录
 	 */
 	List<WsCommission> findCommissionByMembers(@Param("wsCommission") WsCommission wsCommission,

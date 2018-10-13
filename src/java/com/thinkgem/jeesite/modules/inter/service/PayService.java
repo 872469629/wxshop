@@ -104,6 +104,7 @@ public class PayService extends BaseService{
 		 */
 		WsOrder wsOrder=new WsOrder();
 		List<WsOrderItem> wsOrderItemList=new ArrayList<WsOrderItem>();
+		List<WsCommission> wsCommissionList=new ArrayList<>();
 		Date now=new Date();
 		String body="";
 		BigDecimal totalMoney=new BigDecimal(0);
@@ -131,12 +132,18 @@ public class PayService extends BaseService{
 			wsOrderItem.setReallyUnitPrice(wsProdSku.getReallyPrice());
 			wsOrderItem.setReallyPrice(wsProdSku.getReallyPrice().multiply(new BigDecimal(item.getQuantity())));
 			wsOrderItem.setWsProdSku(wsProdSku);
+			if (WsConstant.YES.equals(wsProduct.getIsAgentProduct())) {
+				wsOrderItem.setIsAgentProduct(WsConstant.YES);
+			} else {
+				wsOrderItem.setIsAgentProduct(WsConstant.NO);
+			}
 			wsOrderItemService.save(wsOrderItem);
 			wsOrderItemList.add(wsOrderItem);
 			if(StringUtils.isEmpty(body)&&StringUtils.isNotEmpty(wsProduct.getTitle())){
 				body=wsProduct.getTitle();
 			}
 			totalMoney=totalMoney.add(wsOrderItem.getReallyUnitPrice().multiply(new BigDecimal(wsOrderItem.getQuantity())));
+			
 		}
 		/**
 		 * 计算优惠券优惠后的价格
@@ -175,6 +182,28 @@ public class PayService extends BaseService{
 		 * 保存订单数据
 		 */
 		wsOrderService.save(wsOrder);
+		// 分销商品，生成分销记录
+		int agentNum = member.getToAgentNum();
+		for (WsOrderItem wsOrderItem : wsOrderItemList) {
+			if (WsConstant.YES.equals(wsOrderItem.getIsAgentProduct())) {
+				agentNum += wsOrderItem.getQuantity();
+			}
+		}
+		if (agentNum >= 2) {// 成为代理商
+			for (WsOrderItem wsOrderItem : wsOrderItemList) {
+				WsProduct wsProduct = wsOrderItem.getWsProduct();
+				if (WsConstant.YES.equals(wsOrderItem.getIsAgentProduct())) {
+					WsCommission commission = new WsCommission();
+					wsCommissionService.commission(commission, wsOrderItem, member, wsOrderItem.getQuantity());
+					wsCommissionList.add(commission);
+				}
+			}
+		}
+		if (wsCommissionList.size() > 0) {
+			for (WsCommission c : wsCommissionList) {
+				wsCommissionService.save(c);
+			}
+		}
 		
 		/**
 		 * 获取预付款Id
@@ -342,33 +371,6 @@ public class PayService extends BaseService{
 						wsProduct.setSelNum(wsProduct.getSelNum()+item.getQuantity());
 						wsProductService.save(wsProduct);
 						
-						//代理商购买返利
-						if(wsMember.getIsAgent()!=null && "1".equals(wsMember.getIsAgent())){
-							WsCommission commission = new WsCommission();
-							wsCommissionService.commission(commission, item, wsMember, item.getQuantity());
-							wsCommissionService.save(commission);
-						}else{
-							//如果该用户不是代理商，并且购买的商品是分销商品
-							if (item.getWsProduct() != null && StringUtils.isNotEmpty(item.getWsProduct().getId())) {
-								if ("1".equals(wsProductService.get(item.getWsProduct().getId()).getIsAgentProduct())) {//该商品是分销商品
-									wsMember.setToAgentNum(wsMember.getToAgentNum() + item.getQuantity());
-									if (wsMember.getToAgentNum() >= 2) {
-										wsMember.setIsAgent("1");
-										wsMember.setBecomeAgentTime(new Date());
-										//分销记录
-										WsCommission commission = new WsCommission();
-										wsCommissionService.toAgentCommission(commission, item, wsMember);
-										//如果大于2箱，就要算消费返利
-										if (wsMember.getToAgentNum() > 2) {
-											wsCommissionService.commission(commission, item, wsMember, wsMember.getToAgentNum() - 2);
-										}
-										wsCommissionService.save(commission);
-									}
-									wsMemberService.save(wsMember);
-									
-								}
-							}
-						}
 					}catch(Exception e){
 						logger.error("代理商购买返利异常：",e);
 					}

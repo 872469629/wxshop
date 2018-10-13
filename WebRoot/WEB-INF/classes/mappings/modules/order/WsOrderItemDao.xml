@@ -20,7 +20,8 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		a.is_agent_product AS "isAgentProduct"
 	</sql>
 	
 	<sql id="wsOrderItemJoins">
@@ -93,7 +94,8 @@
 			update_by,
 			update_date,
 			remarks,
-			del_flag
+			del_flag,
+			is_agent_product
 		) VALUES (
 			#{id},
 			#{wsOrder.id},
@@ -112,7 +114,8 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag}
+			#{delFlag},
+			#{isAgentProduct}
 		)
 	</insert>
 	
@@ -128,7 +131,8 @@
 			unit_price = #{unitPrice},
 			really_unit_price = #{reallyUnitPrice},
 			really_price = #{reallyPrice},
-			reward_money = #{rewardMoney}
+			reward_money = #{rewardMoney},
+			is_agent_product = #{isAgentProduct}
 		WHERE id = #{id}
 	</update>
 	
