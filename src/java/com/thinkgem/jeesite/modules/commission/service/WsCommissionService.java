@@ -253,8 +253,8 @@ public class WsCommissionService extends CrudService<WsCommissionDao, WsCommissi
 	/**
 	 * 根据购买者id集合查找所有分销记录
 	 */
-	public List<WsCommission> findCommissionByMembers(WsCommission wsCommission, String orderBy, String type) {
-		return dao.findCommissionByMembers(wsCommission, orderBy, type);
+	public List<WsCommission> findCommissionByMembers(WsMember currMember, String orderBy, String type,List<String> statusList,String status,String level) {
+		return dao.findCommissionByMembers(currMember, orderBy, type, statusList, status, level);
 	}
 
 	/**
@@ -271,6 +271,8 @@ public class WsCommissionService extends CrudService<WsCommissionDao, WsCommissi
 		if (list != null) {
 			for (WsCommission c : list) {
 				c.setStatus("1");
+				WsOrderItem item = wsOrderItemService.get(c.getOrderItemId().getId());
+				wsCommissionService.commission(c, item, wsMember, item.getQuantity());
 				super.save(c);
 			}
 			// 如果该用户不是代理商，并且购买的商品是分销商品，校验是否达到要求，如果达到要求的数量，即可送人头钱
@@ -298,6 +300,6 @@ public class WsCommissionService extends CrudService<WsCommissionDao, WsCommissi
 				wsMemberDao.update(wsMember);
 			}
 		}
-	}
+	} 
 
 }

@@ -56,11 +56,6 @@ public class WsCommission extends DataEntity<WsCommission> {
 	private BigDecimal agent3ConsumeStart;//查询条件
 	private BigDecimal agent3ConsumeEnd;//查询条件
 	
-	
-	private List<WsMember> members;//查询条件
-	private List<String> statusList;//查询条件
-	
-	
 	public WsCommission() {
 		super();
 	}
@@ -349,21 +344,4 @@ public class WsCommission extends DataEntity<WsCommission> {
 		this.agent3PromotionEnd = agent3PromotionEnd;
 	}
 
-	public List<WsMember> getMembers() {
-		return members;
-	}
-
-	public void setMembers(List<WsMember> members) {
-		this.members = members;
-	}
-
-	public List<String> getStatusList() {
-		return statusList;
-	}
-
-	public void setStatusList(List<String> statusList) {
-		this.statusList = statusList;
-	}
-	
-	
 }

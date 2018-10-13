@@ -38,8 +38,11 @@
 		m1.nickname AS "memberId.nickname",
 		m1.headimgurl AS "memberId.headimgurl",
 		m2.nickname AS "memberParent.nickname",
+		m2.headimgurl AS "memberParent.headimgurl",
 		m3.nickname AS "memberParentParent.nickname",
-		m4.nickname AS "memberParentParentParent.nickname"
+		m3.headimgurl AS "memberParentParent.headimgurl",
+		m4.nickname AS "memberParentParentParent.nickname",
+		m4.headimgurl AS "memberParentParentParent.headimgurl"
 	</sql>
 	
 	<sql id="wsCommissionJoins">
@@ -272,13 +275,19 @@
 		FROM ws_commission a
 		<include refid="wsCommissionJoins"/>
 		<where>
-			AND a.member_id in
-			<foreach collection="wsCommission.members" index="index" item="item" open="(" separator="," close=")">  
-            	#{item.id}  
-      	    </foreach>
-      	    <if test="wsCommission.statusList != null">
+			<if test="currMember != null and currMember.id != null">
+      	    	<choose>
+      	    		<when test="level != null and level != '' and level == 1">AND A.member_parent = #{currMember.id} </when>
+      	    		<when test="level != null and level != '' and level == 2">AND A.member_parent_parent = #{currMember.id} </when>
+      	    		<when test="level != null and level != '' and level == 3">AND A.member_parent_parent_parent = #{currMember.id} </when>
+      	    		<otherwise>
+      	    			AND (A.member_parent = #{currMember.id} or A.member_parent_parent = #{currMember.id} or A.member_parent_parent_parent = #{currMember.id})
+      	    		</otherwise>
+      	    	</choose>
+      	    </if>
+      	    <if test="statusList != null">
 	      	    AND o.order_state in
-				<foreach collection="wsCommission.statusList" index="index" item="item" open="(" separator="," close=")">  
+				<foreach collection="statusList" index="index" item="item" open="(" separator="," close=")">  
 	            	#{item}  
 	      	    </foreach>
       	    </if>
@@ -288,8 +297,8 @@
       	    <if test="type != null and type == 2">
       	    	and agent1_consume is not null
       	    </if>
-      	    <if test="wsCommission.status != null and wsCommission.status != ''">
-      	    	and a.status = #{wsCommission.status}
+      	    <if test="status != null and status != ''">
+      	    	and a.status = #{status}
       	    </if>
 		</where>
 		group by a.order_id

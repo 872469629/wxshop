@@ -12,6 +12,7 @@ import com.thinkgem.jeesite.modules.order.entity.WsOrder;
 
 /**
  * 分销明细DAO接口
+ * 
  * @author 分销系统开发者
  * @version 2018-10-03
  */
@@ -21,7 +22,8 @@ public interface WsCommissionDao extends CrudDao<WsCommission> {
 	/**
 	 * 根据购买者id集合查找所有分销记录
 	 */
-	List<WsCommission> findCommissionByMembers(@Param("wsCommission") WsCommission wsCommission,
-			@Param("orderBy") String orderBy,@Param("type") String type);
-	
+	List<WsCommission> findCommissionByMembers(@Param("currMember") WsMember currMember,
+			@Param("orderBy") String orderBy, @Param("type") String type, @Param("statusList") List<String> statusList,
+			@Param("status") String status, @Param("level") String level);
+
 }

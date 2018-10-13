@@ -138,37 +138,14 @@ public class CommissionController extends BaseController {
 		Map data=new HashMap();
 		try{
 			WsMember user = wsMemberService.get(userId);
-			List<WsMember> oneGroup = null;
-			List<WsMember> twoGroup = null;
-			List<WsMember> threeGroup = null;
-			oneGroup = wsMemberService.findNextGroupByList(Arrays.asList(user));
-			if (oneGroup != null && oneGroup.size() > 0) {
-				twoGroup = wsMemberService.findNextGroupByList(oneGroup);
-				if (twoGroup != null && twoGroup.size() > 0) {
-					threeGroup = wsMemberService.findNextGroupByList(twoGroup);
-				}
-			}
-			List<WsMember> allGroup = new ArrayList<>();
-			if (oneGroup != null) allGroup.addAll(oneGroup);
-			if (twoGroup != null) allGroup.addAll(twoGroup);
-			if (threeGroup != null) allGroup.addAll(threeGroup);
 			BigDecimal totalAmount = BigDecimal.ZERO;
-			for (WsMember m : allGroup) {
-				if ("1".equals(type)) {//推荐
-					if (m.getTotalPromotion() != null) {
-						totalAmount = totalAmount.add(m.getTotalPromotion());
-					}
-				}else if ("2".equals(type)) {//消费
-					if (m.getTotalConsume() != null) {
-						totalAmount = totalAmount.add(m.getTotalConsume());
-					}
-				}else{
-					if (m.getTotalConsume() != null) {
-						totalAmount = totalAmount.add(m.getTotalConsume());
-					}
-					if (m.getTotalPromotion() != null) {
-						totalAmount = totalAmount.add(m.getTotalPromotion());
-					}
+			if ("1".equals(type)) {//推荐
+				if (user.getTotalPromotion() != null) {
+					totalAmount = totalAmount.add(user.getTotalPromotion());
+				}
+			}else if ("2".equals(type)) {//消费
+				if (user.getTotalConsume() != null) {
+					totalAmount = totalAmount.add(user.getTotalConsume());
 				}
 			}
 			data.put("ret",InterConstant.RET_SUCCESS);
@@ -197,52 +174,10 @@ public class CommissionController extends BaseController {
 		Map data=new HashMap();
 		try{
 			WsMember user = wsMemberService.get(userId);
-			if ("1".equals(level)) {
-				List<WsMember> nextGroup = wsMemberService.findNextGroupByList(Arrays.asList(user));
-				if (nextGroup != null && nextGroup.size() > 0) {
-					//查找一级消费
-					WsCommission wsCommission = new WsCommission();
-					wsCommission.setMembers(nextGroup);
-					wsCommission.setStatus(WsConstant.YES);
-					List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(wsCommission, " o.create_date desc",type);
-					BigDecimal big = BigDecimal.ZERO;
-					if (commissions != null && commissions.size() > 0) {
-						data.put("list", commissions(commissions, level));
-					}
-				}
-			}else if ("2".equals(level)) {
-				List<WsMember> nextGroup = wsMemberService.findNextGroupByList(Arrays.asList(user));
-				if (nextGroup != null && nextGroup.size() > 0) {
-					nextGroup = wsMemberService.findNextGroupByList(nextGroup);
-					//查找二级消费
-					WsCommission wsCommission = new WsCommission();
-					wsCommission.setMembers(nextGroup);
-					wsCommission.setStatus(WsConstant.YES);
-					List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(wsCommission, " o.create_date desc",type);
-					BigDecimal big = BigDecimal.ZERO;
-					if (commissions != null && commissions.size() > 0) {
-						data.put("amount", big);
-						data.put("list", commissions(commissions, level));
-					}
-				}
-			}else if ("3".equals(level)) {
-				List<WsMember> nextGroup = wsMemberService.findNextGroupByList(Arrays.asList(user));
-				if (nextGroup != null && nextGroup.size() > 0) {
-					nextGroup = wsMemberService.findNextGroupByList(nextGroup);
-					if (nextGroup != null && nextGroup.size() > 0) {
-						nextGroup = wsMemberService.findNextGroupByList(nextGroup);
-						//查找三级消费
-						WsCommission wsCommission = new WsCommission();
-						wsCommission.setMembers(nextGroup);
-						wsCommission.setStatus(WsConstant.YES);
-						List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(wsCommission, " o.create_date desc",type);
-						BigDecimal big = BigDecimal.ZERO;
-						if (commissions != null && commissions.size() > 0) {
-							data.put("amount", big);
-							data.put("list", commissions(commissions, level));
-						}
-					}
-				}
+			List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(user,
+					" o.create_date desc", type, null, WsConstant.YES, level);
+			if (commissions != null && commissions.size() > 0) {
+				data.put("list", commissions(commissions, level));
 			}
 			data.put("ret",InterConstant.RET_SUCCESS);
 			data.put("member",user);
@@ -310,31 +245,11 @@ public class CommissionController extends BaseController {
 				}
 			}
 			WsMember user = wsMemberService.get(userId);
-			List<WsMember> oneGroup = null;
-			List<WsMember> twoGroup = null;
-			List<WsMember> threeGroup = null;
-			oneGroup = wsMemberService.findNextGroupByList(Arrays.asList(user));
-			if (oneGroup != null && oneGroup.size() > 0) {
-				twoGroup = wsMemberService.findNextGroupByList(oneGroup);
-				if (twoGroup != null && twoGroup.size() > 0) {
-					threeGroup = wsMemberService.findNextGroupByList(twoGroup);
-				}
-			}
-			List<WsMember> allGroup = new ArrayList<>();
-			if (oneGroup != null) allGroup.addAll(oneGroup);
-			if (twoGroup != null) allGroup.addAll(twoGroup);
-			if (threeGroup != null) allGroup.addAll(threeGroup);
-			WsCommission wsCommission = new WsCommission();
-			Page page = new Page();
-			wsCommission.setPage(page);
-			wsCommission.setMembers(allGroup);
-			if (statusList != null) wsCommission.setStatusList(statusList);
-			if (allGroup.size() > 0) {
-				List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(wsCommission,null,null);
-				List<Map<String, Object>> list = this.buildCommissionOrder(commissions, user);
-				//查找分销订单
-				data.put("list",list);
-			}
+			List<WsCommission> commissions = wsCommissionService.findCommissionByMembers(user, null, null,
+					statusList, null, null);
+			List<Map<String, Object>> list = this.buildCommissionOrder(commissions, user);
+			//查找分销订单
+			data.put("list",list);
 			data.put("ret",InterConstant.RET_SUCCESS);
 		}catch(WxException e){
 			data.put("ret",InterConstant.RET_WX);
