@@ -211,8 +211,8 @@
 			#{joinAgentTime},
 			#{becomeAgentTime},
 			#{frozenAmount},
-			totalPromotion,
-			totalConsume
+			#{totalPromotion},
+			#{totalConsume}
 		)
 	</insert>
 	

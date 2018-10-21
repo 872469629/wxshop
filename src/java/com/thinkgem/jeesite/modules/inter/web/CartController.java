@@ -100,7 +100,8 @@ public class CartController extends BaseController {
 	@RequestMapping(value = "addCart")
 	@ResponseBody
 	@CrossOrigin
-	public Map addCart(String skuId,HttpServletRequest request, HttpServletResponse response, Model model) {
+	public Map addCart(String skuId, Integer quantity, HttpServletRequest request, HttpServletResponse response,
+			Model model) {
 		Map data=new HashMap();
 		try{
 			/**
@@ -119,20 +120,20 @@ public class CartController extends BaseController {
 				wsCart=wsCartList.get(0);
 				//校验库存
 				WsProdSku wsProdSku=wsProdSkuService.get(skuId);
-				if ((wsCart.getQuantity() + 1) > wsProdSku.getSurplusQuantity()) {
+				if ((wsCart.getQuantity() + quantity) > wsProdSku.getSurplusQuantity()) {
 					data.put("ret",InterConstant.RET_FAILED);
 					data.put("msg","库存不足");
 					return data;
 				}
 				
-				wsCart.setQuantity(wsCart.getQuantity()+1);
+				wsCart.setQuantity(wsCart.getQuantity()+quantity);
 				wsCart.setPrice(wsCart.getUnitPrice().multiply(new BigDecimal(wsCart.getQuantity())));
 				wsCartService.save(wsCart);
 			}else{
 				//如果未存在，则新增如购物车
 				WsProdSku wsProdSku=wsProdSkuService.get(skuId);
 				//校验库存
-				if (1 > wsProdSku.getSurplusQuantity()) {
+				if (quantity > wsProdSku.getSurplusQuantity()) {
 					data.put("ret",InterConstant.RET_FAILED);
 					data.put("msg","库存不足");
 					return data;
@@ -142,7 +143,7 @@ public class CartController extends BaseController {
 				wsCart.setTitle(wsProduct.getTitle());
 				wsCart.setSkuSpec(wsProdSku.getSkuName());
 				wsCart.setThumb(wsProduct.getProdImage());
-				wsCart.setQuantity(1);
+				wsCart.setQuantity(quantity);
 				wsCart.setUnitDefaultPrice(wsProdSku.getPrice());
 				wsCart.setUnitPrice(wsProdSku.getReallyPrice());
 				wsCart.setPrice(wsProdSku.getReallyPrice());
