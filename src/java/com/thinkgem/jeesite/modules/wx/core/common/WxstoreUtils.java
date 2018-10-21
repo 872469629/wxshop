@@ -28,8 +28,6 @@ import org.slf4j.LoggerFactory;
 import com.thinkgem.jeesite.modules.wx.core.exception.WexinReqException;
 
 import net.sf.json.JSONObject;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 /**
  * 
  * @author xiaoqingfeng
@@ -193,20 +191,20 @@ public class WxstoreUtils {
 		}
 	}
 
-	public static String encode(byte[] bstr) {
-		return new BASE64Encoder().encode(bstr);
-	}
-
-	public static byte[] decode(String str) {
-		byte[] bt = null;
-		try {
-			BASE64Decoder decoder = new BASE64Decoder();
-			bt = decoder.decodeBuffer(str);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return bt;
-	}
+//	public static String encode(byte[] bstr) {
+//		return new BASE64Encoder().encode(bstr);
+//	}
+//
+//	public static byte[] decode(String str) {
+//		byte[] bt = null;
+//		try {
+//			BASE64Decoder decoder = new BASE64Decoder();
+//			bt = decoder.decodeBuffer(str);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		return bt;
+//	}
 
 	public static byte[] readInputStream(InputStream inStream) throws Exception {
 		ByteArrayOutputStream outstream = new ByteArrayOutputStream();
