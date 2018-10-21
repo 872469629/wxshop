@@ -205,6 +205,7 @@
 									<th style="display:none;">成本价</th>
 									<th>商品单价(元)</th>
 									<th>购买数量</th>
+									<th>是否是分销商品</th>
 									<th>小计(元)</th>
 								</tr>
 							</thead>
@@ -230,6 +231,10 @@
 		                		</td>
 		                		<td>
 		                			${wsOrderItem.quantity }
+		                		</td>
+		                		<td>
+		                			<c:if test="${wsOrderItem.isAgentProduct=='1' }"><span style="color: red;">是</span></c:if>
+		                			<c:if test="${wsOrderItem.isAgentProduct!='1' }">否</c:if>
 		                		</td>
 		                		<td>
 					                <div class="color_36c"></div>

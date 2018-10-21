@@ -4,6 +4,7 @@
     
 	<sql id="wsMemberColumns">
 		a.id AS "id",
+		a.ids AS "ids",
 		a.username AS "username",
 		a.password AS "password",
 		a.nickname AS "nickname",

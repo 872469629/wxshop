@@ -19,6 +19,7 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 public class WsMember extends DataEntity<WsMember> {
 	
 	private static final long serialVersionUID = 1L;
+	private Integer ids;
 	private String username;		// 用户名
 	private String password;		// 密码
 	private String nickname;		// 昵称
@@ -61,6 +62,14 @@ public class WsMember extends DataEntity<WsMember> {
 
 	public WsMember(String id){
 		super(id);
+	}
+
+	public Integer getIds() {
+		return ids;
+	}
+
+	public void setIds(Integer ids) {
+		this.ids = ids;
 	}
 
 	@Length(min=1, max=64, message="用户名长度必须介于 1 和 64 之间")
