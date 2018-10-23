@@ -1,6 +1,5 @@
 package com.thinkgem.jeesite.modules.order.service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.modules.order.entity.WsOrder;
-import com.thinkgem.jeesite.modules.member.entity.WsMember;
+import com.thinkgem.jeesite.modules.commission.service.WsCommissionService;
 import com.thinkgem.jeesite.modules.member.entity.WsMemberCoupon;
 import com.thinkgem.jeesite.modules.member.service.WsMemberCouponService;
 import com.thinkgem.jeesite.modules.order.dao.WsOrderDao;
+import com.thinkgem.jeesite.modules.order.dao.WsOrderItemDao;
+import com.thinkgem.jeesite.modules.order.entity.WsOrder;
 import com.thinkgem.jeesite.modules.order.entity.WsOrderItem;
 import com.thinkgem.jeesite.modules.ws.utils.WsConstant;
-import com.thinkgem.jeesite.modules.order.dao.WsOrderItemDao;
 
 /**
  * 订单Service
@@ -36,6 +35,9 @@ public class WsOrderService extends CrudService<WsOrderDao, WsOrder> {
 	
 	@Autowired
 	private WsOrderDao wsOrderDao;
+	
+	@Autowired
+	private WsCommissionService wsCommissionService;
 	
 	public WsOrder get(String id) {
 		WsOrder wsOrder = super.get(id);
@@ -128,6 +130,19 @@ public class WsOrderService extends CrudService<WsOrderDao, WsOrder> {
 			wsMemberCoupon.setState(WsConstant.COUPON_TO_USE);
 			wsMemberCouponService.save(wsMemberCoupon);
 		}
+	}
+
+	/**
+	 * 立即完成订单
+	 */
+	@Transactional(readOnly = false)
+	public void finished(WsOrder wsOrder) {
+		//将状态修改为待评价
+		wsOrder = super.get(wsOrder.getId());
+		wsOrder.setOrderState(WsConstant.ORDER_STATE_WAITE_FINSH);
+		super.save(wsOrder);
+		//完成时分佣记录结算
+		wsCommissionService.updateCommission(wsOrder);
 	}
 	
 }

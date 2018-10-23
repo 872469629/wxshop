@@ -113,6 +113,7 @@
 							<shiro:hasPermission name="order:wsOrder:edit"><td>
 			    				<a href="${ctx}/order/wsOrder/form?id=${wsOrder.id}" class="btn btn-success btn-sm"><span class=""><i class="fa fa-pencil">&nbsp;详情</i></span></a><br>			    					
 			    				<c:if test="${wsOrder.orderState==0}">
+			    					<a href="${ctx}/order/wsOrder/finished?id=${wsOrder.id}" class="btn btn-success btn-sm"><span class=""><i class="fa fa-pencil">&nbsp;立即完成</i></span></a><br>
 			    					<a href="${ctx}/order/wsOrder/closeOrder?id=${wsOrder.id}" onclick="return confirmx('确认要关闭该订单吗？', this.href)" class="btn btn-warning btn-sm"><i class="fa fa-trash">&nbsp;关闭</i></a>
 			    				</c:if>
 			    				<c:if test="${wsOrder.orderState==1}">

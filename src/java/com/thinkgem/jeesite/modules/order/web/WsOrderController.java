@@ -148,5 +148,17 @@ public class WsOrderController extends BaseController {
 		addMessage(redirectAttributes, "删除订单成功");
 		return "redirect:"+Global.getAdminPath()+"/order/wsOrder/?repage";
 	}
+	
+	
+	/**
+	 * 立即完成订单
+	 */
+	@RequiresPermissions("order:wsOrder:edit")
+	@RequestMapping(value = "finished")
+	public String finished(WsOrder wsOrder, RedirectAttributes redirectAttributes) {
+		wsOrderService.finished(wsOrder);
+		addMessage(redirectAttributes, "完成订单成功");
+		return "redirect:"+Global.getAdminPath()+"/order/wsOrder/?repage";
+	}
 
 }
