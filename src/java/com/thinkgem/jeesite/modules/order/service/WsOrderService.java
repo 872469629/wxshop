@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.modules.order.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.commission.service.WsCommissionService;
+import com.thinkgem.jeesite.modules.inter.service.PayService;
 import com.thinkgem.jeesite.modules.member.entity.WsMemberCoupon;
 import com.thinkgem.jeesite.modules.member.service.WsMemberCouponService;
 import com.thinkgem.jeesite.modules.order.dao.WsOrderDao;
@@ -38,6 +40,9 @@ public class WsOrderService extends CrudService<WsOrderDao, WsOrder> {
 	
 	@Autowired
 	private WsCommissionService wsCommissionService;
+	
+	@Autowired
+	private PayService payService;
 	
 	public WsOrder get(String id) {
 		WsOrder wsOrder = super.get(id);
@@ -133,16 +138,17 @@ public class WsOrderService extends CrudService<WsOrderDao, WsOrder> {
 	}
 
 	/**
-	 * 立即完成订单
+	 * 支付完成订单
 	 */
 	@Transactional(readOnly = false)
-	public void finished(WsOrder wsOrder) {
-		//将状态修改为待评价
+	public void payFinished(WsOrder wsOrder) {
 		wsOrder = super.get(wsOrder.getId());
-		wsOrder.setOrderState(WsConstant.ORDER_STATE_WAITE_FINSH);
-		super.save(wsOrder);
-		//完成时分佣记录结算
-		wsCommissionService.updateCommission(wsOrder);
+		try {
+			payService.payNotify(wsOrder.getOrderSn(),
+					wsOrder.getReallyPrice().multiply(new BigDecimal(100)).intValue() + "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

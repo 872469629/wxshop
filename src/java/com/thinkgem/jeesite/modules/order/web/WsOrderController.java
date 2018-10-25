@@ -151,13 +151,13 @@ public class WsOrderController extends BaseController {
 	
 	
 	/**
-	 * 立即完成订单
+	 * 支付完成订单
 	 */
 	@RequiresPermissions("order:wsOrder:edit")
-	@RequestMapping(value = "finished")
-	public String finished(WsOrder wsOrder, RedirectAttributes redirectAttributes) {
-		wsOrderService.finished(wsOrder);
-		addMessage(redirectAttributes, "完成订单成功");
+	@RequestMapping(value = "payFinished")
+	public String payFinished(WsOrder wsOrder, RedirectAttributes redirectAttributes) {
+		wsOrderService.payFinished(wsOrder);
+		addMessage(redirectAttributes, "支付订单成功");
 		return "redirect:"+Global.getAdminPath()+"/order/wsOrder/?repage";
 	}
 

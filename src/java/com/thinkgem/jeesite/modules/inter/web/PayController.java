@@ -240,20 +240,4 @@ public class PayController extends BaseController {
 		return data;
 	}
 	
-
-	@RequestMapping(value = "notify")
-	@ResponseBody
-	@CrossOrigin
-	public String notify(HttpServletRequest request, HttpServletResponse response, Model model,String outTradeNo,String totalFee) {
-		String result;//返回给微信的处理结果  
-		try{
-	        	payService.payNotify(outTradeNo,totalFee);
-	            result = setXml("SUCCESS", "OK");  
-        }catch(Exception e){
-        	logger.error(e.getMessage()); 
-	       result = setXml("fail", e.getMessage());  
-		}
-        return result;    
-	}
-	
 }

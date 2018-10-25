@@ -253,9 +253,10 @@ public class WsUtils {
 	/**
 	 * 小程序端获取用户信息
 	 */
-	public static WsMember getWcxMember(HttpServletRequest request, HttpServletResponse response) throws Exception{
+	public static synchronized WsMember getWcxMember(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		WxAccount account=getAccount();
 		String code = request.getParameter("code");
+		String fromUserId = request.getParameter("fromUserId");
 		String url=WsApiConstant.jscode2session.replaceAll("JSCODE",code);
 		url=url.replaceAll("APPID", account.getWcxAppid()).replaceAll("SECRET", account.getWcxAppsecret());
 		JSONObject result=HttpClientUtil.httpRequest(url, "POST", null);
@@ -275,6 +276,13 @@ public class WsUtils {
 				member.setMemberRankName(wsMrankList.get(0).getName());
 			}
 			member.setOpenId(openId);
+			if (StringUtils.isNotEmpty(fromUserId) && !"undefined".equals(fromUserId)) {
+				WsMember fromUser = wsMemberService.get(fromUserId);
+				if (fromUser != null && "1".equals(fromUser.getIsAgent())) {//分享者必须是代理商才可以成为他的下限
+					member.setAgentParent(fromUser);
+					member.setJoinAgentTime(new Date());
+				}
+			}
 			wsMemberService.save(member);
 		}
 		//测试时固定返回用户，不用和微信端交互
