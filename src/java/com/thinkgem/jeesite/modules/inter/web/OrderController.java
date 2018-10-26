@@ -274,6 +274,7 @@ public class OrderController extends BaseController {
 	
 	/**
 	 * 确认收货
+	 * 目前确认收货相当于完成订单
 	 */
 	@RequestMapping(value = "orderRecevied")
 	@ResponseBody
@@ -289,9 +290,11 @@ public class OrderController extends BaseController {
 			 * 确定收货状态
 			 */
 			WsOrder reciveOrder=wsOrderService.get(orderId);
-			reciveOrder.setOrderState(WsConstant.ORDER_STATE_WAITE_EVALUATION);
+//			reciveOrder.setOrderState(WsConstant.ORDER_STATE_WAITE_EVALUATION);
 			reciveOrder.setReceviceTime(new Date());
-			wsOrderService.save(reciveOrder);
+			//目前确认收货就是完成订单
+			reciveOrder.setOrderState(WsConstant.ORDER_STATE_WAITE_FINSH);
+			wsOrderService.orderRecevied(reciveOrder);
 			/**
 			 * 查询全部订单
 			 */

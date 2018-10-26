@@ -150,5 +150,16 @@ public class WsOrderService extends CrudService<WsOrderDao, WsOrder> {
 			e.printStackTrace();
 		}
 	}
+
+	/**
+	 * 确认收货
+	 * 目前确认收货相当于完成订单
+	 */
+	@Transactional(readOnly = false)
+	public void orderRecevied(WsOrder reciveOrder) {
+		//完成时分佣记录结算
+		wsCommissionService.updateCommission(reciveOrder);
+		super.save(reciveOrder);	
+	}
 	
 }
