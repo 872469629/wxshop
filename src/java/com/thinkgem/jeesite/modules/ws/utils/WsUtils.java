@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.modules.ws.utils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -257,6 +258,7 @@ public class WsUtils {
 		WxAccount account=getAccount();
 		String code = request.getParameter("code");
 		String fromUserId = request.getParameter("fromUserId");
+		logger.info("来源id：" + fromUserId);
 		String url=WsApiConstant.jscode2session.replaceAll("JSCODE",code);
 		url=url.replaceAll("APPID", account.getWcxAppid()).replaceAll("SECRET", account.getWcxAppsecret());
 		JSONObject result=HttpClientUtil.httpRequest(url, "POST", null);
@@ -268,6 +270,7 @@ public class WsUtils {
 		WsMember member=wsMemberService.getByOpenId(openId);
 		if(member==null){
 			member=new WsMember();
+			member.setBalance(BigDecimal.ZERO);
 			WsMrank wsMrank=new WsMrank();
 			wsMrank.setIsDefault(WsConstant.YES);
 			List<WsMrank> wsMrankList=wsMrankService.findList(wsMrank);
